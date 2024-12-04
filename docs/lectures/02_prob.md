@@ -175,7 +175,7 @@ $$
 $$
 
 where again $\boldsymbol\beta =\boldsymbol\Sigma^{-1}$. In ML applications, $\boldsymbol\beta$ is generally assumed diagonal
-(mean-field approximation) or even isotropic ($\boldsymbol\beta = \beta \textbf{I}_n)
+(mean-field approximation) or even isotropic ($\boldsymbol\beta = \beta \textbf{I}_n$)
 
 *5. Mixture of distributions*: any smooth probability density function can be expressed as a weighted sum of simpler distributions
 
