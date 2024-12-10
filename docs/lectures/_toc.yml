@@ -1,0 +1,24 @@
+format: jb-book
+root: README
+parts:
+  - caption: Background and Refresher
+    chapters:
+    - file: 01_intro
+    - file: 02_linalg
+    - file: 02_proob
+    - file: 03_gradopt
+    - file: 04_linreg
+
+
+  - caption: Neural Networks
+    chapters:
+    - file: 05_nn
+    - file: 06_nn
+    - file: 07_bestpractice
+
+  - caption: Convolutional Neural Networks
+    chapters:
+    - file: 08_gradopt1
+    - file: 10_cnn
+    - file: 11_cnnarch
+  
