@@ -1,0 +1,865 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Dimensionality reduction &#8212; Machine Learning for Natural Hazards</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '13_dimred';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Machine Learning for Natural Hazards</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Background and Refresher</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_intro.html">Introduction to Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_linalg.html">Linear Algebra refresher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_gradopt.html">Gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_linreg.html">Linear and Logistic Regression</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_nn.html">Basics of Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_nn.html">More on Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_bestpractice.html">Best practices in the training of Machine Learning models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Convolutional Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="08_gradopt1.html">More on gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_cnn.html">Convolutional Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_cnnarch.html">CNNs Popular Architectures</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz/issues/new?title=Issue%20on%20page%20%2F13_dimred.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/13_dimred.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Dimensionality reduction</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#principal-component-analysis-pca">Principal Component Analysis (PCA)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#other-linear-dimensionality-reduction-techniques">Other linear dimensionality reduction techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#independent-component-analysis-ica">Independent Component Analysis (ICA)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sparse-coding-or-dictionary-learning">Sparse Coding (or Dictionary Learning)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#autoencoders">Autoencoders</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#applications">Applications</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#undercomplete-vs-overcomplete-aes">Undercomplete vs. Overcomplete AEs</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sparse-autoencoders">Sparse AutoEncoders</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#contractive-autoencoders">Contractive AutoEncoders</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#denoising-autoencoders">Denoising AutoEncoders</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-readings">Additional readings</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="dimensionality-reduction">
+<h1>Dimensionality reduction<a class="headerlink" href="#dimensionality-reduction" title="Link to this heading">#</a></h1>
+<p>Up until now we have mostly focused on one family of Machine Learning methods, so-called <em>Supervised learning</em>. Whilst this
+is by far the most popular application in Deep Learning and the one that has reported greater success in the last decade,
+another family of methods that is becoming more and more popular falls under the umbrella of so-called <em>Unsupervised learning</em>.</p>
+<p>When labelled data are scarce, or it is difficult to have access to ground truth labels (e.g., in geoscience), unsupervised learning
+can represent an appealing alternative to find patterns in data. Unsupervised learning comes in different flavours.
+For example let’s imagine grouping a set of unlabelled data into a number of buckets and then analyze them
+one-by-one knowing that the samples within each bucket are more similar to each other than others in the dataset: this is a form of
+unsupervised learning called <em>clustering</em>. The flavour that we are going to discuss in
+more details in the following is however referred to as <em>Dimensionality reduction</em>. Simply stated dimensionality reduction
+can be described as:</p>
+<p>Take <span class="math notranslate nohighlight">\(N_s\)</span> training samples <span class="math notranslate nohighlight">\(\mathbf{x}^{(i)} \in \mathbb{R}^{N_f}\)</span>, (<span class="math notranslate nohighlight">\(i=1,2,...N_s\)</span>),</p>
+<p>Find a smaller representation <span class="math notranslate nohighlight">\(\mathbf{c}^{(i)} \in \mathbb{R}^{N_l}\)</span> (<span class="math notranslate nohighlight">\(N_l&lt;&lt;N_f\)</span>) whilst making the
+smallest possible reconstruction error.</p>
+<p>If you previously studied how data are stored in a computer transmitted via cable (or air), you may recall that this
+is the very same objective of <em>data compression</em>. For this reason, nowadays we can build on a vast body of literature
+when designing effective dimensionality reduction techniques. What it is however slowly becoming more and more evident is
+the fact that by identifying representative low-dimensional (also called <em>latent</em>) spaces from a set of data samples living
+in a much richer space, we can implicitly extract useful features to be later used in subsequent tasks of supervised learning.
+This two-steps approach is becoming very popular these days especially in fields of science that lack vast amount of labelled data
+as a way to take advantage as much as possible of unlabelled samples and then being able to fine-tune supervised models using
+small amounts of labelled data.</p>
+<p>Before we consider a number of different approaches to dimensionality reduction, let’s write the problem in a common mathematical form.
+Given a number of training samples $\mathbf{x}^{(i)}, we wish to identify:</p>
+<ul class="simple">
+<li><p>encoder: <span class="math notranslate nohighlight">\(\mathbf{c}^{(i)} = e(\mathbf{x}^{(i)})\)</span></p></li>
+<li><p>decoder: <span class="math notranslate nohighlight">\(\hat{\mathbf{x}}^{(i)} = d(\mathbf{c}^{(i)})\)</span></p></li>
+</ul>
+<p>such that:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{e},\hat{d} = \underset{e,d} {\mathrm{argmin}} \; \frac{1}{N_s}\sum_i \mathscr{L}(\mathbf{x}^{(i)}, d(e(\mathbf{x}^{(i)})))
+\]</div>
+<section id="principal-component-analysis-pca">
+<h2>Principal Component Analysis (PCA)<a class="headerlink" href="#principal-component-analysis-pca" title="Link to this heading">#</a></h2>
+<p>The simplest approach to dimensionality reduction uses linear operators for the encoder:</p>
+<ul class="simple">
+<li><p>encoder: <span class="math notranslate nohighlight">\(\mathbf{c}^{(i)} = \mathbf{E}\mathbf{x}^{(i)}\)</span></p></li>
+<li><p>decoder: <span class="math notranslate nohighlight">\(\hat{\mathbf{x}}^{(i)} = \mathbf{D}\mathbf{c}^{(i)}\)</span></p></li>
+</ul>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{E}_{[N_l \times N_f]}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{D}_{[N_f \times N_l]}\)</span>. PCA aims to find representative
+features that are linear combinations of the columns of the encoder (i.e., <span class="math notranslate nohighlight">\(\mathbf{c}=\sum_{i=1}^{N_f} \mathbf{E}_{:,i} x_i\)</span>)
+such that the projection of these new features onto the original space (<span class="math notranslate nohighlight">\(\mathbf{D}\mathbf{c}\)</span>) is as close as possible to the
+original sample <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>. In other words, we want to find the best linear subspace of the original space that minimizes the
+reconstruction error defined here as the squared Euclidean norm (<span class="math notranslate nohighlight">\(\mathscr{L}=||.||^2_2\)</span>).</p>
+<p>Defining a unique pair of matrices (<span class="math notranslate nohighlight">\(\mathbf{E},\mathbf{D}\)</span>) is however not possible without imposing further constraints. In the
+PCA derivation we must assume that the columns of <span class="math notranslate nohighlight">\(\mathbf{D}\)</span> are orthonormal:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{D}^T \mathbf{D} = \mathbf{I}_{N_l}
+\]</div>
+<p>By making such a strong assumption we can easily see that</p>
+<div class="math notranslate nohighlight">
+\[
+$\hat{\mathbf{x}}^{(i)} = \mathbf{D}\mathbf{E}\mathbf{x}^{(i)}=\mathbf{D}\mathbf{D}^T\mathbf{x}^{(i)} \quad (\mathbf{E}=\mathbf{D}^T)
+\]</div>
+<p>is the choice of encoder-decoder that minimizes the reconstruction error. Let’s now prove to ourselves that this is the case for
+a single training sample:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{\mathbf{c}} = \underset{\mathbf{c}} {\mathrm{argmin}} \; ||\mathbf{x}-d(\mathbf{x})||_2^2
+\]</div>
+<p>where for the moment we do not specify the decoder and simply call it <span class="math notranslate nohighlight">\(d\)</span>. Let’s first expand the loss function</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+||\mathbf{x}-d(\mathbf{x})||_2^2 &amp;= (\mathbf{x}-g(\mathbf{x}))^T (\mathbf{x}-d(\mathbf{x})) \\
+&amp;= \mathbf{x}^T \mathbf{x} - \mathbf{x}^Td(\mathbf{x}) - g(\mathbf{x})^T \mathbf{x} + d(\mathbf{c})^T g(\mathbf{c})^T\\
+&amp;= \mathbf{x}^T \mathbf{x} - 2 \mathbf{x}^Td(\mathbf{x}) + d(\mathbf{c})^T g(\mathbf{c})^T\\
+\end{aligned}
+\end{split}\]</div>
+<p>where we can ignore the first term given it does not depend on <span class="math notranslate nohighlight">\(\mathbf{c}\)</span>. At this point let’s consider the special
+case of <span class="math notranslate nohighlight">\(d()=\mathbf{D}\)</span>, which gives:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+||\mathbf{x}-d(\mathbf{x})||_2^2 &amp;= \mathbf{c}^T \mathbf{D}^T \mathbf{D} \mathbf{c} - 2 \mathbf{x}^T \mathbf{D} \mathbf{c} \\
+&amp;= \mathbf{c}^T \mathbf{I}_{N_l} \mathbf{c} - 2 \mathbf{x}^T \mathbf{D} \mathbf{c}
+\end{aligned}
+\end{split}\]</div>
+<p>Finally we compute the derivative of the loss function over <span class="math notranslate nohighlight">\(\mathbf{c}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial J}{\partial \mathbf{c}} = 0 \rightarrow 2 \mathbf{c}^T - 2 \mathbf{x}^T \mathbf{D} = 0 \rightarrow \mathbf{c} = \mathbf{D}^T \mathbf{x}
+\]</div>
+<p>where we have obtained that <span class="math notranslate nohighlight">\(\mathbf{E} = \mathbf{D}^T\)</span>.</p>
+<p>At this point we know what is the optimal linear encoder-decoder pair with respect to the MSE loss. However, we do not have a specific form
+for the matrix <span class="math notranslate nohighlight">\(\mathbf{D}\)</span> itself. In order to identify the entries of the decoder matrix, we need to set up another optimization problem, this
+time directly for <span class="math notranslate nohighlight">\(\mathbf{D}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{\mathbf{D}} = \underset{\mathbf{D}} {\mathrm{argmin}} \; ||\mathbf{X}-\mathbf{D}\mathbf{D}^T \mathbf{X}||_F 
+\quad s.t. \; \mathbf{D}^T \mathbf{D} = \mathbf{I}_{N_l}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{X}_{[N_f \times N_s]}\)</span> is the training sample matrix. To simplify our derivation let’s consider the case of
+<span class="math notranslate nohighlight">\(N_l=1\)</span>; the result can then be easily generalized for any choice of <span class="math notranslate nohighlight">\(N_l=1\)</span>. Let’s write</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\hat{\mathbf{d}} &amp;= \underset{\mathbf{d}} {\mathrm{argmin}} \; ||\mathbf{X}-\mathbf{d}\mathbf{d}^T \mathbf{X}||_F 
+\quad s.t. \; \mathbf{d}^T \mathbf{d} = 1 \\
+&amp;= \underset{\mathbf{d}} {\mathrm{argmin}} \; ||\bar{\mathbf{X}}-\bar{\mathbf{X}}\mathbf{d}\mathbf{d}^T||_F 
+\quad s.t. \; \mathbf{d}^T \mathbf{d} = 1 \quad (\bar{\mathbf{X}}=\mathbf{X}^T) \\
+&amp;= \underset{\mathbf{d}} {\mathrm{argmin}} \; Tr((\bar{\mathbf{X}}-\bar{\mathbf{X}}\mathbf{d}\mathbf{d}^T)^T(\bar{\mathbf{X}}-\bar{\mathbf{X}}\mathbf{d}\mathbf{d}^T))
+\quad s.t. \; \mathbf{d}^T \mathbf{d} = 1\\
+&amp;= \underset{\mathbf{d}} {\mathrm{argmin}} \; Tr(\bar{\mathbf{X}}^T \bar{\mathbf{X}} - \bar{\mathbf{X}}^T \bar{\mathbf{X}}\mathbf{d}\mathbf{d}^T - 
+\mathbf{d}\mathbf{d}^T \bar{\mathbf{X}}^T \bar{\mathbf{X}} + \mathbf{d}\mathbf{d}^T\bar{\mathbf{X}}^T \bar{\mathbf{X}}\mathbf{d}\mathbf{d}^T)
+\quad s.t. \; \mathbf{d}^T \mathbf{d} = 1\\
+&amp;= \underset{\mathbf{d}} {\mathrm{argmin}} \; -2 Tr(\bar{\mathbf{X}}^T \bar{\mathbf{X}}\mathbf{d}\mathbf{d}^T) + Tr(\mathbf{d}\mathbf{d}^T\bar{\mathbf{X}}^T \bar{\mathbf{X}}\mathbf{d}\mathbf{d}^T) \quad s.t. \; \mathbf{d}^T \mathbf{d} = 1\\
+&amp;= \underset{\mathbf{d}} {\mathrm{argmin}} \; -2 Tr(\bar{\mathbf{X}}^T \bar{\mathbf{X}}\mathbf{d}\mathbf{d}^T) + Tr(\bar{\mathbf{X}}^T \bar{\mathbf{X}}\mathbf{d}\mathbf{d}^T \mathbf{d}\mathbf{d}^T) \quad s.t. \; \mathbf{d}^T \mathbf{d} = 1\\
+&amp;= \underset{\mathbf{d}} {\mathrm{argmin}} \; -Tr(\bar{\mathbf{X}}^T \bar{\mathbf{X}}\mathbf{d}\mathbf{d}^T) \quad s.t. \; \mathbf{d}^T \mathbf{d} = 1\\
+&amp;= \underset{\mathbf{d}} {\mathrm{argmax}} \; Tr(\bar{\mathbf{X}}^T \bar{\mathbf{X}}\mathbf{d}\mathbf{d}^T) = Tr(\mathbf{d}^T \bar{\mathbf{X}}^T \bar{\mathbf{X}}\mathbf{d})  \quad s.t. \; \mathbf{d}^T \mathbf{d} = 1\\
+\end{aligned}
+\end{split}\]</div>
+<p>where in 6 we use the fact that <span class="math notranslate nohighlight">\(\mathbf{d}^T \mathbf{d} = 1\)</span>. The solution of this maximization problem is represented by the
+eigenvector of <span class="math notranslate nohighlight">\(\bar{\mathbf{X}}^T \bar{\mathbf{X}}\)</span> associated to the largest eigenvalue (or the <span class="math notranslate nohighlight">\(N_l\)</span> largest eigenvalues for the
+general case).</p>
+<p>We can therefore conclude that PCA is defined as:</p>
+<ul class="simple">
+<li><p>Take <span class="math notranslate nohighlight">\(N_s\)</span> training samples <span class="math notranslate nohighlight">\(\mathbf{x}^{(i)} \in \mathbb{R}^{N_f}\)</span>, (<span class="math notranslate nohighlight">\(i=1,2,...N_s\)</span>),</p></li>
+<li><p>Compute the matrix <span class="math notranslate nohighlight">\(\bar{\mathbf{X}}_{[N_s \times N_f]}\)</span></p></li>
+<li><p>Compute the SVD of <span class="math notranslate nohighlight">\(\bar{\mathbf{X}}\)</span> (i.e., eigenvalues and eigenvectors of the sample covariance matrix <span class="math notranslate nohighlight">\(\bar{\mathbf{X}}^T \bar{\mathbf{X}}\)</span>)</p></li>
+<li><p>Form <span class="math notranslate nohighlight">\(\mathbf{D}\)</span> composed by the eigenvector associated with the <span class="math notranslate nohighlight">\(N_l\)</span> largest eigenvalues.</p></li>
+<li><p>Compute <span class="math notranslate nohighlight">\(\mathbf{c}=\mathbf{D}^T \mathbf{x}\)</span> and <span class="math notranslate nohighlight">\(\hat{\mathbf{x}}=\mathbf{D} \mathbf{c}\)</span>.</p></li>
+</ul>
+<p>More in general, it is also worth remembering that if the training data is not zero-mean, PCA can be slightly modified to take that into account:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{c}=\mathbf{D}^T (\mathbf{x}-\boldsymbol\mu$ and $\hat{\mathbf{x}}=\mathbf{D} \mathbf{c}+\boldsymbol\mu$.
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\boldsymbol\mu\)</span> is the sample mean.</p>
+<p>To conclude, let’s try to provide some additional geometrical intuition of how PCA works in practice. Once again,
+let’s recall the covariance matrix that we form and create SVD on:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{C}_x=E_\mathbf{x} [(\mathbf{x}-\boldsymbol\mu) (\mathbf{x}-\boldsymbol\mu)^T]
+\]</div>
+<p>The eigenvalues <span class="math notranslate nohighlight">\(\lambda_i\)</span> of <span class="math notranslate nohighlight">\(\mathbf{C}_x\)</span> relate to the variance of the dataset <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> in the direction of the
+associated eigenvector <span class="math notranslate nohighlight">\(\mathbf{v}_i\)</span> as follows (we use a 2d example for simplicity):</p>
+<p><img alt="PCA" src="_images/pca.png" /></p>
+<p>so we observe that the first direction of PCA (i.e. <span class="math notranslate nohighlight">\(\mathbf{v}_1\)</span>) is the one that best minimizes the
+reconstruction error (i.e., \sum_i d_{i,1}). In multiple dimensions, the eigenvectors are organized in order of reconstruction
+error of the projected data points from smallest to largest.</p>
+</section>
+<section id="other-linear-dimensionality-reduction-techniques">
+<h2>Other linear dimensionality reduction techniques<a class="headerlink" href="#other-linear-dimensionality-reduction-techniques" title="Link to this heading">#</a></h2>
+<p>Whilst PCA is very popular for its simplicity (both of understanding and implementation), other techniques for linead dimensionality
+reduction exist. As some of them has been shown during the years to be very powerful and better suited to find representative latent
+representations from data, we will briefly look at them here.</p>
+<section id="independent-component-analysis-ica">
+<h3>Independent Component Analysis (ICA)<a class="headerlink" href="#independent-component-analysis-ica" title="Link to this heading">#</a></h3>
+<p>ICA aims to separate a signal into many underlying signals that are scaled and added together to reproduce the original one:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{x} = \sum_i c_i \mathbf{w}_i = \mathbf{Wc} 
+\]</div>
+<p>where in this case <span class="math notranslate nohighlight">\(\mathbf{c}\)</span> has the same dimensionality of <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>. This model is in fact commonly used for blind source separation
+of mixed signals. Despite it is strictly speaking not a dimensionality reduction technique, we discuss it here due to its ability of finding
+representative bases that combined together can explain a set of data.</p>
+<p>Once again, the problem is in need for extra constraints for us to be able to find a solution. In this case the assumption made of
+the <span class="math notranslate nohighlight">\(\mathbf{w}_i\)</span> signals is as follows:</p>
+<p>Signals <span class="math notranslate nohighlight">\(\mathbf{w}_i\)</span> must be statistically independent from each other and non-gaussian</p>
+<p>A solution to this problem can be obtained finding the pair (<span class="math notranslate nohighlight">\(\mathbf{W}, \mathbf{c}\)</span>) which maximises non-gaussianity (i.e., minimizes
+normalized sample kurtosis) or minimizes mutual information (MI). Whilst we don’t discuss here in details how to achieve such solution,
+it is worth pointing out that this requires solving a nonlinear inverse problem as <span class="math notranslate nohighlight">\(\mathbf{W}\)</span> relates in a nonlinear manner to kurtosis or MI.</p>
+</section>
+<section id="sparse-coding-or-dictionary-learning">
+<h3>Sparse Coding (or Dictionary Learning)<a class="headerlink" href="#sparse-coding-or-dictionary-learning" title="Link to this heading">#</a></h3>
+<p>Sparse coding is another heavily studied model for dimensionality reduction. The general idea has origin in a large body of
+work carried out in other areas of applied mathematics where hand-crafted transformations (e.g., wavelets) habe been identified
+to nicely represent data of different kind (e.g., images, sounds, seismic recordings) in a very sparse fashion. Here <em>sparse</em>
+refers to the fact that the transformed signal can be represented by a vector with many zeros and just few non-zero entries.</p>
+<p>In this context, however, the transformation is represented a matrix <span class="math notranslate nohighlight">\(\mathbf{W}\)</span>, whose entries are once again learned directly
+from the available training data. This is achieved by imposing a strong condition on the probability distribution associated with
+the latent vector <span class="math notranslate nohighlight">\(\mathbf{c}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+p(\mathbf{c}) \approx \text{Laplace, Cauchy, Factorized t-student}
+\]</div>
+<p>in other words, a fat tailed distribution, whose samples are therefore sparse. By making such an assumption, no closed form
+solution exist like in the PCA case. Instead, the training process is set up with the following goals in mind:</p>
+<ol class="arabic simple">
+<li><p>Find sparsest latent representation during the encoding phase</p></li>
+<li><p>Find a decoder that provides the smallest reconstruction error</p></li>
+</ol>
+<p>which mathematically can be written as:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{aligned}
+\hat{\mathbf{W}}, \hat{\mathbf{h}} &amp;= \underset{\mathbf{W}, \mathbf{h}} {\mathrm{argmax}} p(\mathbf{h}|\mathbf{x}) 
+&amp;= \underset{\mathbf{W}, \mathbf{h}} {\mathrm{argmin}} \beta ||\mathbf{h}-\mathbf{W}\mathbf{h}||_2^2 +\lambda ||\mathbf{h}||_1
+\end{aligned}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\beta\)</span>, <span class="math notranslate nohighlight">\(\lambda\)</span> are directly related to the parameters of the posterior distribution that we wish to maximize. This
+functional can be minimized in an alternating fashion, first for <span class="math notranslate nohighlight">\(\mathbf{W}\)</span>, then for <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>, and so on and so forth.</p>
+<p>Finally, once the training process is over and <span class="math notranslate nohighlight">\(\hat{\mathbf{W}}\)</span> is available, it is worth noting that sparse coding does require
+solving a sparsity-promoting inverse problem for any new training sample <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> in order to find its best
+representation <span class="math notranslate nohighlight">\(\hat{\mathbf{h}}\)</span>. Nevertheless, despite the higher cost compared to for example PCA, sparse coding has shown
+great promise in both data compression and representation learning, the latter when coupled with down-the-line supervised tasks.</p>
+</section>
+</section>
+<section id="autoencoders">
+<h2>Autoencoders<a class="headerlink" href="#autoencoders" title="Link to this heading">#</a></h2>
+<p>Finally, we turn our attention onto nonlinear dimensionality reduction models. We should know by now that nonlinear mappings (like
+those performed by NNs) may be much more powerful than their linear counterpart is used to our advantage.</p>
+<p>The most popular nonlinear dimensionality techniques dates back to 1991 and the work of M. Kramer. Simply put, an autoencoder is
+the combination of an encoder function <span class="math notranslate nohighlight">\(e_\theta\)</span>, which converts the input data into a latent representation,
+and a decoder function <span class="math notranslate nohighlight">\(d_\theta\)</span>, which converts the new representation back into the original format. Here, both
+<span class="math notranslate nohighlight">\(e_\theta\)</span> and <span class="math notranslate nohighlight">\(d_\theta\)</span> and nonlinear and fully learned and stack one after the other as shown below</p>
+<p><img alt="AE" src="_images/ae.png" /></p>
+<p>An autoencoder can therefore be simply defined as:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{\mathbf{x}} = d_\phi(e_\theta(\mathbf{x}))
+\]</div>
+<p>where similar to PCA, the training process is setup such the parameters of the two networks are optimized to minimize the
+following loss function:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{e}_\theta,\hat{d}_\phi = \underset{e_\theta,d_\phi} {\mathrm{argmin}} \; \frac{1}{N_s}\sum_i \mathscr{L}(\mathbf{x}^{(i)}, d_\phi(e_\theta(\mathbf{x}^{(i)}))))
+\]</div>
+<p>where the network architecture for both the encoder and decoder can be chosen accordingly to the type of data we are interested in.</p>
+<p>Once again, our code (or latent vector <span class="math notranslate nohighlight">\(\mathbf{z}\)</span>) must be chosen to be of lower dimensionality compared to the input in order to be able to
+learn useful representations. On the other hand if we choose <span class="math notranslate nohighlight">\(N_l \ge N_f\)</span>, we will likely not learn something useful: very likely what
+we are going to learn is to reproduce the identity mapping. In other words, whilst the loss function is set to reproduce the input itself,
+what we are really interested is not the mere reconstruction, rather the creation of some meaningful transformation of the input vector
+that first projects it into a latent space and then expands it back to the original space. If we are able to accomplish this task,
+we will likely see that if we feed the trained network with a new sample <span class="math notranslate nohighlight">\(\mathbf{x}_{in}\)</span> that lies inside the distribution of the training data,
+the reconstruction will be of similar quality as to what we observed in training. On the other hand, when a out-of-distribution sample
+<span class="math notranslate nohighlight">\(\mathbf{x}_{out}\)</span> is fed to the network, its prediction will be much less accurate.</p>
+<section id="applications">
+<h3>Applications<a class="headerlink" href="#applications" title="Link to this heading">#</a></h3>
+<p>Now that we know how an AutoEncoder works, the next obvious question is why do we care and what can we use if for. Let’s recap here a
+couple of applications that we have already mentioned here and there in the lecture:</p>
+<ul class="simple">
+<li><p>Data compression: the use of NNs (and AEs in this specific case) may soon lead to a completely new, nonlinear paradigm in data compression
+where we could simply store the latent vectors and network architecture and weights and reconstruct the original vector on-demand similar
+to what conventionally done with linear compressors (e.g., JPEG2000).</p></li>
+<li><p>Learn robust features on large unlabelled data prior to supervised learning: assuming that we have access to a large dataset composed for the majority of
+unlabelled data and for a small portion of labelled data, we could imagine training and AE on the first part of the dataset and use the learned latent
+features as input to a subsequent task of supervised learning. More specifically, the inputs of the labelled data are fed to the trained encoder and the resulting
+features are used in conjunction with the labels in a supervised manner.</p></li>
+<li><p>Inverse problems in the latent space: this is similar to the previous case, with the main difference that we may have an inverse problem we wish to solve where
+the parameter to estimate lives in the manifold of the <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> samples. We can once again train and AE to learn a good representation for such
+the manifold of possible solutions and then solve the inverse problem for <span class="math notranslate nohighlight">\(\mathbf{z}\)</span> instead of <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> directly.</p></li>
+<li><p>Perform vector math in the latent space: Imagine we want to compare two multi-dimensional vectors <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> (e.g., images). Classical
+distance measures may focus too much on small discrepancies and not really on the overall similarity between these samples, that is
+what we usually want to compare. Alternatively, we could convert both vectors into their latent representations and compare them in this reduced space.
+In this case, even simple distance measures like MSE may become more robust as they really compare high-level features of the inputs that
+are encapsulated in the latent vectors.</p></li>
+</ul>
+</section>
+<section id="undercomplete-vs-overcomplete-aes">
+<h3>Undercomplete vs. Overcomplete AEs<a class="headerlink" href="#undercomplete-vs-overcomplete-aes" title="Link to this heading">#</a></h3>
+<p>Up until now, we are talked about <em>undercomplete</em> representations (i.e., <span class="math notranslate nohighlight">\(N_l &lt;&lt; N_f\)</span>). We have justified this with the fact that if we give
+too many degrees of freedom to the network, we will likely allow it to learn the identity mapping (a form of overfitting for AEs). In short,
+a good design for a AE should follow these two rules:</p>
+<ul class="simple">
+<li><p>choose a small enough code (<span class="math notranslate nohighlight">\(N_l\)</span>): not too small as it won’t be able to reproduce the input accurately, not too large as it will make the AE overfit;</p></li>
+<li><p>choose a small enough network capacity for both the encoder and decoder: similarly, a too large network will easily overfit even if the size of bottleneck has been appropriately chosen.</p></li>
+</ul>
+<p>However, a different choice may be taken as we will see shortly. This is heavily inspired by traditional compression algorithms, where a
+(linear) transformation that can produce a compact code (i.e., a code that can be stored in far fewer bits than the corresponding input) is
+usually overcomplete. Let’s take the Wavelet transform as an example:</p>
+<p><img alt="WAVELETTRANSFORM" src="_images/wt.png" /></p>
+<p>Here the input image is initially decomposed into 3 high-pass and one-low pass filtered versions of it, and the low-pass one is further processed
+recursively. The overall size of the input and output is however <em>identical</em>. What makes this transform a great compressor is that in the transformed domain,
+natural images (and other N-dimensional signals) can be represented by very few non-zero coefficients. In other words, we say that the Wavelet transform provides
+a <em>sparse</em> representation of a variety of N-dimensional signals in nature.</p>
+<p>A similar approach can be taken for nonlinear transformations, like those applied by AEs. In this case, however, extra care must be taken to
+avoid overfitting, which can be done by adding some constraints to the learning process. As already discussed many times, these constraints
+can simply come in the form of regularization in the learning process:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathscr{L}_r = \frac{1}{N_s}\sum_i \left( \mathscr{L}(\mathbf{x}^{(i)}, d_\phi(e_\theta(\mathbf{x}^{(i)}))) +\lambda R(\mathbf{x}^{(i)} ; \theta,\phi) \right)
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(R(\mathbf{x}^{(i)} ;\theta,\phi)\)</span> can take several forms:</p>
+<ul class="simple">
+<li><p><em>L1 norm</em>: this encourages the network to produce sparse latent representations;</p></li>
+<li><p><em>Derivative of the latent vector over the input</em>: this encourages robust latent vectors that a small sensitivity to small perturbations of the input;</p></li>
+<li><p><em>Noise or missing parts in the inputs</em>: this is not really a regularization in formal sense, as nothing is added to the cost function,
+rather the input is perturbed to make once again the latent representation robust to small variations in the input.</p></li>
+</ul>
+<section id="sparse-autoencoders">
+<h4>Sparse AutoEncoders<a class="headerlink" href="#sparse-autoencoders" title="Link to this heading">#</a></h4>
+<p>Enforcing a sparse latent vector can act as a strong regularization. This can be simply achieved by choosing:</p>
+<div class="math notranslate nohighlight">
+\[
+R(\mathbf{x}^{(i)} ;\theta,\phi) = ||e_\theta(\mathbf{x}^{(i)})||_1
+\]</div>
+<p>which allows the learning process to optimize for the pair of encoder-decoder that can reproduce the training samples, whilst also forcing the encoder
+to produce sparse latent representation.</p>
+<p>A step further can be taken by imposing that not only the activations of the latent code are sparse, rather all the activations in the network. Let’s
+take for simplicity a small network as depicted below:</p>
+<p><img alt="AESPARSE" src="_images/ae_sparse.png" /></p>
+<p>and changing the regularizer to:</p>
+<div class="math notranslate nohighlight">
+\[
+R(\mathbf{x}^{(i)} ;\theta,\phi) = \sum_j ||a_e^{[j](i)}||_1 + \sum_j ||a_d^{[j](i)}||_1
+\]</div>
+<p>An autoencoder that is trained using this strategy is called <em>Sparse Autoencoder</em>.</p>
+<p>Finally, a slightly different strategy has been proposed under the name of <em>K-sparse AutoEncoder</em>, where instead of having a soft-constraint
+in the form of the regularization term above, the elements of the latent code are modified by a nonlinear
+transformation that brings all elements to zero apart from the K largest elements in absolute value. More formally, even though in practice no regularization term is
+therefore explicitly added to the loss function, this approach solves the following constrained problem:</p>
+<div class="math notranslate nohighlight">
+\[
+\underset{\mathbf{e}_\theta, \mathbf{d}_\phi} {\mathrm{argmin}} \; \frac{1}{N_s}\sum_i \mathscr{L}(\mathbf{x}^{(i)}, d_\phi(e_\theta(\mathbf{x}^{(i)}))) 
+\quad s.t. \quad ||\mathbf{z}||_0&lt;K
+\]</div>
+<p>Note that, once again, this procedure can be extended such that all the activations in the network are forced to have only K non-zero values.</p>
+</section>
+<section id="contractive-autoencoders">
+<h4>Contractive AutoEncoders<a class="headerlink" href="#contractive-autoencoders" title="Link to this heading">#</a></h4>
+<p>An alternative regularization term that can make AEs robust to small changes in the input vectors is:</p>
+<div class="math notranslate nohighlight">
+\[
+R(\mathbf{x} ;\theta,\phi) = ||\nabla_\mathbf{x} \mathbf{z}||_F
+\]</div>
+<p>where the derivative of the latent vector is taken over the input vector and forced to be small. Note that this derivative produces the
+Jacobian of the encoder as both the input and output are multi-dimensional (and therefore the use of the Frobenious norm). Whilst the authors
+of this method claim additional robustness, the computational cost of computing a Jacobian makes this approach quite costly.</p>
+</section>
+<section id="denoising-autoencoders">
+<h4>Denoising AutoEncoders<a class="headerlink" href="#denoising-autoencoders" title="Link to this heading">#</a></h4>
+<p>Finally, denoising AEs are another family of regularized autoencoders. In this case, however, the regularization is implemented directly on
+the input vectors prior to feeding them to the network, by either replacing some values with zeros (or random values) or adding noise. Considering
+this last case, each step of the training process becomes:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\tilde{\mathbf{x}}^{(i)} = \mathbf{x}^{(i)} + \mathbf{n}^{(i)} \quad \forall i\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathscr{L} = \frac{1}{N_s}\sum_i \mathscr{L}(\mathbf{x}^{(i)}, d_\phi(e_\theta(\tilde{\mathbf{x}}^{(i)})))\)</span>.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="additional-readings">
+<h2>Additional readings<a class="headerlink" href="#additional-readings" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>the following <a class="reference external" href="https://towardsdatascience.com/independent-component-analysis-ica-a3eba0ccec35">resource</a> provides a detailed
+explanation of the theory of ICA (and a simple Python implementation!)</p></li>
+<li><p>the following <a class="reference external" href="https://lilianweng.github.io/posts/2018-08-12-vae/">blog post</a> provides an extensive list (and description) of
+different AutoEncoder networks (and Variational AutoEncoders, which we will discuss in the next lecture).</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#principal-component-analysis-pca">Principal Component Analysis (PCA)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#other-linear-dimensionality-reduction-techniques">Other linear dimensionality reduction techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#independent-component-analysis-ica">Independent Component Analysis (ICA)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sparse-coding-or-dictionary-learning">Sparse Coding (or Dictionary Learning)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#autoencoders">Autoencoders</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#applications">Applications</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#undercomplete-vs-overcomplete-aes">Undercomplete vs. Overcomplete AEs</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sparse-autoencoders">Sparse AutoEncoders</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#contractive-autoencoders">Contractive AutoEncoders</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#denoising-autoencoders">Denoising AutoEncoders</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-readings">Additional readings</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Ashok Dahal, Modified from the Content of Matteo Ravasi, KAUST
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

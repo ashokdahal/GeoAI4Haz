@@ -1,0 +1,977 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>More on Neural Networks &#8212; Machine Learning for Natural Hazards</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '06_nn';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Best practices in the training of Machine Learning models" href="07_bestpractice.html" />
+    <link rel="prev" title="Basics of Neural Networks" href="05_nn.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Machine Learning for Natural Hazards</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Background and Refresher</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_intro.html">Introduction to Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_linalg.html">Linear Algebra refresher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_gradopt.html">Gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_linreg.html">Linear and Logistic Regression</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_nn.html">Basics of Neural Networks</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">More on Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_bestpractice.html">Best practices in the training of Machine Learning models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Convolutional Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="08_gradopt1.html">More on gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_cnn.html">Convolutional Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_cnnarch.html">CNNs Popular Architectures</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz/issues/new?title=Issue%20on%20page%20%2F06_nn.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/06_nn.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>More on Neural Networks</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#backpropagation">Backpropagation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initialization">Initialization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-initialization">Zero initialization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#random-initialization">Random initialization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-deep-learning-took-off-in-the-last-century">Why Deep Learning took off in the last century</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood-estimators">Maximum likelihood estimators</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regression">Regression</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression">Linear regression</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-layer-perceptron-regression">Multi-layer perceptron regression</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classification">Classification</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#binary-classification">Binary classification</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-label-classification">Multi-label classification</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-readings">Additional readings</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="more-on-neural-networks">
+<h1>More on Neural Networks<a class="headerlink" href="#more-on-neural-networks" title="Link to this heading">#</a></h1>
+<p>In this lecture, we will delve into some more advanced topics associated to the creation and training of deep
+neural networks.</p>
+<section id="backpropagation">
+<h2>Backpropagation<a class="headerlink" href="#backpropagation" title="Link to this heading">#</a></h2>
+<p>First of all, once a neural network architecture has been defined for the problem at hand, we need a method
+that can learn the best set of free parameters of such nonlinear function represented as <span class="math notranslate nohighlight">\(f_\theta\)</span>.</p>
+<p>More specifically, we want to initialize the network with some random weights and biases (we will soon discuss how
+such initialization can be performed) and use the training data at hand to improve our weights and biases in order
+to minimize a certain loss function. Whilst this can be easily done by means of gradient based optimizers like those
+presented in Lecture 3, a key ingredient that we need to provide to such algorithms is represented by the gradient
+of the loss function with respect to each and every weight and bias parameters.</p>
+<p>We have already alluded at a technique that can do so whilst discussing a simple logistic regression model. This
+is generally referred to by the ML community as <em>back-propagation</em> and more broadly by the mathematical community
+as <em>Reverse Automatic Differentiation</em>. Let’s start by taking the same schematic diagram used for the logistic regression
+example and generalize it to a N-layer NN:</p>
+<p><img alt="BACKPROP_NN" src="_images/backprop_nn.png" /></p>
+<p>The main difference here, which we will need to discuss in details, is the fact that in the forward pass
+we feed the input into a stack of linear layers prior to computing the loss function. The backpropagation
+does need to be able to keep track of the chain of operations (i.e., computational graph) and traverse it
+back. However, as already done for the logistic regression model, all we need to do is to write the entire
+chain of operations as a chain of atomic ones that we can then easily traverse back. Let’s do this for
+the network above and a single training sample <span class="math notranslate nohighlight">\(\textbf{x}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\textbf{z}^{[1]} = \textbf{W}^{[1]}\textbf{x} + \textbf{b}^{[1]}, \quad
+\textbf{a}^{[1]} = \sigma(\textbf{z}^{[1]}),
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\textbf{z}^{[2]} = \textbf{W}^{[2]}\textbf{a}^{[1]} + \textbf{b}^{[2]}, \quad
+\textbf{a}^{[2]} = \sigma(\textbf{z}^{[2]}),
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+z^{[3]} = \textbf{w}^{[3]T}\textbf{a}^{[2]} + b^{[3]}, \quad
+a^{[3]} = \sigma(z^{[3]}),
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+l = \mathscr{L}(y,a^{[3]}).
+\]</div>
+<p>Given such a chain of operations, we are now able to find the derivatives of the loss function with
+respect to any of the weights or biases. As an example we consider here <span class="math notranslate nohighlight">\(\partial l / \partial \textbf{W}^{[2]}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial l}{\partial \textbf{W}^{[2]}} = \frac{\partial l}{\partial a^{[3]}} \frac{\partial a^{[3]}}{\partial z^{[3]}}
+\frac{\partial z^{[3]}}{\partial \textbf{a}^{[2]}} \frac{\partial \textbf{a}^{[2]}}{\partial \textbf{z}^{[2]}} 
+\frac{\partial \textbf{z}^{[2]}}{\partial \textbf{W}^{[2]}}
+\]</div>
+<p>Note that since this will be effectively evaluated from left to right, it is perhaps easier to rewrite the chain of derivatives as follows:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial l}{\partial \textbf{W}^{[2]}} = \frac{\partial \textbf{z}^{[2]}}{\partial \textbf{W}^{[2]}} 
+\frac{\partial \textbf{a}^{[2]}}{\partial \textbf{z}^{[2]}}  
+\frac{\partial z^{[3]}}{\partial \textbf{a}^{[2]}} 
+\frac{\partial a^{[3]}}{\partial z^{[3]}} \frac{\partial l}{\partial a^{[3]}}
+\]</div>
+<p>Assuming for simplicity that the binary cross-entropy and sigmoid functions are used here as the loss and activation functions, respectively,
+we get:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial a^{[3]}}{\partial z^{[3]}} \frac{\partial l}{\partial a^{[3]}}  = a^{[3]} - y
+\]</div>
+<p>(which has already been derived in the logistic regression lecture). The subsequent derivatives are:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial z^{[3]}}{\partial \textbf{a}^{[2]}} = \textbf{w}^{[3]}_{N_{a^{[2]}} \times 1}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial \textbf{a}^{[2]}}{\partial \textbf{z}^{[2]}} = diag\{\textbf{a}^{[2]}(1-\textbf{a}^{[2]})\}_{N_{z^{[2]}} \times N_{a^{[2]}}}
+\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\frac{\partial \textbf{z}^{[2]}}{\partial \textbf{W}^{[2]}} = 
+\begin{bmatrix}
+    \mathbf{a}^{[1]}  &amp; \mathbf{0}       &amp;  \ldots &amp; \mathbf{0}  \\
+    \mathbf{0}        &amp; \mathbf{a}^{[1]} &amp;  \ldots &amp; \mathbf{0}  \\
+    \vdots            &amp; \vdots           &amp;  \ddots &amp; \vdots            \\
+     \mathbf{0}       &amp; \mathbf{0}       &amp;  \ldots &amp; \mathbf{a}^{[1]}
+\end{bmatrix}_{N_{a^{[1]}}N_{z^{[2]}} \times N_{z^{[2]}}}
+\end{split}\]</div>
+<p>where the last two expressions correspond to the transposed Jacobian. Putting all together:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\frac{\partial l}{\partial \textbf{W}^{[2]}} = \begin{bmatrix}
+    \mathbf{a}^{[1]}  &amp; \mathbf{0}       &amp;  \ldots &amp; \mathbf{0}  \\
+    \mathbf{0}        &amp; \mathbf{a}^{[1]} &amp;  \ldots &amp; \mathbf{0}  \\
+    \vdots            &amp; \vdots           &amp;  \ddots &amp; \vdots            \\
+     \mathbf{0}       &amp; \mathbf{0}       &amp;  \ldots &amp; \mathbf{a}^{[1]}
+\end{bmatrix} diag\{\textbf{a}^{[2]}(1-\textbf{a}^{[2]})\}
+ \textbf{w}^{[3]} (a^{[3]} - y)
+\end{split}\]</div>
+<p>which can be later reshaped into a matrix of size <span class="math notranslate nohighlight">\(N_{z^{[2]}} \times N_{a^{[1]}}\)</span>. This derivative
+can also written in a more compact form as</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial l}{\partial \textbf{W}^{[2]}} = \textbf{a}^{[1]}[(\textbf{a}^{[2]}(1-\textbf{a}^{[2]})) \cdot \textbf{w}^{[3]}(a^{[3]} - y)]^T
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\cdot\)</span> is used to refer to element-wise products. Similar results can be obtained for the bias vector
+and for both weights and biases in the other layers as depicted in the figure below for a 2-layer NN:</p>
+<p><img alt="BACKPROP_NN1" src="_images/backprop_nn1.png" /></p>
+<p>To conclude, the backpropagation equations in the diagram above are now generalized for the case
+of <span class="math notranslate nohighlight">\(N_s\)</span> training samples <span class="math notranslate nohighlight">\(\textbf{X} \in \mathbb{R}^{N \times N_s}\)</span> and a generic activation function
+<span class="math notranslate nohighlight">\(\sigma\)</span> whose derivative is denoted as <span class="math notranslate nohighlight">\(\sigma'\)</span>. Here we still assume an output
+of dimensionality one – <span class="math notranslate nohighlight">\(\textbf{Y} \in \mathbb{R}^{1 \times N_s}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\textbf{dZ}^{[2]}=\textbf{A}^{[2]}-\textbf{Y} \qquad (\textbf{A}^{[2]},\textbf{dZ}^{[2]} \in \mathbb{R}^{1 \times N_s})
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\textbf{dW}^{[2]}= \frac{1}{N_s} \textbf{dZ}^{[2]}\textbf{A}^{[1]T} \qquad (\textbf{A}^{[1]} \in \mathbb{R}^{N^{[1]} \times N_s})
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+db^{[2]}= \frac{1}{N_s} \sum_i \textbf{dZ}_{:,i}^{[2]}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\textbf{dZ}^{[1]}=\textbf{W}^{[2]^T}\textbf{dZ}^{[2]} \cdot \sigma'(\textbf{Z}^{[1]})  \qquad (\textbf{dZ}^{[1]} \in \mathbb{R}^{N^{[1]} \times N_s})
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\textbf{dW}^{[1]}= \frac{1}{N_s} \textbf{dZ}^{[1]}\textbf{X}^T
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\textbf{db}^{[1]}= \frac{1}{N_s} \sum_i \textbf{dZ}_{:,i}^{[1]}
+\]</div>
+</section>
+<section id="initialization">
+<h2>Initialization<a class="headerlink" href="#initialization" title="Link to this heading">#</a></h2>
+<p>Neural networks are highly nonlinear functions. The associated cost function used in the training
+process in order to optimize the network weights and biases is therefore non-convex and contains
+several local minima and saddle points.</p>
+<p>A key component in non-convex optimization is represented by the starting guess of the parameters
+to optimize, which in the context of deep learning is identified by initialization of weights and biases.
+Whilst a proper initialization has been shown to be key to a successful training of deep train NNs,
+this is a very active area of research as initialization strategies are so far mostly based on heuristic
+arguments and experience.</p>
+<section id="zero-initialization">
+<h3>Zero initialization<a class="headerlink" href="#zero-initialization" title="Link to this heading">#</a></h3>
+<p>First of all, let’s highlight a bad choice of initialization that can compromise the training no matter the
+architecture of the network and other hyperparameters. A common choice in standard optimization in the absence
+of any strong prior information is to initialize all the parameters to zero: if we decide to follow such a strategy
+when training a NN, we will soon realize that training is stagnant due to the so called <em>symmetry problem</em>
+(also referred to as <em>symmetric gradients</em>). Note that a similar situation arises also if we
+choose a constant values for weights and biases (e.g., <span class="math notranslate nohighlight">\(c^{[1]}\)</span> for all the weights and biases in the first layer and
+<span class="math notranslate nohighlight">\(c^{[2]}\)</span> for all the weights and biases in the second layer):</p>
+<p>Let’s take a look at this with an example:</p>
+<p><img alt="ZEROINIT" src="_images/zeroinit.png" /></p>
+<p>Since the activations are constant vectors, back-propagation produces constant updates for the weights (and biases),
+leading to weights and biases to never lose the initial symmetry.</p>
+</section>
+<section id="random-initialization">
+<h3>Random initialization<a class="headerlink" href="#random-initialization" title="Link to this heading">#</a></h3>
+<p>A more appropriate way to initialize the weights of a neural network is to sample their
+values from random distributions, for example:
+$<span class="math notranslate nohighlight">\(
+w_{ij}^{[.]} \sim \mathcal{N}(0, 0.01)
+\)</span><span class="math notranslate nohighlight">\(
+where the choice of the variance is based on the following trade-off: too small variance leads to the 
+vanishing gradient problem (i.e., slow training), whilst too high variance leads to the 
+exploding gradient problem (i.e., unstable training). On the other hand, for the biases we can use zero or a constant value. If you remember, we have already
+mentioned this when discussing the ReLU activation function: a good strategy to limit the amount of
+negative values as input to this activation function is to choose a small constant bias (e.g., \)</span>b=0.1$).</p>
+<p>Whilst this approach provides a good starting point for stable training of neural networks, more advanced
+initialization strategies have been proposed in the literature:</p>
+<ul class="simple">
+<li><p><strong>Uniform</strong>: the weights are initialized with uniform distributions whose variance depend on the
+number of units in the layer:
+$<span class="math notranslate nohighlight">\(
+w_{ij}^{[k]} \sim \mathcal{U}(-1/\sqrt{N^{[k]}}, 1/\sqrt{N^{[k]}})
+\)</span><span class="math notranslate nohighlight">\(
+or
+\)</span><span class="math notranslate nohighlight">\(
+w_{ij}^{[k]} \sim \mathcal{U}(-\sqrt{6/(N^{[k-1]}+N^{[k]})}, \sqrt{6/(N^{[k-1]}+N^{[k]})})
+\)</span>$
+This strategy is commonly used with FC layers.</p></li>
+<li><p><strong>Xavier</strong>: the weights are initialized with normal distributions whose variance depend on the
+number of units in the layer:
+$<span class="math notranslate nohighlight">\(
+w_{ij}^{[k]} \sim \mathcal{N}(0, 1/N^{[k]})
+\)</span>$
+This strategy ensures that the variance remains the same across the layers. Xavier initialization
+is very popular especially in layers using Tanh activations.</p></li>
+<li><p><strong>He</strong>: the weights are initialized with normal distributions whose variance depend on the
+number of units in the layer:
+$<span class="math notranslate nohighlight">\(
+w_{ij}^{[k]} \sim \mathcal{N}(0, 2/N^{[k]})
+\)</span>$
+This strategy ensures that the variance remains the same across the layers. He initialization
+is very popular especially in layers using ReLU activations.</p></li>
+</ul>
+</section>
+</section>
+<section id="why-deep-learning-took-off-in-the-last-century">
+<h2>Why Deep Learning took off in the last century<a class="headerlink" href="#why-deep-learning-took-off-in-the-last-century" title="Link to this heading">#</a></h2>
+<p>Before moving onto the last topic of this lecture, a unified statistical view of loss functions in deep learning,
+let’s try to answer a question that many of you may ask: <em>what makes NNs so popular these days and why deep learning took off in the
+last decade?</em></p>
+<p>By now, we have made ourself familiar with the concept of neural networks, learned about its basic building block (the so-called perceptron) and
+how by simply horizontally and vertically stacking multiple perceptrons we can create universal function approximators that can be trained to learn
+very complex nonlinear relationships between inputs and targets (provided availability of a large enough amount of training data). The process
+of creating and training NNs relies on the following four key ingredients:</p>
+<ul class="simple">
+<li><p><em>linear algebra operations</em>: matrix-vector and matrix-matrix multiplications (at least within the context of FC networks);</p></li>
+<li><p><em>activations</em>: nonlinear functions that enable the learning of complex nonlinear mappings;</p></li>
+<li><p><em>loss functions</em>: functions that can be used to evaluate the goodness of the model in terms of predicting targets from inputs;</p></li>
+<li><p><em>learning algorithms</em>: optimization methods that can produce the best weights and biases using gradient information;</p></li>
+</ul>
+<p>Eventually, most of the underlying theory of NNs was already fairly mature in
+70s and 80s; nevertheless, until the early 2000, research in the field of artificial neural networks was still considered a
+niche domain mostly theoretical and with little practical implications. So, what did lead to the renaissance of Deep Learning?</p>
+<p>Two key factors in the popularity and success of Neural Networks growth are undoubtedly:</p>
+<ul class="simple">
+<li><p><em>larger datasets</em>: with the growth of the internet and social media, a digital revolution has started since the beginning of the
+new century, where datasets of ever increasing size can be easily sourced. This applies both to images and text as well as audio
+and video content.</p></li>
+<li><p><em>larger networks</em>: with the emergence of new hardware technology such as GPUs, training large deep networks is nowadays possible,
+not only for large corporations like Google or Microsoft but also in Academia or for small- and medium-size enterprises that
+want to leverage their data to make data-driven business decisions.</p></li>
+</ul>
+<p>Alongside the data and hardware revolution, a number of important algorithmic discoveries have also led to faster, more robust
+training of NNs making this process easier and more accessible to domain scientists in a variety of scientific fields. Some of them
+have been already discussed, but we wish here to put more emphasis on them:</p>
+<ul class="simple">
+<li><p><em>MSE –&gt; Cross-entropy</em>: whilst in the past the mean square error (MSE) loss was used for pretty much every task, nowadays classification
+or semantic segmentation tasks are more commonly solved by means of Cross-entropy loss functions. This shift in training strategy is mostly
+due to the fact that the ML community and the statistical community got closer to each other in the last two decades, which lead to
+the development of strong statistical foundations in the theory of deep learning;</p></li>
+<li><p><em>Sigmoid –&gt; ReLU</em>: whilst continuous, differentiable activation functions used to be a must in the past mostly due to the belief that
+gradient descent algorithms (and back-propagation) needs these kind of functions to behave correctly, it is now clear that this constraint
+can be greatly related. Piece-wise linear activation functions like ReLU are nowadays not only used but pretty much the de-facto standard
+for hidden layers in deep neural networks. Jarrett et al. (2009) observed that <em>“using a rectifying nonlinearity is the single most
+important factor in improving the performance of a recognition system”</em>.</p></li>
+</ul>
+</section>
+<section id="maximum-likelihood-estimators">
+<h2>Maximum likelihood estimators<a class="headerlink" href="#maximum-likelihood-estimators" title="Link to this heading">#</a></h2>
+<p>To conclude, we would like to revisit the loss functions already introduced in the context of linear and logistic
+regression models and introduce some other loss functions that are commonly employed to train neural networks.</p>
+<p>However, whilst so far we have chosen different loss functions for each task (regression vs. classification) without really
+providing a statistical motivation of such choices, in this section we will instead try to define a common framework based on the concept of
+Maximum Likelihood Estimations (MLE).</p>
+<p>Let’s start by considering a set of samples drawn from the true (but unknown) distribution:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{X} = \{ \mathbf{x}^{(1)}, \mathbf{x}^{(2)}, ..., \mathbf{x}^{(N_s)} \} \sim p_{data}(\mathbf{X}) 
+\]</div>
+<p>Second, a parametric family of probability distribution is defined:</p>
+<div class="math notranslate nohighlight">
+\[
+p_{model}(\mathbf{X}; \theta) 
+\]</div>
+<p>This distribution maps any vector <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> to a real number and is generally referred to as the
+likelihood function. Its free parameters <span class="math notranslate nohighlight">\(\theta\)</span> must be chosen
+such that this probability distribution is as close as possible to the true one.</p>
+<p>As an example, if we consider a multi-variate gaussian distribution with uncorrelated members, the
+free parameters become <span class="math notranslate nohighlight">\(\theta = \{ \boldsymbol \mu, \sigma\}\)</span> and the probability density function
+becomes:</p>
+<div class="math notranslate nohighlight">
+\[
+p_{model}(\mathbf{x}; \{ \boldsymbol \mu, \sigma\}) = 
+\frac{1}{\sqrt{2 \pi \sigma^2}} e^{-\frac{||\mathbf{x} - \boldsymbol \mu||_2^2}{2 \sigma^2}}
+\]</div>
+<p>We can now define the MLE as follows:</p>
+<div class="math notranslate nohighlight">
+\[
+\theta_{ML} = \underset{\theta} {\mathrm{argmax}} \; p_{model}(\mathbf{X}; \theta) 
+\]</div>
+<p>Assuming now statistical independence between the samples <span class="math notranslate nohighlight">\(\mathbf{x}^{(i)}\)</span>, the equation above can
+be rewritten as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\theta_{ML} &amp;= \underset{\theta} {\mathrm{argmax}} \; \prod_{i=1}^{N_s} p_{model}(\mathbf{x}^{(i)}; \theta) \\
+&amp;= \underset{\theta} {\mathrm{argmax}} \; \sum_{i=1}^{N_s} log(p_{model}(\mathbf{x}^{(i)}; \theta)) \\
+&amp;\approx \underset{\theta} {\mathrm{argmax}} \; E_{\mathbf{x} \sim p_{data}} [ log(p_{model}(\mathbf{x}; \theta))] \\
+&amp;= \underset{\theta} {\mathrm{argmin}} \; - E_{\mathbf{x} \sim p_{data}} [ log(p_{model}(\mathbf{x}; \theta))]
+\end{aligned}
+\end{split}\]</div>
+<p>Simply put, maximizing the parametric probability density
+function is shown to be equivalent to <em>minimizing the negative log likelihood</em> of the same distribution.
+An optimization problem must be therefore solved to find the most suitable free parameters. Going back
+to the multi-variate gaussian example, let’s assume we are interested to estimate the mean (whilst we keep the
+variance fixed):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\boldsymbol \mu_{ML} &amp;= \underset{\boldsymbol \mu} {\mathrm{argmin}} \; 
+- \sum_{i=1}^{N_s} log \Big( \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-\frac{||\mathbf{x}^{(i)} - \boldsymbol \mu||_2^2}{2 \sigma^2}} \Big) \\
+&amp;= \underset{\boldsymbol \mu} {\mathrm{argmin}} \; \sum_{i=1}^{N_s} \frac{||\mathbf{x}^{(i)} - \boldsymbol \mu||_2^2}{2 \sigma^2}
+\end{aligned}
+\end{split}\]</div>
+<p>Computing the gradient and imposing it to be zero gives us the point estimate of <span class="math notranslate nohighlight">\(\boldsymbol \mu_{ML}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[ \frac{\partial -\sum_i log p}{\partial \boldsymbol \mu} = 0 \rightarrow \sum_{i=1}^{N_s} (\mathbf{x}^{(i)} - \boldsymbol \mu) = 0 
+\rightarrow \boldsymbol \mu_{ML} = \frac{1}{N_s} \sum_{i=1}^{N_s} \mathbf{x}^{(i)}
+\]</div>
+<p>which is nothing more than the well-known <em>sample mean</em> of the distribution.</p>
+<p>In order to apply the same framework to learning problems like those arising in DL, the ML estimation is now
+extended to the case of conditional probabilities where we are given a set of training pairs <span class="math notranslate nohighlight">\((\mathbf{x}, y)^{(i)}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\theta_{ML} &amp;= \underset{\theta} {\mathrm{argmax}} \; p_{model}(Y | \mathbf{X}; \theta) \\
+&amp;= ... \\
+&amp;= \underset{\theta} {\mathrm{argmin}} \; - E_{\mathbf{x},y \sim p_{data}} [ log(p_{model}(y|\mathbf{x}; \theta))]
+\end{aligned}
+\end{split}\]</div>
+<section id="regression">
+<h3>Regression<a class="headerlink" href="#regression" title="Link to this heading">#</a></h3>
+<section id="linear-regression">
+<h4>Linear regression<a class="headerlink" href="#linear-regression" title="Link to this heading">#</a></h4>
+<p>Let’s first apply this framework to a simple linear regression problem. Here, under the assumption
+of gaussian noise, the likelihood can be written as a multi-variate gaussian distribution:</p>
+<div class="math notranslate nohighlight">
+\[
+y = \tilde{\mathbf{x}}^T \boldsymbol \theta + \mathbf{n}  \sim \mathcal{N}(\hat{y} = \tilde{\mathbf{x}}^T \boldsymbol \theta, \sigma)
+\]</div>
+<p>Plugging this distribution into the negative log likelihood expression, we obtain:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\boldsymbol \theta_{ML} = \underset{\boldsymbol \theta} {\mathrm{argmin}} \; \sum_{i=1}^{N_s} 
+\frac{||\hat{y}^{(i)} - y^{(i)}||_2^2}{2\sigma^2} = \frac{N_s}{2\sigma^2} MSE(\textbf{y}_{train}, \hat{\textbf{y}}_{train})\\
+\end{split}\]</div>
+<p>This cost function can be seen to be a rescaled version of the MSE function previously introduced
+as the loss function for the linear regression model. Note however, that this model is not only more rigorous from
+a statistical point of view but provides also a natural way to handle training samples with different confidence. By using
+sample-dependant scaling factors (<span class="math notranslate nohighlight">\(\sigma^{(i)}\)</span>), different samples can be chosen to contribute more or less to the
+training process.</p>
+</section>
+<section id="multi-layer-perceptron-regression">
+<h4>Multi-layer perceptron regression<a class="headerlink" href="#multi-layer-perceptron-regression" title="Link to this heading">#</a></h4>
+<p>A very similar derivation can be performed for a neural network composed by one or more MLPs. Eventually we simply need
+to swap the previously linearly predicted output <span class="math notranslate nohighlight">\(\hat{y}=\tilde{\mathbf{x}}^T \boldsymbol \theta\)</span> with a new
+output produced by the chosen nonlinear functional <span class="math notranslate nohighlight">\(\hat{y}=f_\theta(\mathbf{x})\)</span>.</p>
+<p>In conclusion, we must remember that the MSE loss function, commonly used for regression
+tasks in ML and DL, is a MLE in disguise.</p>
+</section>
+</section>
+<section id="classification">
+<h3>Classification<a class="headerlink" href="#classification" title="Link to this heading">#</a></h3>
+<section id="binary-classification">
+<h4>Binary classification<a class="headerlink" href="#binary-classification" title="Link to this heading">#</a></h4>
+<p>In statistical learning, a Bernoulli distribution is commonly used for the task of binary (i.e., 2 label)
+classification:</p>
+<div class="math notranslate nohighlight">
+\[
+P(y)= \phi y + (1-\phi)(1-y)
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(y\)</span> is the outcome and <span class="math notranslate nohighlight">\(\phi\)</span> is its probability that we wish to learn by means of a model
+(i.e., logistic regression or MLP). Moreover, as we wish to learn a probability this value must be bound between
+0 and 1; this can be easily achieved by feeding the output of the model into a sigmoid function <span class="math notranslate nohighlight">\(\sigma\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{y} = \sigma (f_\theta(\mathbf{x}))
+\]</div>
+<p>Put together:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\boldsymbol \theta_{ML} &amp;= \underset{\boldsymbol \theta} {\mathrm{argmin}} \; -\sum_{i=1}^{N_s} log(p_{model}(y^{(i)}|\mathbf{x}^{(i)}; \theta) \\
+&amp;= -\sum_{i=1}^{N_s} y^{(i)} log \hat{y}^{(i)} + (1-y^{(i)}) log (1-\hat{y}^{(i)})
+\end{aligned}
+\end{split}\]</div>
+<p>which is the same loss function that we have introduced and discussed in details in the context of logistic
+regression.</p>
+<p>Once again, we note how we have here simply defined a MLE for a classification task and obtained
+the well-know binary cross-entropy loss function.</p>
+</section>
+<section id="multi-label-classification">
+<h4>Multi-label classification<a class="headerlink" href="#multi-label-classification" title="Link to this heading">#</a></h4>
+<p>An extension of binary classification, multi-label classification aims at producing an estimate of the most likely class
+within a set of <span class="math notranslate nohighlight">\(N_c\)</span> classes.</p>
+<p>The combination of a Bernoulli distribution and sigmoid activation used for the binary classifier
+is here replaced by a Multinoulli distribution and softmax activation, where the latter is defined as follows:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{\mathbf{y}} = \sigma(\mathbf{x}) =\frac{e^\mathbf{x}}{\sum_{i=1}^{N_c} e^{x_i}}
+\]</div>
+<p>A property of such activation function is that it takes as input a vector of numbers (sometimes called <em>logits</em>)) and
+produces as output a vector of probabilities (i.e., <span class="math notranslate nohighlight">\(y_i&gt;0\)</span> and <span class="math notranslate nohighlight">\(\sum_{i=1}^{N_c} y_i=1\)</span>).</p>
+<p>Put together:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\boldsymbol \theta_{ML} &amp;= \underset{\boldsymbol \theta} {\mathrm{argmin}} \; -\sum_{i=1}^{N_s} log(p_{model}(y^{(i)}|\mathbf{x}^{(i)}; \theta)) \\
+&amp;= -\sum_{i=1}^{N_s} \sum_{j=1}^{N_c} y_j^{(i)} log \hat{y}_j^{(i)}
+\end{aligned}
+\end{split}\]</div>
+<p>where the true labels <span class="math notranslate nohighlight">\(\mathbf{y}^{(i)}\)</span> are one-hot encoded vectors (i.e., <span class="math notranslate nohighlight">\(y_{j=j_{true}}^{(i)}=1\)</span> and
+<span class="math notranslate nohighlight">\(y_{j \neq j_{true}}^{(i)}=0\)</span>).</p>
+<p>To conclude, let’s try to get more insights into why ML estimators work so succesfully. In order to do so, we start
+by defining a measure of similarity between the two distributions of interest:</p>
+<ul class="simple">
+<li><p>empirical distribution of the data: <span class="math notranslate nohighlight">\(p_{data}(\mathbf{X})\)</span></p></li>
+<li><p>parametric model distribution: <span class="math notranslate nohighlight">\(p_{model}(\mathbf{X}; \theta)\)</span></p></li>
+</ul>
+<p>This can be achieved by means of the previously introduced Kullback-Leibler divergence, which we can write as follows:</p>
+<div class="math notranslate nohighlight">
+\[
+D_{KL}(p_{data}||p_{model})  = E_{x \sim p_{data}} [log p_{data}(\mathbf{x}) - p_{model}(\mathbf{x})]  
+\]</div>
+<p>Since we are interested to estimate the free-parameters <span class="math notranslate nohighlight">\(\theta\)</span> such that the model distribution matches that of the data,
+an equivalent optimization problem can be written with the help of the KL divergence:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\theta_{KL} &amp;= \underset{\theta} {\mathrm{argmin}} \; D_{KL}(p_{data}||p_{model}) \\
+&amp;= \underset{\theta} {\mathrm{argmin}} \; - E_{\mathbf{x} \sim p_{data}} [ log(p_{model}(\mathbf{x}; \theta))]
+\end{aligned}
+\end{split}\]</div>
+<p>where the data probability has been removed in the second term since it is independent of <span class="math notranslate nohighlight">\(\theta\)</span>. We can conclude
+that <span class="math notranslate nohighlight">\(\theta_{KL}=\theta_{ML}\)</span> and therefore minimizing the KL divergence between the model and data distributions
+is the same as maximizing their cross-entropy (as done by the ML estimator).</p>
+</section>
+</section>
+</section>
+<section id="additional-readings">
+<h2>Additional readings<a class="headerlink" href="#additional-readings" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>If you are interested to learn more about network initialization, I recommend reading (and reproducing)
+the following blog posts: <a class="reference external" href="https://medium.com/&#64;safrin1128/weight-initialization-in-neural-network-inspired-by-andrew-ng-e0066dc4a566">1</a>
+and <a class="reference external" href="https://www.deeplearning.ai/ai-notes/initialization/">2</a>.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="05_nn.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Basics of Neural Networks</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="07_bestpractice.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Best practices in the training of Machine Learning models</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#backpropagation">Backpropagation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initialization">Initialization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-initialization">Zero initialization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#random-initialization">Random initialization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-deep-learning-took-off-in-the-last-century">Why Deep Learning took off in the last century</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood-estimators">Maximum likelihood estimators</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regression">Regression</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression">Linear regression</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-layer-perceptron-regression">Multi-layer perceptron regression</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classification">Classification</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#binary-classification">Binary classification</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-label-classification">Multi-label classification</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-readings">Additional readings</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Ashok Dahal, Modified from the Content of Matteo Ravasi, KAUST
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
