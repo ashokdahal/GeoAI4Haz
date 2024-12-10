@@ -1,0 +1,762 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Basics of Neural Networks &#8212; Machine Learning for Natural Hazards</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '05_nn';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="More on Neural Networks" href="06_nn.html" />
+    <link rel="prev" title="Linear and Logistic Regression" href="04_linreg.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Machine Learning for Natural Hazards</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Background and Refresher</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_intro.html">Introduction to Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_linalg.html">Linear Algebra refresher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_gradopt.html">Gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_linreg.html">Linear and Logistic Regression</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Basics of Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_nn.html">More on Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_bestpractice.html">Best practices in the training of Machine Learning models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Convolutional Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="08_gradopt1.html">More on gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_cnn.html">Convolutional Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_cnnarch.html">CNNs Popular Architectures</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz/issues/new?title=Issue%20on%20page%20%2F05_nn.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/05_nn.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Basics of Neural Networks</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perceptron">Perceptron</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-layer-perceptron">Multi-layer Perceptron</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#activation-functions">Activation functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#network-architecture">Network architecture</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-readings">Additional readings</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="basics-of-neural-networks">
+<h1>Basics of Neural Networks<a class="headerlink" href="#basics-of-neural-networks" title="Link to this heading">#</a></h1>
+<p>In this lecture, we start our journey in the field of Deep Learning. In order to do so, we must first introduce
+the most commonly used kind of Neural Networks, the so-called Multi-Layer Perceptron (MLP) (also commonly referred
+to as fully connected (FC) layer).</p>
+<p>A MLP is a class of <em>feedforward</em> artificial neural networks (ANNs), where the term feedforward refers to the
+fact the the flow of information moves from left to right. On the other hand, a change in the direction
+of the flow is introduced as part of the forward pass gives rise to a different family of NNs, so-called Recurrent
+Neural Networks (they will be subject of future lectures):</p>
+<p><img alt="FFN" src="_images/ffn_rnn.png" /></p>
+<section id="perceptron">
+<h2>Perceptron<a class="headerlink" href="#perceptron" title="Link to this heading">#</a></h2>
+<p>To begin with, we focus on the core building block of a MLP, so-called Perceptron or Unit.
+This is nothing really new to us, as it is exactly the same structure that we used to create the logistic regression model,
+a linear weighting of the element of the input vector followed by a nonlinear activation function. We prefer however
+to schematic represent it in a slightly different way as this will make it easier later on to drawn MLPs.</p>
+<p><img alt="PERCEPTRON" src="_images/perceptron.png" /></p>
+<p>Mathematically, the action of a percepton can be written compactly as dot-product followed
+by an element-wise nonlinear activation:</p>
+<div class="math notranslate nohighlight">
+\[
+y = \sigma(\sum_i w_i x_i + b) = \sigma(\sum_i \textbf{w}^T \textbf{x} + b) 
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\textbf{w} \in \mathbb{R}^{N_i}\)</span> is the vector of weights, <span class="math notranslate nohighlight">\(b\)</span> is the bias, and <span class="math notranslate nohighlight">\(\sigma\)</span> is a nonlinear
+activation function. Note that whilst we used a sigmoid function in the logistic regression model, this can be
+any differentiable function as later we will discuss in more details.</p>
+</section>
+<section id="multi-layer-perceptron">
+<h2>Multi-layer Perceptron<a class="headerlink" href="#multi-layer-perceptron" title="Link to this heading">#</a></h2>
+<p>The perceptron model shown above takes as input a vector  <span class="math notranslate nohighlight">\(\textbf{x} \in \mathbb{R}^{N_i}\)</span> and
+returns a scalar <span class="math notranslate nohighlight">\(y\)</span>, we are now ready to make a step forward where we simply combine multiple perceptrons together
+to return a vector <span class="math notranslate nohighlight">\(\textbf{y} \in \mathbb{R}^{N_o}\)</span></p>
+<p><img alt="MLP" src="_images/mlp.png" /></p>
+<p>The MLP in the figure above presents <span class="math notranslate nohighlight">\(N_i=3\)</span> inputs and <span class="math notranslate nohighlight">\(N_o=2\)</span> outputs. By highlighting the original perceptron in green,
+we can easily observed that a MLP is simply a composition of <span class="math notranslate nohighlight">\(N_o\)</span> perceptrons, which again we can
+compactly write as a matrix-vector multiplication followed by an element-wise nonlinear activation:</p>
+<div class="math notranslate nohighlight">
+\[
+y_j = \sigma(\sum_i w_{ji} x_i + b), \quad \textbf{y} = \sigma(\textbf{W} \textbf{x} + \textbf{b}) 
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\textbf{W} \in \mathbb{R}^{N_o \times N_i}\)</span> is the matrix of weights, <span class="math notranslate nohighlight">\(\textbf{b} \in \mathbb{R}^{N_o}\)</span>
+is a vector of biases.</p>
+<p>Finally, if we stack multiple MLPs together we obtained what is generally referred to as N-layer NN, where
+the count of the number of layers does not include the input layer. For example, a 3-layer NN has the following structure</p>
+<p><img alt="3LAYERNN" src="_images/3layernn.png" /></p>
+<p>where we omit for simplicity the bias terms in the schematic drawing.
+This figure gives us the opportunity to introduce some terminology commonly used in the DL community:</p>
+<ul class="simple">
+<li><p><em>Input layer</em>: first layer taking the input vector <span class="math notranslate nohighlight">\(\textbf{x}\)</span> as input and returning an intermediate representation
+<span class="math notranslate nohighlight">\(\textbf{z}^{[1]}\)</span>;</p></li>
+<li><p><em>Hidden layers</em>: second to penultimate layers taking as input the previous representation <span class="math notranslate nohighlight">\(\textbf{z}^{[i-1]}\)</span> and
+returning a new representation <span class="math notranslate nohighlight">\(\textbf{z}^{[i]}\)</span>;</p></li>
+<li><p><em>Ouput layer</em>: last layer producing the output of the network <span class="math notranslate nohighlight">\(\textbf{y}\)</span>;</p></li>
+<li><p><em>Depth</em>: number of hidden layers (plus output layer);</p></li>
+<li><p><em>Width</em>: number of units in each hidden layer.</p></li>
+</ul>
+<p>Note that we will always use the following notation <span class="math notranslate nohighlight">\(\cdot^{(i)[j]}\)</span> where round brackets are used to refer to a
+specific training sample and square brackets are used to refer to a specific layer.</p>
+</section>
+<section id="activation-functions">
+<h2>Activation functions<a class="headerlink" href="#activation-functions" title="Link to this heading">#</a></h2>
+<p>We have just started to appreciate the simplicity of NNs. A Neural Network is nothing more than a stack of linear
+transformations and nonlinear element-wise activation functions. If such activation functions where omitted,
+we could combine the various linear transformations together in a single matrix, as the product of N matrices. Assuming that sigma acts as an identity matrix <span class="math notranslate nohighlight">\(\sigma(\textbf{x})=\textbf{Ix}=\textbf{x}\)</span>,
+(and omitting biases for simplicity) we get:</p>
+<div class="math notranslate nohighlight">
+\[
+\textbf{y} = \sigma(\textbf{W}^{[3]}\sigma(\textbf{W}^{[2]}\sigma(\textbf{W}^{[1]} \textbf{x}))) = 
+\textbf{W}^{[3]}\textbf{W}^{[2]}\textbf{W}^{[1]}\textbf{x} = \textbf{W} \textbf{x}
+\]</div>
+<p>so no matter how deep the network is, we can always reconduct it to a linear model.
+Depending on the final activation and loss function, therefore we will have a linear regression or a logistic
+regression model.</p>
+<p>We consider here a very simple example to show the importance of nonlinear activations before delving into the details.
+Let’s assume that we wish the learn the XOR (eXclusive OR) boolean logic operator from the
+following four training samples:</p>
+<div class="math notranslate nohighlight">
+\[
+\textbf{x}^{(1)} = [0, 0] \rightarrow y^{(1)}=0
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\textbf{x}^{(2)} = [0, 1] \rightarrow y^{(2)}=1
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\textbf{x}^{(3)} = [1, 0] \rightarrow y^{(3)}=1
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\textbf{x}^{(4)} = [1, 1] \rightarrow y^{(4)}=0
+\]</div>
+<p>Starting from the linear regression model, we can define a matrix
+<span class="math notranslate nohighlight">\(\textbf{X}_{train} = [\textbf{x}^{(1)}, \textbf{x}^{(2)}, \textbf{x}^{(3)}, \textbf{x}^{(4)}]\)</span> and a vector
+<span class="math notranslate nohighlight">\(\textbf{y}_{train} = [y^{(1)}, y^{(2)}, y^{(3)}, y^{(4)}]\)</span>. The linear model becomes:</p>
+<div class="math notranslate nohighlight">
+\[
+\textbf{y}_{train} = \textbf{X}_{train}^T  \boldsymbol \theta
+\]</div>
+<p>where the weights <span class="math notranslate nohighlight">\(\boldsymbol \theta\)</span> are obtained as detailed in the previous section. It can be easily proven that
+the solution is <span class="math notranslate nohighlight">\(\boldsymbol \theta=[0,0,0.5]\)</span>, where <span class="math notranslate nohighlight">\(\textbf{w}=[0,0]\)</span> and <span class="math notranslate nohighlight">\(b=0.5\)</span>. This means that, no matter the input
+the output of the linear model will always be equal to <span class="math notranslate nohighlight">\(0.5\)</span>; in other words, the model is unable to distinguish
+between the true or false outcomes. If instead we introduce a nonlinearity between two weight matrices (i.e., a 2-layer NN),
+the following combination of weights and biases (taken from the Goodfellow book) will lead to a correct prediction:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\textbf{W}^{[1]} = \begin{bmatrix} 
+                1 \&amp; 1 \\
+                1 \&amp; 1\end{bmatrix},
+\textbf{W}^{[2]} = \begin{bmatrix} 
+                1  \\
+                -2 \end{bmatrix}^T,
+\textbf{b}^{[1]} = \begin{bmatrix} 
+                0  \\
+                -1 \end{bmatrix},
+b^{[2]} = 0
+\end{split}\]</div>
+<p>Note that in this case the <span class="math notranslate nohighlight">\(\sigma=ReLU\)</span> activation function, which we will introduce in the next section, must be used.
+Of course, there may be many more combinations of weights and biases that lead to a satisfactory prediction. You can prove this to yourself by
+initializing the weights and biases randomly and optimizing them by means of a stochastic gradient-descent algorithm.</p>
+<p>Having introduced nonlinearites every time after we apply the weight matrices to the vector
+flowing through the computational graph, the overall set of operations cannot be simply reconducted to a matrix-vector
+multiplication and allows us to learn highly complex nonlinear mappings between input features and targets. The role of activation functions is however not always straightforward and easy to grasp. Whilst we can say that
+they help in the learning process, not every function is suitable for this task and in fact, some functions may prevent
+the network from learning at all.</p>
+<p>In the following we look at the most commonly used activation functions and discuss their origin and why
+they became popular and useful in Deep Learning:</p>
+<ul>
+<li><p><strong>Sigmoid</strong> and <strong>Tanh</strong>: historically these were the most popular activation functions as they are
+differentiable across the entire domain. In the past, there was in fact a strong belief that
+gradient-descent cannot operate on functions that have singularities; although this is correct from
+a theoretical point of view it was later proved to be wrong in practice. They are mathematically
+defined as:</p>
+<div class="math notranslate nohighlight">
+\[ \sigma_s(x) = \frac{1}{1-e^{-x}} \]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[ \sigma_t(x) = 2 \sigma_s(2x) - 1 \]</div>
+<p>Whilst still used in various contexts, these activation functions saturate very quickly (i.e., large values are clipped to 1
+and small values are clipped to -1 for tanh or 0 for sigmoid). This leads to the so-called <em>vanishing
+gradient problem</em> that we will discuss in more details in following lectures; simply put, if we look at the
+the gradient of both of these functions, it is non-zero only when x is near zero and becomes zero away
+from it, meaning that if the output of a linear layer is large the gradient of the activation function
+will be zero and therefore the gradient will stop flowing through backpropagation. This is particularly
+problematic for deep network as the training of the early layers becomes very slow.</p>
+</li>
+<li><p><strong>ReLU</strong> (Rectified Linear Unit): this activation function became very popular in the start of the 21st
+century and since then
+it is the most commonly used activation function for NN training. It is much closer to a linear activation
+than the previous two, but introduces a nonlinearity by putting negative inputs to zero. By doing so, the
+ReLU activation function is a piecewise linear function. This shows that
+non-differentiable functions can be used in gradient based optimization, mostly because numerically we will hardly
+(if not never) have an output of a NN layer that is exactly zero when fed as input to the activation.
+Mathematically speaking, we can write it as:
+$<span class="math notranslate nohighlight">\(
+\sigma_r(x) = max ( 0,x ) = 
+\begin{cases}
+    x \&amp; x\ge 0, \quad
+    0 \&amp; x&lt;0
+  \end{cases}       
+\)</span><span class="math notranslate nohighlight">\(
+whilst its derivative is:
+\)</span><span class="math notranslate nohighlight">\(
+\sigma'_{relu}(x) = 
+\begin{cases}
+    1 \&amp; x\ge 0, \quad
+    0 \&amp; x&lt;0
+  \end{cases}    
+\)</span>$
+We can observe that this activation function never saturates, for every value in the positive axis the derivative
+is always 1. Such a property makes ReLU suitable for large networks as the risk of vanishing gradients is
+greatly reduced. A downside of ReLU is that the entire negative axis acts as an annihilator preventing information
+to flow. A strategy to prevent or reduce the occurrences of negative inputs is represented by the initialization
+of biases to a value slightly greater than zero (e.g., b=0.1).</p></li>
+<li><p><strong>Leaky ReLU</strong> (Leaky Rectified Linear Unit): a modified version of the ReLU activation function
+aimed once again at avoiding zeroing of inputs in the negative axis. This function is identical to the ReLU
+in the positive axis, whilst another straight line with smaller slope is used in the negative axis:
+$<span class="math notranslate nohighlight">\(
+\sigma'_{l-relu}(x) = max ( 0,x ) + \alpha min ( 0,x ) = 
+\begin{cases}
+    x \&amp; x\ge 0, \quad
+    \alpha x \&amp; x&lt;0
+  \end{cases}     
+\)</span><span class="math notranslate nohighlight">\(
+By doing so, also negative inputs can flow through the computational graph. A variant of L-ReLU, called
+P-ReLU, allows for the \)</span>\alpha$ parameter to be learned instead of being fixed.</p></li>
+<li><p><strong>Absolute ReLU</strong> (Absolute Rectified Linear Unit): a modified version of the ReLU activation function
+that is symmetric with respect to the <span class="math notranslate nohighlight">\(x=0\)</span> axis:
+$<span class="math notranslate nohighlight">\(
+\sigma'_{l-relu}(x) = |x| = 
+\begin{cases}
+    x \&amp; x\ge 0, \quad
+    -x \&amp; x&lt;0
+  \end{cases}     
+\)</span>$
+Whilst this is not a popular choice in the DL literature, it has been successfully used in object detection
+tasks where the features that we wish the NN to extract from the training process are polarity invariant.</p></li>
+<li><p><strong>Cosine, Sine, …</strong>: the use of periodic functions have recently started to appear in the literature
+especially in the context of scientific DL (e.g., Physics-informed neural networks).</p></li>
+<li><p><strong>Softmax</strong>: this activation function is commonly used at the end of the last layer in the context of
+multi-label classification. However as it takes an input vector of N numbers and converts it into an
+output vector of probabilities (i.e., N numbers summing to 1), it may also be used as a sort of switch in
+the internal layers.</p></li>
+</ul>
+<p>The following two figures show the different activation functions discussed above and their gradients.</p>
+<p><img alt="3LAYERNN" src="_images/Activations.png" /></p>
+<p><img alt="3LAYERNN" src="_images/Activations_deriv.png" /></p>
+</section>
+<section id="network-architecture">
+<h2>Network architecture<a class="headerlink" href="#network-architecture" title="Link to this heading">#</a></h2>
+<p>Up until now we have discussed the key components of a Feedforward Neural Network, the Multi-layer Perceptron.
+It was mentioned a few times that a NN can be composed of multiple MLPs connected with each other, giving rise
+to a so-called Deep Neural Network (DNN). The depth and width of the network has been also defined, and
+we have introduced the convention that a N-layer NN is a network with N-1 hidden layers.</p>
+<p>A crucial point in the design of a neural network architecture is represented by the choice of such parameters.
+Whilst no hard rules exist and the creation
+of a NN architecture is to these days still closer to an art than a systematic science, in the following
+we provide a number of guidelines that should be followed when approaching the problem of designing a
+network. For example, as previously discussed, connecting two or more layers without adding a nonlinear
+activation function in between should be avoided as this part of the network simply behaves as a single
+linear layer.</p>
+<p>An important theorem that provide insights into the design of neural networks is the so-called
+<strong>Universal Approximation theorem</strong>. This theorem states that:</p>
+<p><em>“…regardless of the function that we are trying to learn, we know that a single MLP with infinite number
+of units can represent this function. We are however not guaranteed that we can train such a network…”</em></p>
+<p>More specifically, learning can fail for two different reasons: i) the optimization algorithm used for training
+may not be able to find the value of the parameters that correspond to the desired function; ii) the training
+algorithm might choose the wrong function as a result of overﬁtting.</p>
+<p>In practice, experience has shown that deeper networks with fewer units per layer are better both in
+terms of <em>generalization</em> and <em>robustness to training</em>. This leads us with a trade-off between
+shallow networks with many units in each layer and deep networks with fewer units in each layer.
+An empirical trend has been observed between the depth of a network and its accuracy on test data:</p>
+<p><img alt="DEPTHACC" src="_images/depth_vs_accuracy.png" /></p>
+<p>To summarize, whilst theoretically 1-layer shallow networks can learn any function, it is advisable these
+days to trade network width with network depth as training deep networks is nowadays feasible both from a
+theoretical and computational point of view. It is however always best to start small and grow the network in width and
+depth as the problem requires. We will see in the following lectures that a large network requires a large
+training data to avoid overfitting; therefore, when working with small to medium size training data it is
+always best to avoid using very large networks in the first place.</p>
+</section>
+<section id="additional-readings">
+<h2>Additional readings<a class="headerlink" href="#additional-readings" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>the following <a class="reference external" href="https://mlfromscratch.com/activation-functions-explained/">blog post</a> contains an extensive
+treatment of activation functions used in NN training beyond the most popular ones that we covered in this
+lecture.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="04_linreg.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Linear and Logistic Regression</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="06_nn.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">More on Neural Networks</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perceptron">Perceptron</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-layer-perceptron">Multi-layer Perceptron</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#activation-functions">Activation functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#network-architecture">Network architecture</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-readings">Additional readings</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Ashok Dahal, Modified from the Content of Matteo Ravasi, KAUST
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

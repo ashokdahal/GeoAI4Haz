@@ -1,0 +1,1008 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Sequence modelling &#8212; Machine Learning for Natural Hazards</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '12_seqmod';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Machine Learning for Natural Hazards</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Background and Refresher</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_intro.html">Introduction to Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_linalg.html">Linear Algebra refresher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_gradopt.html">Gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_linreg.html">Linear and Logistic Regression</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_nn.html">Basics of Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_nn.html">More on Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_bestpractice.html">Best practices in the training of Machine Learning models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Convolutional Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="08_gradopt1.html">More on gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_cnn.html">Convolutional Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_cnnarch.html">CNNs Popular Architectures</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz/issues/new?title=Issue%20on%20page%20%2F12_seqmod.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/12_seqmod.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Sequence modelling</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#motivation">Motivation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-rnn">Basic RNN</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture">Architecture</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loss">Loss</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#backprop">Backprop</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bidirectional-rnn">Bidirectional RNN</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deep-rnns">Deep RNNs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#long-term-dependencies-implications-for-gradients">Long-term dependencies: implications for gradients</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gradient-clipping">Gradient clipping</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gated-recurrent-networks-or-gru-unit">Gated recurrent networks or GRU unit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#long-short-term-memory-lstm-unit">Long-short term memory (LSTM) unit</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#present-and-future-of-sequence-modelling">Present and future of sequence modelling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-readings">Additional readings</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="sequence-modelling">
+<h1>Sequence modelling<a class="headerlink" href="#sequence-modelling" title="Link to this heading">#</a></h1>
+<p>In this lecture we will start investigating a family of Neural Network that are particularly suitable for learning tasks that involve sequences
+as input data.</p>
+<p>To understand what a sequence is in the context of Deep learning, let’s consider a recording over time (e.g., an audio recording):</p>
+<p><img alt="SEQUENCE" src="_images/sequence.png" /></p>
+<p>Compared to other dataset types (e.g., tabular or gridded data), the different samples of a sequence present an obvious degree of correlation
+that tends to diminuish the further away to samples are from each other. Moreover, in the case of multi-feature sequences (e.g., multi-component
+seismological recordings), the overall sequence contains a number of features at each time step that can be more or less correlated to each other.</p>
+<p>Sequences appear in every aspect of life. For example, outside of geoscience, the two most commonly used data in sequence modelling are:</p>
+<ul class="simple">
+<li><p>text</p></li>
+<li><p>audio</p></li>
+</ul>
+<p>More specifically, as we will see, the field of Natural Language Processing (NPL) has experienced a revolutionary growth in the last decade thanks
+to sequence modelling and deep learning. In geoscience, many of the commonly used datasets can also be interpreted as sequences, for example:</p>
+<ul class="simple">
+<li><p>seismograms</p></li>
+<li><p>well logs</p></li>
+<li><p>production data</p></li>
+</ul>
+<p>are all datatypes that present a certain degree of correlation along either the time or depth axis.</p>
+<p>Finally, similar to FFNs or CNNs, sequence modelling can be used for various applications:</p>
+<ul class="simple">
+<li><p>Single output classification: given an input sequence of a certain length <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>, a model is trained to decide whether than sequence contains
+a feature of interest or not. For example, given a seismogram we may be interest to detect the presence of a seismic event, or we may want to find out
+if a well log is clean or corrupted by some recording error or what is the facies in the middle of the sequence;</p></li>
+<li><p>Multi output classification (i.e., semantic segmentation): given an input sequence of a certain length <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>, a model is trained to classify each element
+of the input sequence into a predefined set of classes. Taking once again the example of facies labelling, here the task is extended to predicting labels
+at each depth level (and not only in the middle of the sequence);</p></li>
+<li><p>Regression: given an input sequence of a certain length <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>, a model is trained to predict a continuous output, which could be
+a single value <span class="math notranslate nohighlight">\(y\)</span> or a sequence of values <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> that has the same (or different length) of the input. For example, given a set of
+well logs we may want to predict another one that was not acquired. Similarly, given a seismic trace recorded by the vertical component of a geophone
+we may be interested to predict the horizontal components. Both of these example fall under the area of <em>domain translation</em>;</p></li>
+</ul>
+<section id="motivation">
+<h2>Motivation<a class="headerlink" href="#motivation" title="Link to this heading">#</a></h2>
+<p>Let’s start by considering what we have learned so far and discuss how we could use those tools to handle sequential data. First of all,
+we consider a sequence of <span class="math notranslate nohighlight">\(N_\tau\)</span> samples and <span class="math notranslate nohighlight">\(N_f\)</span> features:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\mathbf{X} = \begin{bmatrix} 
+                x_1^{&lt;1&gt;} &amp; x_1^{&lt;2&gt;} &amp; x_1^{N_\tau} \\
+                ...     &amp; ...     &amp; ... \\
+                x_{N_f}^{1} &amp; x_1^{&lt;2&gt;} &amp; x_{N_f}^{N_\tau}
+  \end{bmatrix} =
+  \begin{bmatrix} 
+                \mathbf{x}^{&lt;1&gt;} &amp; \mathbf{x}^{&lt;2&gt;} &amp; \mathbf{x}^{&lt;N_\tau&gt;}
+  \end{bmatrix}_{[N_f \times N_\tau]}
+\end{split}\]</div>
+<p>we could easily deal with this as if it was a 2D-array (i.e., an image) and use CNNs. However, the locality argument used for the convolutional filters
+that constitute a convolutional layer would not make much sense here, especially if we know that elements in the sequence away from each other may still have
+a certain degree of correlation. Alternatively, the matrix <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> could be simply vectorized and used as input to a FFN. This approach does
+however present two main limitations:</p>
+<ul class="simple">
+<li><p>since the vector <span class="math notranslate nohighlight">\(vec(\mathbf{X})\)</span> is likely to be very long, weight matrices will be very large leading to a very expensive training process;</p></li>
+<li><p>FFNs cannot easily handle inputs of variable lengths, so all sequences will need to have fixed length. We will see that being able to handle
+variable-length sequences is very useful in some situations.</p></li>
+</ul>
+<p>Both problems can be overcome by taking advantage of <em>parameter sharing</em>. We have already introduced this concept in the context of CNNs,
+where the same filters are used in different parts of the input. Similarly in sequence modelling, the idea of parameter sharing allows using the same
+parameters at different stages of the sequence and therefore allows the network to easily handle sequences of variable length. By doing so,
+a new type of neural network is created under the name of Recurrent Neural Network (RNN):</p>
+<p><img alt="RNN" src="_images/rnn.png" /></p>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is the input vector (or matrix when multiple features are present), <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> is the output vector, and <span class="math notranslate nohighlight">\(\mathbf{h}\)</span>
+is the so called hidden state vector.</p>
+<p>As clearly shown in the unrolled version of the network into a standard computational graph, various inputs and hidden states are passed through
+the same function <span class="math notranslate nohighlight">\(f_\theta\)</span> with a given number of training parameters. This is very different from a feed-forward network where different functions
+is are used over consecutive layers. The choice of the function <span class="math notranslate nohighlight">\(f_\theta\)</span> leads to the definition of different RNN architectures.</p>
+<p>Before we begin introducing a number of popular architectures for sequence modelling, let’s introduce some useful notation. Inputs and outputs of a RNNs
+will be always defined as follows:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{X} = \begin{bmatrix} 
+                \mathbf{x}^{&lt;1&gt;} &amp; \mathbf{x}^{&lt;2&gt;} &amp; \mathbf{x}^{&lt;T_x&gt;}
+  \end{bmatrix}_{[N_f \times T_x]}
+\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{Y} = \begin{bmatrix} 
+                \mathbf{y}^{&lt;1&gt;} &amp; \mathbf{y}^{&lt;2&gt;} &amp; \mathbf{y}^{&lt;T_y&gt;}
+  \end{bmatrix}_{[N_t \times T_y]}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(T_x\)</span> and <span class="math notranslate nohighlight">\(T_y\)</span> are the length of the input and output sequences. First, note that this notations differs from before in that a
+single training sample is now represented as a matrix; therefore, the entire training data becomes a 3-D tensor of size <span class="math notranslate nohighlight">\([N_s \times N_f \times T_x]\)</span>
+(and <span class="math notranslate nohighlight">\([N_s \times N_t \times T_y]\)</span>). Finally, note that in the most general case these parameters may be sample dependant (i.e., when we allow sequences of variable size): the following notation will be used in that case, <span class="math notranslate nohighlight">\(T_x^{(i)}\)</span> and <span class="math notranslate nohighlight">\(T_y^{(i)}\)</span>
+where <span class="math notranslate nohighlight">\(i\)</span> refers to the i-th training sample. Moreover, given that we recurrently apply the same function <span class="math notranslate nohighlight">\(f_\theta\)</span>, we can very compactly write an
+RNN as:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{h}^{&lt;t&gt;}, \mathbf{y}^{&lt;t&gt;}=f_\theta(\mathbf{h}^{&lt;t-1&gt;}, \mathbf{x}^{&lt;t&gt;}) \qquad t=1,2,T_x
+\]</div>
+<p>that we can unroll into:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{h}^{&lt;t&gt;}, \mathbf{y}^{&lt;t&gt;}=f_\theta(f_\theta(f_\theta(\mathbf{h}^{&lt;0&gt;}, \mathbf{x}^{&lt;1&gt;}), ...), \mathbf{x}^{&lt;t-2&gt;}), \mathbf{x}^{&lt;t-1&gt;}), \mathbf{x}^{&lt;t&gt;}) 
+\]</div>
+<p>As we have already briefly mentioned, RNNs allows some flexibility on the choice of <span class="math notranslate nohighlight">\(T_y\)</span> (i.e., the length of the output sequence).
+This leads to the creation of different network architectures that are suitable to different tasks:</p>
+<p><img alt="RNNARCHS" src="_images/rnnarchs.png" /></p>
+<p>Note that in the cases 3 and 4, the predicted output is fed back to the network as input to the next step at inference stage as shown in the figure above.
+At training stage, however, the true output is used as input.</p>
+<p>In summary, what we wish to achieve here is to create a network that can learn but short and long term relationships in the data such that
+both samples closes to each other as well as far away samples can help in the prediction of the current step. By using parameter sharing in a smart way,
+we can avoid overparametrizing the network and therefore limit the risk of overfitting on short and long term trends in the data. In other words,
+by assuming stationariety in the data, we let the network understand if step <span class="math notranslate nohighlight">\(t\)</span> and <span class="math notranslate nohighlight">\(t+N_t\)</span> are correlated to each other across the entire time sequence,
+instead of giving the network with the freedom to find relationships between any two samples in the sequence.</p>
+</section>
+<section id="basic-rnn">
+<h2>Basic RNN<a class="headerlink" href="#basic-rnn" title="Link to this heading">#</a></h2>
+<section id="architecture">
+<h3>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">#</a></h3>
+<p>It is now time to discuss in more details what is an effective function, <span class="math notranslate nohighlight">\(f_\theta\)</span>.</p>
+<p>The most basic Recurrent Neural Network can be written as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\mathbf{a}^{&lt;t&gt;} &amp;= \mathbf{W}_h \mathbf{h}^{&lt;t-1&gt;} + \mathbf{W}_x \mathbf{x}^{&lt;t&gt;} + \mathbf{b}_a = \mathbf{W} [\mathbf{h}^{&lt;t-1&gt;}, \mathbf{x}^{&lt;t&gt;}]^T + \mathbf{b}_a  \\
+\mathbf{h}^{&lt;t&gt;} &amp;= \sigma(\mathbf{a}^{&lt;t&gt;} )  \\
+\mathbf{o}^{&lt;t&gt;} &amp;= \mathbf{W}_y \mathbf{h}^{&lt;t&gt;} + \mathbf{b}_y \\
+\hat{\mathbf{y}}^{&lt;t&gt;} &amp;= \sigma' (\mathbf{o}^{&lt;t&gt;}) 
+\end{aligned}
+\end{split}\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\sigma\)</span> and <span class="math notranslate nohighlight">\(\sigma'\)</span> are the activation functions for the hidden and output paths (the choice of the activation
+for the latter depends on the problem we wish to solve, e.g., softmax for binary classification)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{h}^{&lt;0&gt;}\)</span> is the initial hidden state vector which is usually initalialized as a zero vector.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{W} = [\mathbf{W}_h, \mathbf{W}_x]_{[N_h \times N_h + N_x]}\)</span> is the matrix of weights for the hidden path</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{W}_{y \; [N_y \times N_h]}\)</span> is the matrix of weights for the output path</p></li>
+</ul>
+<p>In conclusion, the learnable parameters for this kind of RNN block are: <span class="math notranslate nohighlight">\(\mathbf{W}_h, \mathbf{W}_x, \mathbf{W}_y, 
+\mathbf{b}_a, \mathbf{b}_y\)</span> whose overall size is <span class="math notranslate nohighlight">\(N_h(N_h+N_x) + N_y N_h + N_h + N_y\)</span>. To give some perspective, this
+is much smaller than the number of learnable parameters of an ‘equivalent’ Feed-Forward network where the entire input matrix <span class="math notranslate nohighlight">\(\mathbf{X}\)</span>
+is flattened into a 1-d array of size <span class="math notranslate nohighlight">\(N_f T_x\)</span> and the entire output matrix <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span>
+is flattened into a 1-d array of size <span class="math notranslate nohighlight">\(N_t T_y\)</span>. The equivalent weight matrix and bias vectors have size <span class="math notranslate nohighlight">\(N_x N_y T_x T_y\)</span> and <span class="math notranslate nohighlight">\(N_yT_y\)</span>.
+For example, given a problem of size <span class="math notranslate nohighlight">\(N_x=2\)</span>, <span class="math notranslate nohighlight">\(N_y=3\)</span>, <span class="math notranslate nohighlight">\(N_h=5\)</span>, and <span class="math notranslate nohighlight">\(T_x=T_y=4\)</span>, we obtain <span class="math notranslate nohighlight">\(N_{FFN}=108\)</span> and <span class="math notranslate nohighlight">\(N_{RNN}=58\)</span>.</p>
+<p><img alt="BASICRNN" src="_images/basicrnn.png" /></p>
+</section>
+<section id="loss">
+<h3>Loss<a class="headerlink" href="#loss" title="Link to this heading">#</a></h3>
+<p>Once the architecture is defined, the next step is to understand how the loss function should be defined for this kind of networks.
+As shown in the figure below, this can be simply accomplished by considering a loss function per time step and summing them together:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathscr{L} = \sum_{t=1}^{T_x} \mathscr{L}^{&lt;t&gt;}, \qquad \mathscr{L}^{&lt;t&gt;}= f(\hat{\mathbf{y}}^{&lt;t&gt;}, \mathbf{y}^{&lt;t&gt;})
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(f\)</span> can be the MSE, MAE, BCE, etc. This loss function can be easily interpreted in probabilistic terms as:</p>
+<div class="math notranslate nohighlight">
+\[
+f \rightarrow -log P (\mathbf{y}^{&lt;t&gt;} | \mathbf{x}^{&lt;1&gt;}, \mathbf{x}^{&lt;2&gt;}, ..., \mathbf{x}^{&lt;t&gt;})
+\]</div>
+<p>To conclude, we note that the process of evaluating the various terms of the loss function is sequential as a previous hidden state is
+required to evaluate the current output. This can be very expensive and does not allow for parallelization (beyond across training samples), similar
+to the case of very deep feedforward neural networks.</p>
+<p><img alt="BASICRNLOSS" src="_images/basicrnn_loss.png" /></p>
+</section>
+<section id="backprop">
+<h3>Backprop<a class="headerlink" href="#backprop" title="Link to this heading">#</a></h3>
+<p>Given the loss function defined above, the computation of its gradient easily follows the principles that we have already extensively
+discussed in previous lectures; in simple terms, the backpropagation algorithm is applied on the unrolled computational graph in order
+to obtain the gradients of the weights and biases of the network block. Backpropagation over an RNN block is usually referred to as
+back-propagation through time (BPTT).</p>
+<p>Looking at this in more details, we can observe how the overall gradient of each of the weights or biases can be written as</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial \mathscr{L}}{\partial \cdot} = \sum_{t=1}^{T_x} \frac{\partial \mathscr{L}^{&lt;t&gt;}}{\partial \cdot}
+\]</div>
+<p>or, in other words, the gradient accumulates over the unrolled graph. Note also that,</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial \mathscr{L}}{\partial \mathscr{L}^{&lt;t&gt;}} = 1, \qquad \frac{\partial \mathscr{L}}{\partial \cdot} = \sum_{t=1}^{T_x} \frac{\partial \mathscr{L}}{\partial \mathscr{L}^{&lt;t&gt;}} \frac{\partial \mathscr{L}^{&lt;t&gt;}}{\partial \cdot} = 
+\sum_{t=1}^{T_x} \frac{\partial \mathscr{L}^{&lt;t&gt;}}{\partial \cdot}
+\]</div>
+<p><img alt="BASICRNBACK" src="_images/basicrnn_backprop.png" /></p>
+<p>Let’s now look more in details at the equations of backpropagation through time for a specific case of multi-label classification.
+More specifically we assume that the output of each step of the recurrent network (<span class="math notranslate nohighlight">\(\mathbf{o}^{&lt;t&gt;}\)</span>) is passed through a softmax
+to get <span class="math notranslate nohighlight">\(\hat{\mathbf{y}}^{&lt;t&gt;}= \sigma' (\mathbf{o}^{&lt;t&gt;})\)</span>, and the loss in the negative log-likelihood of a Multinoulli distribution.
+Moreover, we will use tanh for the internal activation function <span class="math notranslate nohighlight">\(\sigma\)</span>. Starting from the gradients of the internal nodes:</p>
+<div class="math notranslate nohighlight">
+\[
+\left(\frac{\partial \mathscr{L}}{\partial \mathbf{o}^{&lt;t&gt;}}\right)_i = \hat{y}_i^{&lt;t&gt;} - \mathbf{1}_{i=y^{&lt;t&gt;}}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial \mathscr{L}}{\partial \mathbf{h}^{&lt;T_x&gt;}} = \frac{\partial \mathscr{L}^{&lt;T_x&gt;}}{\partial \mathbf{o}^{&lt;T_x&gt;}} 
+\frac{\partial \mathbf{o}^{&lt;T_x&gt;}}{\partial \mathbf{h}^{&lt;T_x&gt;}} = \mathbf{W}_y^T (\hat{\mathbf{y}}^{&lt;T_x&gt;} - \mathbf{1}_{i=y^{&lt;T_x&gt;}})
+\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\frac{\partial \mathscr{L}}{\partial \mathbf{h}^{&lt;t&gt;}} &amp;= \frac{\partial \mathscr{L}}{\partial \mathbf{o}^{&lt;t&gt;}} 
+\frac{\partial \mathbf{o}^{&lt;t&gt;}}{\partial \mathbf{h}^{&lt;t&gt;}} + \frac{\partial \mathscr{L}}{\partial \mathbf{h}^{&lt;t+1&gt;}} 
+\frac{\partial \mathbf{h}^{&lt;t+1&gt;}}{\partial \mathbf{h}^{&lt;t&gt;}} \\
+&amp;= \mathbf{W}_y^T (\hat{\mathbf{y}}^{&lt;t&gt;} - \mathbf{1}_{i=y^{&lt;t&gt;}}) + \mathbf{W}_h^T diag(1 - (\mathbf{h}^{&lt;t+1&gt;})^2) 
+\frac{\partial \mathscr{L}}{\partial \mathbf{h}^{&lt;t+1&gt;}}
+\end{aligned}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{1}_{i=y^{&lt;t&gt;}}\)</span> is a vector of zeros with 1 at location of the true label, i.e. <span class="math notranslate nohighlight">\(i=y^{&lt;t&gt;}\)</span>, <span class="math notranslate nohighlight">\(diag(1 - (\mathbf{h}^{&lt;t+1&gt;})^2)\)</span>
+is the Jacobian of the tanh activation function, and <span class="math notranslate nohighlight">\(\partial \mathscr{L} / \partial \mathbf{h}^{&lt;t+1&gt;}\)</span> is computed recursively from <span class="math notranslate nohighlight">\(t+1=T_x\)</span>
+as we know <span class="math notranslate nohighlight">\(\partial \mathscr{L} / \partial \mathbf{h}^{&lt;T_x&gt;}\)</span>. Moreover, it is worth noting how the gradient of the loss function
+over any hidden state <span class="math notranslate nohighlight">\(\mathbf{h}^{&lt;t&gt;}\)</span> is composed of two terms, one coming directly from the corresponding output
+<span class="math notranslate nohighlight">\(\mathbf{o}^{&lt;t&gt;}\)</span> and one from the next hidden state <span class="math notranslate nohighlight">\(\mathbf{h}^{&lt;t+1&gt;}\)</span>.</p>
+<p>It follows that the gradients of the parameters to update are:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial \mathscr{L}}{\partial \mathbf{b}_y} = \sum_{t=1}^{T_x} \left( \frac{\partial \mathbf{o}^{&lt;t&gt;}}{\partial \mathbf{b}_y} \right)^T 
+\frac{\partial \mathscr{L}}{\partial \mathbf{o}^{&lt;t&gt;}} =  \sum_{t=1}^{T_x} \frac{\partial \mathscr{L}}{\partial \mathbf{o}^{&lt;t&gt;}}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial \mathscr{L}}{\partial \mathbf{b}_a} = \sum_{t=1}^{T_x} \left( \frac{\partial \mathbf{h}^{&lt;t&gt;}}{\partial \mathbf{b}_a} \right)^T 
+\frac{\partial \mathscr{L}}{\partial \mathbf{h}^{&lt;t&gt;}} = \sum_{t=1}^{T_x} diag(1 - (\mathbf{h}^{&lt;t&gt;})^2) \frac{\partial \mathscr{L}}{\partial \mathbf{h}^{&lt;t&gt;}}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial \mathscr{L}}{\partial \mathbf{W}_y} = \sum_{t=1}^{T_x} \frac{\partial \mathscr{L}}{\partial \mathbf{o}^{&lt;t&gt;}} 
+\frac{\partial \mathbf{o}^{&lt;t&gt;}}{\partial \mathbf{W}_y} =
+\sum_{t=1}^{T_x} \frac{\partial \mathscr{L}}{\partial \mathbf{o}^{&lt;t&gt;}} \mathbf{h}^{&lt;t&gt;T}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial \mathscr{L}}{\partial \mathbf{W}_h} = \sum_{t=1}^{T_x} \frac{\partial \mathscr{L}}{\partial \mathbf{h}^{&lt;t&gt;}} 
+\frac{\partial \mathbf{h}^{&lt;t&gt;}}{\partial \mathbf{W}_h} = \sum_{t=1}^{T_x} diag(1 - (\mathbf{h}^{&lt;t&gt;})^2) \frac{\partial 
+\mathscr{L}}{\partial \mathbf{h}^{&lt;t&gt;}} \mathbf{h}^{&lt;t-1&gt;T}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial \mathscr{L}}{\partial \mathbf{W}_x} = \sum_{t=1}^{T_x} \frac{\partial \mathscr{L}}{\partial \mathbf{h}^{&lt;t&gt;}} 
+\frac{\partial \mathbf{h}^{&lt;t&gt;}}{\partial \mathbf{W}_x} = \sum_{t=1}^{T_x} diag(1 - (\mathbf{h}^{&lt;t&gt;})^2) \frac{\partial 
+\mathscr{L}}{\partial \mathbf{h}^{&lt;t&gt;}} \mathbf{x}^{&lt;t&gt;T}
+\]</div>
+</section>
+<section id="inference">
+<h3>Inference<a class="headerlink" href="#inference" title="Link to this heading">#</a></h3>
+<p>At test time, the evaluation of a RNN is straightforward. We usually simply need to pass through the forward pass and get
+the output <span class="math notranslate nohighlight">\(\hat{\mathbf{y}}^{&lt;t&gt;}\)</span>. However, this is not always true, especially in the following two cases:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(T_x=1, T_y&gt;1\)</span> (generative network)</p></li>
+<li><p><span class="math notranslate nohighlight">\(T_x, T_y\)</span> (encoder-decoder network)</p></li>
+</ul>
+<p>as in both cases we will be required to use the output at a given step (<span class="math notranslate nohighlight">\(\hat{\mathbf{y}}^{&lt;t-1&gt;}\)</span>) as part of the input to
+produce the output of the next step (<span class="math notranslate nohighlight">\(\hat{\mathbf{y}}^{&lt;t&gt;}\)</span>). These two scenarios are dominant in so-called <em>Language Modelling</em>
+for tasks where we want to generate sentences given some initial guess (e.g., first word) or perform language-to-language translation.
+However, similar concepts could also be used to for example generate well logs or seismograms. Let’s briefly take a look at some of
+the required changes in the inference process of these 2 network types.</p>
+<p>First of all, in conventional cases our loss function can be written as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\mathscr{L} &amp;= \prod_{t=1}^{T_x} P (\mathbf{y}^{&lt;t&gt;} | \mathbf{x}^{&lt;1&gt;}, \mathbf{x}^{&lt;2&gt;}, ..., \mathbf{x}^{&lt;t&gt;}) \\
+&amp;= - \sum_{t=1}^{T_x} log P (\mathbf{y}^{&lt;t&gt;} | \mathbf{x}^{&lt;1&gt;}, \mathbf{x}^{&lt;2&gt;}, ..., \mathbf{x}^{&lt;t&gt;})
+\end{aligned}
+\end{split}\]</div>
+<p>where each output is here totally independent from the others. On the other hand, we are now faced with a joint distribution to
+sample from:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\mathscr{L} &amp;= P (\mathbf{y}^{&lt;1&gt;}, \mathbf{y}^{&lt;2&gt;},..., \mathbf{y}^{&lt;t&gt;})\\
+&amp;= - \prod_{t=1}^{T_x} log P (\mathbf{y}^{&lt;t&gt;} | \mathbf{y}^{&lt;1&gt;}, \mathbf{y}^{&lt;2&gt;},..., \mathbf{y}^{&lt;t-1&gt;})
+\end{aligned}
+\end{split}\]</div>
+<p>Evaluating such a probability is not a big deal during training as we can simply use the true labels as inputs (similarly to the
+more conventional network architectures where we use <span class="math notranslate nohighlight">\(\mathbf{x}^{&lt;t&gt;}\)</span>) instead. However, at inference stage we do not have access to the
+exact previous outputs when evaluating the current one. In order to simplify the evaluation of such a probability, we are therefore required
+to make an assumption: more specifically, we assume that the outputs can be modelled as a Markov Chain. In other words, we assume that the
+current output depends only on the previous one and not all of the other previous outputs. We can therefore write:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathscr{L} \approx - \prod_{t=1}^{T_x} log P (\mathbf{y}^{&lt;t&gt;} | \hat{\mathbf{y}}^{&lt;t-1&gt;})
+\]</div>
+<p>which can be easily evaluated by placing the prediction at step <span class="math notranslate nohighlight">\(t-1\)</span> as input to step <span class="math notranslate nohighlight">\(t\)</span>.</p>
+<p>However, when we are interested in using our trained RNN for generative tasks, this approach comes with a limitation.
+It is in fact deterministic, and therefore we can only create a single output sequence. A more sophisticated procedure can be
+designed such that we can take advantage of our predictions in terms of their probabilities (and not the most probable outcome).
+Given <span class="math notranslate nohighlight">\(P (\mathbf{y}^{&lt;t-1&gt;} | ...)\)</span> (from, e.g., before a softmax later), what we can instead do is to sample one value of
+<span class="math notranslate nohighlight">\(\mathbf{y}^{&lt;t-1&gt;}\)</span> and feed it to the next step of our recurrent network. If we now repeat the same procedure multiple times,
+we will produce a bunch of different sequences. Finally, we could go even one step beyond and sample multiple values at step <span class="math notranslate nohighlight">\(t-1\)</span>,
+feed them concurrently to the next step (or the next N steps) and evaluate which one(s) has the highest joint probability, then go back
+to step <span class="math notranslate nohighlight">\(t-1\)</span> and choose that value(s). This procedure, usually referred as <em>Beam Search</em>, is however beyond the scope of this lecture.</p>
+</section>
+</section>
+<section id="bidirectional-rnn">
+<h2>Bidirectional RNN<a class="headerlink" href="#bidirectional-rnn" title="Link to this heading">#</a></h2>
+<p>Up until now, we have tried to construct NNs that can learn from short and long term patterns in the data in a <em>causal</em> fashion: in other
+words, by feeding our time series from left to right to the network we allow it at every time step <span class="math notranslate nohighlight">\(t\)</span> to learn dependencies from
+the past <span class="math notranslate nohighlight">\((t-1,t-2,t-i)\)</span>. This is very useful for streaming data where we record the data sequentially from <span class="math notranslate nohighlight">\(t=0\)</span> to <span class="math notranslate nohighlight">\(t=T_x\)</span>, and we do not
+want to wait until the entire data has been collected before we can make some predictions. This is usually referred to as <em>online</em> processing.
+An example of such a scenario is represented by real-time drilling, when we drill a hole into the subsurface and record some measurements whilst doing so. We would like a machine to process
+such recordings as they come in and provide us with useful insights on how to best continue drilling:</p>
+<p><img alt="DRILLBIT" src="_images/drillbit.png" /></p>
+<p>Of course, not every problem lends naturally to the above depicted scenario. In most cases we are able to record data over an entire time window
+and only after that we are concerned with analyzing such data. This is usually referred to as <em>offline</em> processing. In this case it may be useful
+to also look at correlations between samples at time <span class="math notranslate nohighlight">\(t\)</span> and future samples <span class="math notranslate nohighlight">\((t+1,t+2,t+i)\)</span>. Bidirectional RNNs represent a solution to this as they
+allow learning short and long term dependencies not only from the past but also from the future. Let’s start with a schematic diagram:</p>
+<p><img alt="BRNN" src="_images/brnn.png" /></p>
+<p>where the network architecture presents a simple modification. Instead of having a single flow of information from left to right as it is the
+case for basic RNNs, we have now added a second flow of information from right to left. The hidden states of the first have been labelled with
+the suffix F (for forward), and those of the second with the suffix B (for backward). The inputs remain unchanged, apart from the fact that they
+are now fed twice to the network, once for the forward flow and once for the backward flow, whilst the output is not the concatenation of the
+outputs of the two flows, i.e., <span class="math notranslate nohighlight">\(\hat{\mathbf{y}}^{&lt;t&gt;} = [\hat{\mathbf{y}}_F^{&lt;t&gt;T} \; \hat{\mathbf{y}}_B^{&lt;t&gt;T}]^T\)</span>.</p>
+</section>
+<section id="deep-rnns">
+<h2>Deep RNNs<a class="headerlink" href="#deep-rnns" title="Link to this heading">#</a></h2>
+<p>Similarly to any other network architecture that we have investigated so far, the concept of shallow and deep network also applies to RNNs. Shallow
+RNNs are recurrent networks that have a single hidden layer connecting the inputs to the outputs. On the other than, deep RNNs are composed of more hidden
+layers. This is simply achieved as follows:</p>
+<ul class="simple">
+<li><p><strong>First layer</strong> input: <span class="math notranslate nohighlight">\(\mathbf{x}^{&lt;t&gt;}\)</span>, hidden and output: <span class="math notranslate nohighlight">\(\mathbf{h}_0^{&lt;t&gt;}\)</span>,</p></li>
+<li><p><strong>Second layer</strong> input: <span class="math notranslate nohighlight">\(\mathbf{h}_0^{&lt;t&gt;}\)</span>, hidden and output: <span class="math notranslate nohighlight">\(\mathbf{h}_1^{&lt;t&gt;}\)</span>,</p></li>
+<li><p><strong>Last layer</strong> input: <span class="math notranslate nohighlight">\(\mathbf{h}_{N-1}^{&lt;t&gt;}\)</span>, hidden:<span class="math notranslate nohighlight">\(\mathbf{h}_N^{&lt;t&gt;}\)</span>, output: <span class="math notranslate nohighlight">\(\hat{\mathbf{y}}^{&lt;t&gt;}\)</span>.</p></li>
+</ul>
+<p>that we can visually represent as:</p>
+<p><img alt="DEEPRNN" src="_images/deeprnn.png" /></p>
+<p>Mathematically, a deep RNN can be simply expressed as follows.</p>
+<ul>
+<li><p>For <span class="math notranslate nohighlight">\(i=0,1,N-1\)</span> (with <span class="math notranslate nohighlight">\(\mathbf{h}_{-1}=\mathbf{x}\)</span>)</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{aligned}
+    \mathbf{a}_i^{&lt;t&gt;} &amp;= \mathbf{W}_{h_i} \mathbf{h}_i^{&lt;t-1&gt;} + \mathbf{W}_{x_i} \mathbf{h}_{i-1}^{&lt;t&gt;} + \mathbf{b}_{a_i} \\
+    \mathbf{h}_i^{&lt;t&gt;} &amp;= \sigma(\mathbf{a}_i^{&lt;t&gt;} )  \\
+    \end{aligned}
+    \end{split}\]</div>
+</li>
+<li><p>For <span class="math notranslate nohighlight">\(i=N\)</span></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{aligned}
+    \mathbf{a}_N^{&lt;t&gt;} &amp;= \mathbf{W}_{h_N} \mathbf{h}_N^{&lt;t-1&gt;} + \mathbf{W}_{x_N} \mathbf{h}_{N-1}^{&lt;t&gt;} + \mathbf{b}_{a_N} \\
+    \mathbf{h}_N^{&lt;t&gt;} &amp;= \sigma(\mathbf{a}_N^{&lt;t&gt;} )  \\ 
+    \mathbf{o}^{&lt;t&gt;} &amp;= \mathbf{W}_y \mathbf{h}_N^{&lt;t&gt;} + \mathbf{b}_y \\
+    \hat{\mathbf{y}}^{&lt;t&gt;} &amp;= \sigma' (\mathbf{o}^{&lt;t&gt;})  \\
+    \end{aligned}
+    \end{split}\]</div>
+</li>
+</ul>
+</section>
+<section id="long-term-dependencies-implications-for-gradients">
+<h2>Long-term dependencies: implications for gradients<a class="headerlink" href="#long-term-dependencies-implications-for-gradients" title="Link to this heading">#</a></h2>
+<p>In this section, we will discuss a long-standing challenge arising when implementing backpropagation through a RNN. A number
+of solution to circumvent this problem will be presented in following sections.</p>
+<p>Let’s start by considering the forward pass of a recurrent network. For the information to flow from left to right, a
+recurrent network repeatedly applies the matrix <span class="math notranslate nohighlight">\(\mathbf{W}_h\)</span> to the hidden state vectors (interleaved by nonlinear
+transformations): as already discussed in the <a class="reference internal" href="08_gradopt1.html"><span class="std std-doc">Optimization</span></a> lecture, this leads to raising the eigenvalues
+of this matrix to the power of <span class="math notranslate nohighlight">\(T_x\)</span>. Eigenvalues smaller than one decay very fast to zero, whilst those bigger than one grow
+exponentially fast to infinity. As a consequence, only the part of the initial vector <span class="math notranslate nohighlight">\(\mathbf{h}^{&lt;0&gt;}\)</span> aligned with the largest
+eigenvectors successfully propagates through the network whilst the other components become insignificant after a few steps. So,
+no matter how we choose the initial weights of the network and hidden state, long term dependencies tend to become irrelevant when
+compared to short terms ones in terms of their contribution to the gradient. In other words, the network will take a long time to
+train and learn long-term dependencies.</p>
+<p>In order to avoid that, a number of strategies have been proposed in the literature. In the following, we will look at three of them:
+the first tries to circumvent this problem as part of the learning process, whilst the latter two tackle the issue from the perspective
+of the network architecture design. By no means, these are the preferred choices nowadays when using RNNs.</p>
+<section id="gradient-clipping">
+<h3>Gradient clipping<a class="headerlink" href="#gradient-clipping" title="Link to this heading">#</a></h3>
+<p>We have previously mentioned that one simple strategy to prevent exploding gradient is represented by so-called gradient clipping. As the name
+suggests, this is applied only during the backward pass to gradients that overcome a given threshold. A forward-backward pass with gradient
+clipping can be therefore written as:</p>
+<ul class="simple">
+<li><p>Forward pass: <span class="math notranslate nohighlight">\(\hat{\mathbf{y}}^{&lt;t&gt;} = f_\theta(\mathbf{x}^{&lt;t&gt;} , \mathbf{h}^{&lt;0&gt;}) \; \forall t=0,1,...T_x\)</span></p></li>
+<li><p>Backward pass: <span class="math notranslate nohighlight">\(\partial \mathscr{L} / \partial \theta\)</span></p></li>
+<li><p>Gradient clipping: if <span class="math notranslate nohighlight">\(|\partial \mathscr{L} / \partial \theta| &gt; th\)</span>, then
+<span class="math notranslate nohighlight">\(\partial \mathscr{L} / \partial \theta = sign(\partial \mathscr{L} / \partial \theta) \cdot th\)</span></p></li>
+</ul>
+<p>Unfortunately, a similar simply trick does not exist for the other problem, vanishing gradients. So, whislt adopting this strategy will avoid
+instabilities in the training of basic RNNs, the training process will still be painfully slow.</p>
+</section>
+<section id="gated-recurrent-networks-or-gru-unit">
+<h3>Gated recurrent networks or GRU unit<a class="headerlink" href="#gated-recurrent-networks-or-gru-unit" title="Link to this heading">#</a></h3>
+<p>The most effective family of networks that can tackle both the exploding and vanishing gradient problem is called <em>Gated networks</em>. As the name
+implies, a gate is introduced in each block of the network to help information flow and be used by later units without vanishing and exploding
+gradient issues. By doing so, the gate helps the network <em>remembering</em> some information from early steps, use it much later down the flow, and eventually
+<em>forget</em> about it.</p>
+<p>A GRU unit can be simply seen as a classical RNN unit with a number of small modifications. Let’s start by drawing them side-by-side
+(note that for the moment we are considering a simplified GRU block):</p>
+<p><img alt="SIMPGRU" src="_images/simpgru.png" /></p>
+<p>Apart from a slight change in name (<span class="math notranslate nohighlight">\(\mathbf{h}^{&lt;t&gt;}\)</span> has been replaced by <span class="math notranslate nohighlight">\(\mathbf{c}^{&lt;t&gt;}\)</span>, which stands for <em>memory</em> cell), compared to the basic RNN
+the GRU block contains a number of additional internal states. More specifically:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\tilde{\mathbf{c}}^{&lt;t&gt;}\)</span>: the candidate replacement for the memory cell. It is a candidate as in some cases it will not be used, rather the current
+memory cell will be fast-tracked to allow learning long-term dependencies.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\Gamma_u\)</span>: update gate, which is responsible to choose whether to pass the candidate memory cell <span class="math notranslate nohighlight">\(\tilde{\mathbf{c}}^{&lt;t&gt;}\)</span> or the previous memory
+cell <span class="math notranslate nohighlight">\(\mathbf{c}^{&lt;t-1&gt;}\)</span> to the next layer.</p></li>
+</ul>
+<p>The associated update equations for this simplified GRU block are:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+&amp;\boldsymbol \Gamma_{u}=\sigma\left(\mathbf{W}_{u}\left[\begin{array}{c}
+\mathbf{c}^{&lt;t-1&gt;} \\
+\mathbf{x}^{&lt;t&gt;}
+\end{array}\right]+\mathbf{b}_{u}\right) \\
+&amp;\tilde{\mathbf{c}}^{&lt;t&gt;}=\tanh \left(\mathbf{W}_{c}\left[\begin{array}{c} 
+\mathbf{c}^{&lt;t-1&gt;} \\
+\mathbf{x}^{&lt;t&gt;}
+\end{array}\right]+\mathbf{b}_{c}\right) \\
+&amp;\mathbf{c}^{&lt;t&gt;}=\boldsymbol \Gamma_{u} \cdot \tilde{\mathbf{c}}^{&lt;t&gt;}+\left(1-\boldsymbol \Gamma_{u}\right) \cdot  \mathbf{c}^{&lt;t-1&gt;}\\
+&amp;\hat{\mathbf{y}}^{&lt;t&gt;}=\sigma' (\mathbf{W}_y \mathbf{c}^{&lt;t&gt;} + \mathbf{b}_{y})
+\end{aligned}
+\end{split}\]</div>
+<p>In the last equation, the new memory cell is computed as the linear interpolation between the old memory cell and the candidate one.
+However, since a sigmoid is usually chosen for the update gate, <span class="math notranslate nohighlight">\(\boldsymbol \Gamma_{u}\)</span> roughly acts as a binary gate (0-stop, 1-pass).
+This way, the gate can stop the flowing of new information for a number of steps allowing the old information to be moved further up the flow
+without being multiplicated by the weight matrix and therefore creating long-term dependencies that do not suffer from the vanishing gradient
+problem.</p>
+<p>To conclude, let’s look at the real GRU and its equations, which introduces an additional gate called the relevance or reset gate <span class="math notranslate nohighlight">\(\boldsymbol \Gamma_{r}\)</span>:</p>
+<p><img alt="GRU" src="_images/gru.png" /></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+&amp;\boldsymbol \Gamma_{u}=\sigma\left(\mathbf{W}_{u}\left[\begin{array}{c}
+\mathbf{c}^{&lt;t-1&gt;} \\
+\mathbf{x}^{&lt;t&gt;}
+\end{array}\right]+\mathbf{b}_{u}\right) \\
+&amp;\boldsymbol \Gamma_{r}=\sigma\left(\mathbf{W}_{r}\left[\begin{array}{c}
+\mathbf{c}^{&lt;t-1&gt;} \\
+\mathbf{x}^{&lt;t&gt;}
+\end{array}\right]+\mathbf{b}_{r}\right) \\
+&amp;\tilde{\mathbf{c}}^{&lt;t&gt;}=\tanh \left(\mathbf{W}_{c}\left[\begin{array}{c}
+\boldsymbol \Gamma_{r} \cdot \mathbf{c}^{&lt;t-1&gt;} \\
+\mathbf{x}^{&lt;t&gt;}
+\end{array}\right]+\mathbf{b}_{c}\right) \\
+&amp;\mathbf{c}^{&lt;t&gt;}=\boldsymbol \Gamma_{u} \cdot \tilde{\mathbf{c}}^{&lt;t&gt;}+\left(1-\boldsymbol \Gamma_{u}\right) \cdot \mathbf{c}^{&lt;t-1&gt;}\\
+&amp;\hat{\mathbf{y}}^{&lt;t&gt;}=\sigma' (\mathbf{W}_y \mathbf{c}^{&lt;t&gt;} + \mathbf{b}_{y})
+\end{aligned}
+\end{split}\]</div>
+</section>
+<section id="long-short-term-memory-lstm-unit">
+<h3>Long-short term memory (LSTM) unit<a class="headerlink" href="#long-short-term-memory-lstm-unit" title="Link to this heading">#</a></h3>
+<p>Another popular, probably the most popular, RNN block that mitigates the vanishing gradient problem is called LSTM block. It uses similar concepts
+to those introduced for the GRU block, but at the same time introduces a number of additional hidden states, namely:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\Gamma_f\)</span>: forget gate, which provides more flexibility when updating the memory cell with the old and candidate memory cells.
+More specifically, whilst in the GRU block, the new memory cell was a linear combination of those two terms, now we have two independent weights (both of them learned) that
+can allow passing more or less information from the two inputs instead of having to weight their total contribution to 1.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\Gamma_o\)</span>: output gate;</p></li>
+</ul>
+<p><img alt="LSTM" src="_images/lstm.png" /></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+&amp;\boldsymbol{\Gamma}_{u}=\sigma\left(\boldsymbol{W}_{u}\left[\begin{array}{c}
+\boldsymbol{h}^{&lt;t-1&gt;} \\
+\boldsymbol{x}^{&lt;t&gt;}
+\end{array}\right]+\boldsymbol{b}_{u}\right) \\
+&amp;\boldsymbol{\Gamma}_{\boldsymbol{f}}=\sigma\left(\boldsymbol{W}_{f}\left[\begin{array}{c}
+h^{&lt;t-1&gt;} \\
+x^{&lt;t&gt;}
+\end{array}\right]+\boldsymbol{b}_{f}\right) \\
+&amp;\boldsymbol{\Gamma}_{o}=\sigma\left(\boldsymbol{W}_{o}\left[\begin{array}{c}
+\boldsymbol{h}^{&lt;t-1&gt;} \\
+\boldsymbol{x}^{&lt;t&gt;}
+\end{array}\right]+\boldsymbol{b}_{o}\right) \\
+&amp;\tilde{\boldsymbol{c}}^{&lt;t&gt;}=\tanh \left(\boldsymbol{W}_{c}\left[\begin{array}{c}
+\boldsymbol{h}^{&lt;t-1&gt;} \\
+\boldsymbol{x}^{&lt;t&gt;}
+\end{array}\right]+\boldsymbol{b}_{c}\right) \\
+&amp;\boldsymbol{c}^{&lt;t&gt;}=\boldsymbol{\Gamma}_{u} \tilde{\boldsymbol{c}}^{&lt;t&gt;}+\boldsymbol{\Gamma}_{f} \boldsymbol{c}^{&lt;t-1&gt;} \\
+&amp;\boldsymbol{h}^{&lt;t&gt;}=\boldsymbol{\Gamma}_{o} \tanh \left(\boldsymbol{c}^{&lt;t&gt;}\right) \\
+&amp;\boldsymbol{y}^{&lt;t&gt;}=\sigma^{\prime}\left(\boldsymbol{W}_{y} \boldsymbol{h}^{&lt;t&gt;}+\boldsymbol{b}_{y}\right)
+\end{aligned}
+\end{split}\]</div>
+</section>
+</section>
+<section id="present-and-future-of-sequence-modelling">
+<h2>Present and future of sequence modelling<a class="headerlink" href="#present-and-future-of-sequence-modelling" title="Link to this heading">#</a></h2>
+<p>Finally, it is worth noting that the field of sequence modelling with deep neural networks has been taken by a storm a couple of years
+ago with novel architectures that have led to great improvements in the field of Natural Language Processing. The first innovation, which
+goes under the name of <em>Attention</em> layer has been initially introduced to mitigate one of the main limitations of the encoder-decoder RNN
+architecture that we have extensively discussed in this lecture. More specifically, the attention layer can find global correlations between
+the input(s) of the decoder layer and any of the hidden states of the encoder, avoiding the problem of having a bottleneck at the end of the
+encoder and a single hidden state that is required to encode the information of the various inputs of the encoder.</p>
+<p>The attention layer has later led to the design of a completely new type of neural network architecture, the so-called <em>Transformer</em> layer. In this
+case, instead of processing the input sequentially as in RNNs, the transformer layer takes all the inputs at once and find both local and global correlations
+by means of so-called self-attention blocks.</p>
+</section>
+<section id="additional-readings">
+<h2>Additional readings<a class="headerlink" href="#additional-readings" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>If you are interested to learn more about attention and transformer layers, I recommend watching this
+<a class="reference internal" href="#!%5Bimg.png%5D(img.png)"><span class="xref myst">lecture</span></a> from the KAUST Summer School on Unstructured Data in Geoscience</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#motivation">Motivation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-rnn">Basic RNN</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture">Architecture</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loss">Loss</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#backprop">Backprop</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bidirectional-rnn">Bidirectional RNN</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deep-rnns">Deep RNNs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#long-term-dependencies-implications-for-gradients">Long-term dependencies: implications for gradients</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gradient-clipping">Gradient clipping</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gated-recurrent-networks-or-gru-unit">Gated recurrent networks or GRU unit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#long-short-term-memory-lstm-unit">Long-short term memory (LSTM) unit</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#present-and-future-of-sequence-modelling">Present and future of sequence modelling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-readings">Additional readings</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Ashok Dahal, Modified from the Content of Matteo Ravasi, KAUST
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

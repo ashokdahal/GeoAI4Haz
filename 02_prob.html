@@ -1,0 +1,685 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Probability refresher &#8212; Machine Learning for Natural Hazards</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '02_prob';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Machine Learning for Natural Hazards</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Background and Refresher</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_intro.html">Introduction to Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_linalg.html">Linear Algebra refresher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_gradopt.html">Gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_linreg.html">Linear and Logistic Regression</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_nn.html">Basics of Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_nn.html">More on Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_bestpractice.html">Best practices in the training of Machine Learning models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Convolutional Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="08_gradopt1.html">More on gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_cnn.html">Convolutional Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_cnnarch.html">CNNs Popular Architectures</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz/issues/new?title=Issue%20on%20page%20%2F02_prob.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/02_prob.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Probability refresher</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probability">Probability</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#information-theory">Information theory</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="probability-refresher">
+<h1>Probability refresher<a class="headerlink" href="#probability-refresher" title="Link to this heading">#</a></h1>
+<p>Another set of fundamental mathematical tools required to develop various machine learning algorithms
+(especially towards the end of the course when we will focus on generative modelling)</p>
+<p>In order to develop various machine learning algorithms (especially towards the end of the
+course when we will focus on generative modelling) we need to be familiarized with some basic concepts of:
+mathematical tools from:</p>
+<ul class="simple">
+<li><p><strong>Probability</strong>: mathematical framework to handle uncertain statements;</p></li>
+<li><p><strong>Information Theory</strong>: scientific field focused on the quantification of amount of uncertainty in a probability distribution.</p></li>
+</ul>
+<section id="probability">
+<h2>Probability<a class="headerlink" href="#probability" title="Link to this heading">#</a></h2>
+<p><strong>Random Variable</strong>: a variable whose value is unknown, all we know is that it can take on different
+values with a given probability. It is generally defined by an uppercase letter <span class="math notranslate nohighlight">\(X\)</span>, whilst the values
+it can take are in lowercase letter <span class="math notranslate nohighlight">\(x\)</span>. (Note: Actually, random variable is not really a variable. To be exact, random variable is actually a function that maps from sample space to the probability space.)</p>
+<p><strong>Probability distribution</strong>: description of how likely a variable <span class="math notranslate nohighlight">\(x\)</span> is, <span class="math notranslate nohighlight">\(P(x)\)</span> (or <span class="math notranslate nohighlight">\(p(x)\)</span>).
+Depending on the type of variable we have:</p>
+<ul class="simple">
+<li><p><em>Discrete distributions</em>: <span class="math notranslate nohighlight">\(P(X)\)</span> called Probability Mass Function (PMF) and <span class="math notranslate nohighlight">\(X\)</span> can take on a discrete number of states N.
+A classical example is represented by a coin where N=2 and <span class="math notranslate nohighlight">\(X={0,1}\)</span>. For a fair coin, <span class="math notranslate nohighlight">\(P(X=0)=0.5\)</span> and <span class="math notranslate nohighlight">\(P(X=1)=0.5\)</span>.</p></li>
+<li><p><em>Continuous distributions</em>: <span class="math notranslate nohighlight">\(p(X)\)</span> called Probability Density Function (PDF) and <span class="math notranslate nohighlight">\(X\)</span> can take on any value from a continuous space
+(e.g., <span class="math notranslate nohighlight">\(\mathbb{R}\)</span>). A classical example is represented by the gaussian distribution where <span class="math notranslate nohighlight">\(x \in (-\infty, \infty)\)</span>.</p></li>
+</ul>
+<p>A probability distribution must satisfy the following conditions:</p>
+<ul class="simple">
+<li><p>each of the possible states must have probability bounded between 0 (no occurrance) and 1 (certainty of occurcence):
+<span class="math notranslate nohighlight">\(\forall x \in X, \; 0 \leq P(x) \leq 1\)</span> (or <span class="math notranslate nohighlight">\(p(x) \geq 0\)</span>, where the upper bound is removed because of the
+fact that the integration step <span class="math notranslate nohighlight">\(\delta x\)</span> in the second condition can be smaller than 1: <span class="math notranslate nohighlight">\(p(X=x) \delta x &lt;=1\)</span>);</p></li>
+<li><p>the sum of the probabilities of all possible states must equal to 1: <span class="math notranslate nohighlight">\(\sum_x P(X=x)=1\)</span> (or <span class="math notranslate nohighlight">\(\int p(X=x)dx=1\)</span>).</p></li>
+</ul>
+<p><strong>Joint and Marginal Probabilities</strong>: assuming we have a probability distribution acting over a set of variables (e.g., <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>)
+we can define</p>
+<ul class="simple">
+<li><p><em>Joint distribution</em>: <span class="math notranslate nohighlight">\(P(X=x, Y=y)\)</span> (or <span class="math notranslate nohighlight">\(p(X=x, Y=y)\)</span>);</p></li>
+<li><p><em>Marginal distribution</em>: <span class="math notranslate nohighlight">\(P(X=x) = \sum_{y \in Y} P(X=x, Y=y)\)</span> (or <span class="math notranslate nohighlight">\(p(X=x) = \int P(X=x, Y=y) dy\)</span>),
+which is the probability spanning one or a subset of the original variables;</p></li>
+</ul>
+<p><strong>Conditional Probability</strong>: provides us with the probability of an event given the knowledge
+that another event has already occurred</p>
+<div class="math notranslate nohighlight">
+\[
+P(Y=y | X=x) = \frac{P(X=x, Y=y)}{P(X=x)}
+\]</div>
+<p>This formula can be used recursively to define the joint probability of N variables as product of conditional
+probabilities (so-called <em>Chain Rule of Probability</em>)</p>
+<div class="math notranslate nohighlight">
+\[
+P(x_1, x_2, ..., x_N) = P(x_1) \prod_{i=2}^N P(x_i | x_1, x_2, x_{i-1})
+\]</div>
+<p><strong>Independence and Conditional Independence</strong>: Two variables X and Y are said to be independent if</p>
+<div class="math notranslate nohighlight">
+\[
+P(X=x, Y=y) = P(X=x) P(Y=y)
+\]</div>
+<p>If both variables are conditioned on a third variable Z (i.e., P(X=x, Y=y | Z=z)), they are said to be conditionally
+independent if</p>
+<div class="math notranslate nohighlight">
+\[
+P(X=x, Y=y | Z=z) = P(X=x | Z=z) P(Y=y| Z=z)
+\]</div>
+<p><strong>Bayes Rule</strong>: probabilistic way to update our knowledge of a certain phenomenon (called prior) based on a new piece of evidence
+(called likelihood):</p>
+<div class="math notranslate nohighlight">
+\[
+P(x | y) = \frac{P(y|x) P(x)}{P(y)}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(P(y) = \sum_x P(x, y) = \sum_x P(y |x) P(x)\)</span> is called the evidence. In practice, it is infeasible to compute this
+quantity as it would require evaluating <span class="math notranslate nohighlight">\(y\)</span> for all possible combination of <span class="math notranslate nohighlight">\(x\)</span> (we will see later how it is possible to
+devise methods for which <span class="math notranslate nohighlight">\(P(y)\)</span> can be ignored).</p>
+<p><strong>Mean (or Expectation)</strong>: Given a function <span class="math notranslate nohighlight">\(f(x)\)</span> where <span class="math notranslate nohighlight">\(x\)</span> is a random variable with probability <span class="math notranslate nohighlight">\(P(x)\)</span>, its average
+or mean value is defined as follows for the discrete case:</p>
+<div class="math notranslate nohighlight">
+\[
+\mu = E_{x \sim P} [f(x)] = \sum_x P(x) f(x)
+\]</div>
+<p>and for the continuous case</p>
+<div class="math notranslate nohighlight">
+\[
+\mu = E_{x \sim p} [f(x)] = \int p(x) f(x) dx
+\]</div>
+<p>In most Machine Learning applications, we do not have knowledge of the full distribution to evaluate the mean, rather we
+have access to N equi-probable samples that we assume are drawn from the underlying distribution. We can approximate the mean
+via the <em>Sample Mean</em>:</p>
+<div class="math notranslate nohighlight">
+\[
+\mu \approx \sum_i \frac{1}{N} f(x_i)
+\]</div>
+<p><strong>Variance (and Covariance)</strong>: Given a function <span class="math notranslate nohighlight">\(f(x)\)</span> where <span class="math notranslate nohighlight">\(x\)</span> is a random variable with probability <span class="math notranslate nohighlight">\(P(x)\)</span>,
+it represents a measure of how much the values of the function vary from the mean:</p>
+<div class="math notranslate nohighlight">
+\[
+\sigma^2 = E_{x \sim p} [(f(x)-\mu)^2]
+\]</div>
+<p>Covariance is the extension of the variance to two or more variables, and it tells
+how much these variables are related to each other:</p>
+<div class="math notranslate nohighlight">
+\[
+Cov(f(x), g(y)) =  E_{x,y \sim p} [(f(x)-\mu_x)(f(y)-\mu_y)]
+\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(Cov \rightarrow 0\)</span> indicates no correlation between the variables, <span class="math notranslate nohighlight">\(Cov &gt; 0\)</span> denotes positive correlation and
+<span class="math notranslate nohighlight">\(Cov &lt; 0\)</span> denotes negative correlation. It is worth remembering that covariance is linked to correlation via:</p>
+<div class="math notranslate nohighlight">
+\[
+Corr_{x,y} =  \frac{Cov_{x,y}}{\sigma_x \sigma_y}
+\]</div>
+<p>Finally, the covariance of a multidimensional vector <span class="math notranslate nohighlight">\(\textbf{x} \in \mathbb{R}^n\)</span> is defined as:</p>
+<div class="math notranslate nohighlight">
+\[
+Cov_{i,j} = Cov(x_i, x_j), \qquad Cov_{i,i} = \sigma^2_i
+\]</div>
+<p><strong>Distributions</strong>: some of the most used probability distributions in Machine Learning are listed in the following.</p>
+<p><em>1. Bernoulli</em>: single binary variable <span class="math notranslate nohighlight">\(x \in \{0,1\}\)</span> (commonly used to describe the toss of a coin). It is defined as</p>
+<div class="math notranslate nohighlight">
+\[
+P(x=1)=\phi, \; P(x=0)=1-\phi, \; \phi \in [0,1]
+\]</div>
+<p>with probability:</p>
+<div class="math notranslate nohighlight">
+\[
+P(x)=\phi^x(1-\phi)^{1-x} = \phi x + (1-\phi)(1-x)
+\]</div>
+<p>and momentum equal to:</p>
+<div class="math notranslate nohighlight">
+\[
+E[x] = 1, \; \sigma^2 = \phi (1-\phi)
+\]</div>
+<p><em>2. Multinoulli (or categorical)</em>: extension of Bernoulli distribution to K different states</p>
+<div class="math notranslate nohighlight">
+\[
+\textbf{P} \in [0,1]^{K-1}; \; P_k = 1- \textbf{1}^T\textbf{P}, \; \textbf{1}^T\textbf{P} \leq 1
+\]</div>
+<p><em>3. Gaussian</em>: most popular choice for continuous random variables (most distributions are close to a normal distribution
+and the central limit theorem states that any sum of independent variables is approximately normal)</p>
+<div class="math notranslate nohighlight">
+\[
+x \sim \mathcal{N}(\mu, \sigma^2) \rightarrow p(x) = \frac{1}{\sqrt{2 \pi} \sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}} = \sqrt{\frac{\beta}{2 \pi}} e^{-\frac{\beta(x-\mu)^2}{2}}
+\]</div>
+<p>where the second definition uses the precision <span class="math notranslate nohighlight">\(\beta=\frac{1}{\sigma^2} \in (0, \infty)\)</span> to avoid possible division by zero.
+A third way to parametrize the gaussian probability uses <span class="math notranslate nohighlight">\(2 \delta = log \sigma^2 \in (-\infty, \infty)\)</span> which has the further
+benefit to be unbounded and can be easily optimized for during training.
+which is unbounded (compared to the variance that must be positive)</p>
+<p><em>4. Multivariate Gaussian</em>: extension of Gaussian distribution to a multidimensional vector <span class="math notranslate nohighlight">\(\textbf{x} \in \mathbb{R}^n\)</span></p>
+<div class="math notranslate nohighlight">
+\[
+\textbf{x} \sim \mathcal{N}(\boldsymbol\mu, \boldsymbol\Sigma) \rightarrow p(\textbf{x}) = 
+\sqrt{\frac{1}{(2 \pi)^n det \boldsymbol\Sigma}} e^{-\frac{1}{2}(\textbf{x}- \boldsymbol\mu)^T\boldsymbol\Sigma^{-1}(\textbf{x}- \boldsymbol\mu)}=
+\sqrt{\frac{det \boldsymbol\beta}{(2 \pi)^n}} e^{-\frac{1}{2}(\textbf{x}- \boldsymbol\mu)^T\boldsymbol\beta(\textbf{x}- \boldsymbol\mu)}
+\]</div>
+<p>where again <span class="math notranslate nohighlight">\(\boldsymbol\beta =\boldsymbol\Sigma^{-1}\)</span>. In ML applications, <span class="math notranslate nohighlight">\(\boldsymbol\beta\)</span> is generally assumed diagonal
+(mean-field approximation) or even isotropic (<span class="math notranslate nohighlight">\(\boldsymbol\beta = \beta \textbf{I}_n\)</span>)</p>
+<p><em>5. Mixture of distributions</em>: any smooth probability density function can be expressed as a weighted sum of simpler distributions</p>
+<div class="math notranslate nohighlight">
+\[
+P(x) = \sum_i P(c=i) P(x | c=i)
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(c\)</span> is a categorical variable with Multinoulli distribution and plays the role of a <em>latent variable</em>, a variable that
+cannot be directly observed but is related to <span class="math notranslate nohighlight">\(x\)</span> via the joint distribution:</p>
+<div class="math notranslate nohighlight">
+\[
+P(x,c) = P(x | c) P(c), \; P(x) = \sum_c P(x|c)P(c)
+\]</div>
+<p>A special case is the so-called <em>Gaussian Mixture</em> where each probability <span class="math notranslate nohighlight">\(P(x|c=i) \sim \mathcal{N}(\mu_i, \sigma_i^2)\)</span>.</p>
+</section>
+<section id="information-theory">
+<h2>Information theory<a class="headerlink" href="#information-theory" title="Link to this heading">#</a></h2>
+<p>In Machine Learning, we are sometimes interested to quantify how much information is contained in a signal or how much two
+signals (or probability distributions) differ from each other.</p>
+<p>A large body of literature exists in the context of telecommunications, where it is necessary to study how to transmit signals
+for a discrete alphabet over a noisy channel. More specifically, a code must be designed so to allow sending the least amount
+of bits for the most amount of useful information. Extension of such theory to continuous variables is also available and more
+commonly used in the context of ML systems.</p>
+<p><strong>Self-information</strong>: a measure of information in such a way that likely events have low information content, less
+likely events have higher information content and independent events have additive information:</p>
+<div class="math notranslate nohighlight">
+\[
+I(x) = - log_eP(x)
+\]</div>
+<p>such that for <span class="math notranslate nohighlight">\(P(x) \rightarrow 0\)</span> (unlikely event), <span class="math notranslate nohighlight">\(I \rightarrow \infty\)</span> and for <span class="math notranslate nohighlight">\(P(x) \rightarrow 1\)</span> (likely event), <span class="math notranslate nohighlight">\(I \rightarrow 0\)</span>.</p>
+<p><strong>Shannon entropy</strong>: extension of self-information to continuous variables, representing the expected amount of information in an event <span class="math notranslate nohighlight">\(x\)</span> drawn from a probability $P:</p>
+<div class="math notranslate nohighlight">
+\[
+H(x) = E_{x \sim P} [I(x)] = - E_{x \sim P} [log_eP(x)]
+\]</div>
+<p><strong>Kullback-Leibler divergence</strong>: extension of entropy to 2 variables with probability <span class="math notranslate nohighlight">\(P\)</span> and <span class="math notranslate nohighlight">\(Q\)</span>, respectively. It is used to measure their distance</p>
+<div class="math notranslate nohighlight">
+\[
+D_{KL}(P||Q)  = E_{x \sim P} [log\frac{P(x)}{Q(x)}] = 
+E_{x \sim P} [logP(x)-logQ(x)]  = E_{x \sim P} [logP(x)] -E_{x \sim P}[logQ(x)] 
+\]</div>
+<p>which is <span class="math notranslate nohighlight">\(D_{KL}(P||Q)=0\)</span> only when <span class="math notranslate nohighlight">\(P=Q\)</span> and grows the further away the two probabilities are.
+Finally, note that this is not a real distance in that <span class="math notranslate nohighlight">\(D_{KL}(P||Q) \neq D_{KL}(Q|| P)\)</span> (non-symmetric), therefore
+the direction matter and it must be chosen wisely when devising optimization schemes with KL divergence in the loss function as
+we will discuss in more details later.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probability">Probability</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#information-theory">Information theory</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Ashok Dahal, Modified from the Content of Matteo Ravasi, KAUST
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

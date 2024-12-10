@@ -1,0 +1,698 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Gradient-based optimization &#8212; Machine Learning for Natural Hazards</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '03_gradopt';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Linear and Logistic Regression" href="04_linreg.html" />
+    <link rel="prev" title="Linear Algebra refresher" href="02_linalg.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Machine Learning for Natural Hazards</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Background and Refresher</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_intro.html">Introduction to Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_linalg.html">Linear Algebra refresher</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_linreg.html">Linear and Logistic Regression</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_nn.html">Basics of Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_nn.html">More on Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_bestpractice.html">Best practices in the training of Machine Learning models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Convolutional Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="08_gradopt1.html">More on gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_cnn.html">Convolutional Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_cnnarch.html">CNNs Popular Architectures</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz/issues/new?title=Issue%20on%20page%20%2F03_gradopt.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/03_gradopt.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Gradient-based optimization</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gradient-descent-algorithms">Gradient-descent algorithms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-length-selection">Step length selection</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#second-order-optimization">Second-order optimization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stochastic-gradient-descent-sgd">Stochastic-gradient descent (SGD)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batched-gradient-descent">Batched gradient descent</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stochastic-gradient-descent">Stochastic gradient descent</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mini-batched-gradient-descent">Mini-batched gradient descent</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-readings">Additional readings</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="gradient-based-optimization">
+<h1>Gradient-based optimization<a class="headerlink" href="#gradient-based-optimization" title="Link to this heading">#</a></h1>
+<p>After reviewing some of the basic concepts of linear algebra and probability that we will be using during this course,
+we are now in a position to start our journey in the field of <em>learning algorithms</em>.</p>
+<p>Any learning algorithm, no matter its level of complexity, is composed of 4 key elements:</p>
+<p><strong>Dataset</strong>: a collection of many examples (sometimes referred to as samples of data points) that represents the experience
+we wish our machine learning algorithm to learn from. More specifically, the dataset is defined as:
+$<span class="math notranslate nohighlight">\(
+\mathbf{x} = [x_1, x_2, ..., x_{N_f}]^T \quad \mathbf{X} = [\mathbf{x}^{(1)}, \mathbf{x}^{(2)}, ..., \mathbf{x}^{(N_s)}] 
+\)</span><span class="math notranslate nohighlight">\(
+and
+\)</span><span class="math notranslate nohighlight">\(
+\mathbf{y} = [y_1, y_2, ..., y_{N_t}]^T \quad \mathbf{Y} = [\mathbf{y}^{(1)}, \mathbf{y}^{(2)}, ..., \mathbf{y}^{(N_s)}] 
+\)</span><span class="math notranslate nohighlight">\(
+where \)</span>N_f<span class="math notranslate nohighlight">\( and \)</span>N_t<span class="math notranslate nohighlight">\( are the number of features and targets for each sample in the dataset, respectively, and 
+\)</span>N_s$ is the number of samples.</p>
+<p><strong>Model</strong>: a mathematical relation between the input (or features) and output (or target)
+of our dataset. It is generally parametrized as function <span class="math notranslate nohighlight">\(f\)</span> of a number of free parameters <span class="math notranslate nohighlight">\(\theta\)</span> which we want the
+learning algorithm to estimate given a task and a measure of performance, and we write it as
+$<span class="math notranslate nohighlight">\(
+\mathbf{y} = f_\theta(\mathbf{x})
+\)</span>$</p>
+<p><strong>Loss (and cost) function</strong>: quantitative measure of the performance of the learning algorithm, which we wish to minimize
+(or maximize) in order to make accurate predictions on the unseen data. It is written as
+$<span class="math notranslate nohighlight">\(
+J_\theta = \frac{1}{N_s} \sum_{j=1}^{N_s} \mathscr{L} (\mathbf{y}^{(j)}, f_\theta(\mathbf{x}^{(j)}))
+\)</span>$</p>
+<p>where <span class="math notranslate nohighlight">\(\mathscr{L}\)</span> is the loss function for each input-output pair and <span class="math notranslate nohighlight">\(J\)</span> is the overall cost function.</p>
+<p><strong>Optimization algorithm</strong>: mathematical method that aims to drive down (up) the cost function by modifying
+its free-parameters <span class="math notranslate nohighlight">\(\theta\)</span>:
+$<span class="math notranslate nohighlight">\(
+\hat{\theta} = \underset{\theta} {\mathrm{argmin}} \; J_\theta
+\)</span>$</p>
+<p>Optimization algorithms are generally divided into two main families: gradient-based
+(or local) and gradient-free (or global). Gradient-based optimization is by far the most popular way to train NNs and
+will be discussed in more details below.</p>
+<section id="gradient-descent-algorithms">
+<h2>Gradient-descent algorithms<a class="headerlink" href="#gradient-descent-algorithms" title="Link to this heading">#</a></h2>
+<p>The simplest of gradient-based methods is the so-called <strong>Gradient-descent</strong> algorithms (e.g., steepest descent algorithm). As the name implies, this algorithm uses local gradient information of the functional to minimize/maximize to move towards its global
+mimimum/maximum as depicted in the figure below.</p>
+<p><img alt="GRADIENT OPTIMIZATION" src="_images/opt_gradient.png" /></p>
+<p>More formally, given a functional <span class="math notranslate nohighlight">\(J_\theta\)</span> and its gradient
+<span class="math notranslate nohighlight">\(\nabla J = \frac{\delta J}{\delta \theta}\)</span>, the (minimization) algorithm can be written as:</p>
+<p>Initialization: choose <span class="math notranslate nohighlight">\(\theta \in \mathbb{R}\)</span></p>
+<p>For <span class="math notranslate nohighlight">\(i=0,...N-1\)</span>;</p>
+<ol class="arabic simple">
+<li><p>Compute update direction <span class="math notranslate nohighlight">\(d_i = -\nabla J |_{\theta_i}\)</span></p></li>
+<li><p>Estimate step-lenght <span class="math notranslate nohighlight">\(\alpha_i\)</span></p></li>
+<li><p>Update <span class="math notranslate nohighlight">\(\theta_{i+1} = \theta_{i} + \alpha_i d_i\)</span></p></li>
+</ol>
+<p>Note that the maximization version of this algorithm simply swaps the sign in the update direction (first equation of the algorithm).
+Moreover, the proposed algorithm can be easily extended to N-dimensional model vectors <span class="math notranslate nohighlight">\(\theta=[\theta_1, \theta_2, ..., \theta_N]\)</span> by
+defining the following gradient vector
+<span class="math notranslate nohighlight">\(\nabla J=[\delta J / \delta\theta_1, \delta J / \delta\theta_2, ..., \delta J/ \delta\theta_N]\)</span>.</p>
+<section id="step-length-selection">
+<h3>Step length selection<a class="headerlink" href="#step-length-selection" title="Link to this heading">#</a></h3>
+<p>The choice of the step-length has tremendous impact on the performance of the algorithm and its ability to converge
+fast (i.e., in a small number of iterations) to the optimal solution.</p>
+<p>The most used selection rules are:</p>
+<ul class="simple">
+<li><p>Constant: the step size is fixed to a constant value <span class="math notranslate nohighlight">\(\alpha_i=\hat{\alpha}\)</span>. This is the most common situation that we
+will encounter when training neural networks. In practice, some adaptive schemes based on the evolution of the train
+(or validation) norm are generally adopted, but we will still refer to this case as constant step size;</p></li>
+<li><p>Exact line search: at each iteration, <span class="math notranslate nohighlight">\(\alpha_i\)</span> is chosen such that it minimizes <span class="math notranslate nohighlight">\(J(\theta_{i} + \alpha_i d_i)\)</span>. This
+is the most commonly used approach when dealing with linear systems of equations.</p></li>
+<li><p>Backtracking  “Armijo” line search: at each iteration, given a parameter <span class="math notranslate nohighlight">\(\mu \in (0,1)\)</span>, start with <span class="math notranslate nohighlight">\(\alpha_i=1\)</span>
+and reduce it by a factor of 2 until the following condition is satisfied: <span class="math notranslate nohighlight">\(J(\theta_i) - J(\theta_{i} + \alpha_i d_i) \ge  -\mu \alpha_i \nabla J^T d_i\)</span></p></li>
+</ul>
+</section>
+</section>
+<section id="second-order-optimization">
+<h2>Second-order optimization<a class="headerlink" href="#second-order-optimization" title="Link to this heading">#</a></h2>
+<p>Up until now we have discussed first-order optimization techniques that rely on the ability to evaluate the function <span class="math notranslate nohighlight">\(J\)</span> and
+its gradient <span class="math notranslate nohighlight">\(\nabla J\)</span>. Second-order optimization method go one step beyond in that they use information from both the
+local slope and curvature of the function <span class="math notranslate nohighlight">\(J\)</span>.</p>
+<p>When a function has small curvature, the function and its tangent line are very similar:
+the gradient alone is therefore able to provide a good local approximation of the function (i.e., <span class="math notranslate nohighlight">\(J(\theta+\delta \theta)\approx J(\theta) + \nabla J \delta \theta\)</span>).
+On the other hand, if the curvature of the function of large, the function and its tangent line start to differ very quickly away from the linearization point. The gradient alone is not able anymore to provide a good local approximation of the function
+(i.e., <span class="math notranslate nohighlight">\(J(\theta+\delta \theta)\approx J(\theta) + \nabla J \delta \theta + \nabla^2 J \delta \theta^2\)</span>).</p>
+<p>Let’s start again from the one-dimensional case and the well-known <strong>Newton’s method</strong>. This method is generally employed to find the zeros of a function:
+<span class="math notranslate nohighlight">\(\theta: J(\theta)=0\)</span> and can be written as:</p>
+<div class="math notranslate nohighlight">
+\[
+\theta_{i+1} = \theta_i - \frac{J(\theta)|_{\theta_i}}{J'(\theta)|_{\theta_i}} 
+\]</div>
+<p>which can be easily derived from the Taylor expansion of <span class="math notranslate nohighlight">\(f(\theta)\)</span> around <span class="math notranslate nohighlight">\(\theta_{i+1}\)</span>.</p>
+<p>If we remember that finding the minimum (or maximum) of a function is equivalent to find the zeros of its first derivative
+(<span class="math notranslate nohighlight">\(\theta: min_\theta f(\theta) \leftrightarrow \theta: f'(\theta)=0\)</span>), the Newton’s method can be written as:</p>
+<div class="math notranslate nohighlight">
+\[
+\theta_{i+1} = \theta_i - \frac{J'(\theta)|_{\theta_i}}{J''(\theta)|_{\theta_i}} 
+\]</div>
+<p>In order to be able to discuss second-order optimization algorithms for the multi-dimensional case,
+let’s first introduce the notion of <em>Jacobian</em>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{y} = J(\boldsymbol\theta) \rightarrow  \mathbf{J}  = \begin{bmatrix} 
+                \frac{\partial J_1}{\partial \theta_1} &amp; \frac{\partial J_1}{\partial \theta_2} &amp; ... &amp; \frac{\partial J_1}{\partial \theta_M} \\
+                ...     &amp; ...  &amp; ...   &amp; ... \\
+                \frac{\partial J_N}{\partial \theta_1} &amp; \frac{\partial J_N}{\partial \theta_2} &amp; ... &amp; \frac{\partial J_N}{\partial \theta_M} \\
+  \end{bmatrix} \in \mathbb{R}^{[N \times M]}
+\end{split}\]</div>
+<p>Through the notion of Jacobian, we can define the <strong>Hessian</strong> as the Jacobian of the gradient vector</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{H} = \nabla (\nabla J) = \begin{bmatrix} 
+                \frac{\partial J^2}{\partial \theta_1^2} &amp; \frac{\partial J^2}{\partial x_1 \partial \theta_2} &amp; ... &amp; \frac{\partial J^2}{\partial \theta_1\partial \theta_M} \\
+                ...     &amp; ...  &amp; ...   &amp; ... \\
+                \frac{\partial J^2}{\partial \theta_M \partial \theta_1} &amp; \frac{\partial J^2}{\partial \theta_M \partial \theta_2} &amp; ... &amp; \frac{\partial J^2}{\partial \theta_M^2} \\
+  \end{bmatrix} \in \mathbb{R}^{[M \times M]}
+\end{split}\]</div>
+<p>where we note that when <span class="math notranslate nohighlight">\(J\)</span> is continuous, <span class="math notranslate nohighlight">\(\partial / \partial \theta_i \partial \theta_j = \partial / \partial \theta_j \partial \theta_i\)</span>, and <span class="math notranslate nohighlight">\(\mathbf{H}\)</span>
+is symmetric.</p>
+<p>The Newton method for the multi-dimensional case becomes:</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol\theta_{i+1} = \boldsymbol\theta_i - \mathbf{H}^{-1}\nabla J
+\]</div>
+<p>Approximated version of the Newton method have been developed over the years, mostly based on the idea that inverting <span class="math notranslate nohighlight">\(\mathbf{H}\)</span> is sometimes a prohibitive task. Such methods, generally referred to as Quasi-Netwon methods attempt to approximate the Hessian (or its inverse) using the collections of gradient information from the previous iterations. <a class="reference external" href="https://en.wikipedia.org/wiki/Broyden%E2%80%93Fletcher%E2%80%93Goldfarb%E2%80%93Shanno_algorithm">BFGS</a> or its limited memory version <a class="reference external" href="https://en.wikipedia.org/wiki/Limited-memory_BFGS">L-BFGS</a> are examples of such a kind. Due to their computational cost
+(as well as the lack of solid theories for their use in conjunction with approximate gradients), these methods are not yet commonly used by the machine learning community to optimize the parameters of NNs in deep learning.</p>
+</section>
+<section id="stochastic-gradient-descent-sgd">
+<h2>Stochastic-gradient descent (SGD)<a class="headerlink" href="#stochastic-gradient-descent-sgd" title="Link to this heading">#</a></h2>
+<p>To conclude, we look again at gradient-based iterative solvers and more specifically in the context of finite-sum functionals of the kind that we will encountering when training neural networks:</p>
+<div class="math notranslate nohighlight">
+\[
+J_\theta = \frac{1}{N_s} \sum_{i=1}^{N_s} \mathscr{L} (\mathbf{y}^{(i)}, f_\theta(\mathbf{x}^{(i)}))
+\]</div>
+<p>where the summation here is performed over training data.</p>
+<section id="batched-gradient-descent">
+<h3>Batched gradient descent<a class="headerlink" href="#batched-gradient-descent" title="Link to this heading">#</a></h3>
+<p>The solvers that we have considered so far are generally update the model parameters <span class="math notranslate nohighlight">\(\boldsymbol\theta\)</span> using the full gradient (i.e., over the entire batch of samples):</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol\theta_{i+1} = \boldsymbol\theta_{i} - \alpha_i \nabla J = \boldsymbol\theta_{i} - \frac{\alpha_i}{N_s} \sum_{j=1}^{N_s} \nabla \mathscr{L}_j
+\]</div>
+<p>A limitation of such an approach is that, if we have a very large number of training samples, the computational cost of computing the full gradient is very high and when some of the samples are similar, their gradient contribution is somehow redundant.</p>
+</section>
+<section id="stochastic-gradient-descent">
+<h3>Stochastic gradient descent<a class="headerlink" href="#stochastic-gradient-descent" title="Link to this heading">#</a></h3>
+<p>In this case we take a completely opposite approach to computing the gradient. More specifically, a single training sample is considered at each iteration:</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol\theta_{i+1} = \boldsymbol\theta_{i} - \alpha_i \nabla \mathscr{L}_j
+\]</div>
+<p>The choice of the training sample <span class="math notranslate nohighlight">\(j\)</span> at each iteration is generally completely random and this is repeated once all training data have been used at least once (generally referred to as <em>epoch</em>). In this case, the gradient may be noisy because the gradient of a single sample is a very rough approximation of the total cost function <span class="math notranslate nohighlight">\(J\)</span>: such a high variance of gradients requires lowering the step-size <span class="math notranslate nohighlight">\(\alpha\)</span> leading to slow convergence.</p>
+</section>
+<section id="mini-batched-gradient-descent">
+<h3>Mini-batched gradient descent<a class="headerlink" href="#mini-batched-gradient-descent" title="Link to this heading">#</a></h3>
+<p>A more commonly used strategy lies in between the batched and stochastic gradient descent algorithms
+uses batches of training samples to compute the gradient at each iteration. More specifically given a batch of
+<span class="math notranslate nohighlight">\(N_b\)</span> samples, the update formula can be written as:</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol\theta_{i+1} = \boldsymbol\theta_{i} - \frac{\alpha_i}{N_b} \sum_{j=1}^{N_b} \nabla \mathscr{L}_j
+\]</div>
+<p>and similarly to the stochastic gradient descent, the batches of data are chosen at random and this is repeated as soon as all
+data are used once in the training loop. Whilst the choice of the size of the batch depends on many factors
+(e.g., overall size of the dataset, variety of training samples), common batch sizes in training of NNs are from around 50 to 256
+(unless memory requirements kick in leading to even small batch sizes).</p>
+<p><img alt="GD LOSSES" src="_images/opt_losses.png" /></p>
+</section>
+</section>
+<section id="additional-readings">
+<h2>Additional readings<a class="headerlink" href="#additional-readings" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>the following <a class="reference external" href="https://ruder.io/optimizing-gradient-descent/">blog post</a> for a more
+detailed overview of the optimization algorithms discussed here. Note that in one of our future <a class="reference internal" href="#lectures/08_gradopt1.md"><span class="xref myst">lectures</span></a>
+we will also look again at the optimization algorithms and more specifically discuss strategies that allow overcoming some of the
+limitations of standard SGD in <a class="reference internal" href="#lectures/10_gradopt1.md"><span class="xref myst">this lecture</span></a>.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="02_linalg.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Linear Algebra refresher</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="04_linreg.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Linear and Logistic Regression</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gradient-descent-algorithms">Gradient-descent algorithms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-length-selection">Step length selection</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#second-order-optimization">Second-order optimization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stochastic-gradient-descent-sgd">Stochastic-gradient descent (SGD)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batched-gradient-descent">Batched gradient descent</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stochastic-gradient-descent">Stochastic gradient descent</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mini-batched-gradient-descent">Mini-batched gradient descent</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-readings">Additional readings</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Ashok Dahal, Modified from the Content of Matteo Ravasi, KAUST
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
