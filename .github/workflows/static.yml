@@ -1,43 +1,40 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+name: deploy
 
 on:
-  # Runs on pushes targeting the default branch
+  # Trigger the workflow on push to main branch and tutorial path
   push:
-    branches: ["main"]
+    branches:
+      - main
+    paths:
+      - docs/lectures/**
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
+# This job installs dependencies, build the jupyter notebook, and pushes it to `render`, a new `branch`
 jobs:
-  # Single deploy job since we're just deploying
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+  build:
+    name: Setup
+    runs-on: "ubuntu-latest"
+    defaults:
+      run:
+        shell: bash -l {0}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/checkout@v2
+      - name: Set up conda and dependencies
+        uses: mamba-org/setup-micromamba@v1
         with:
-          # Upload only the html files
-          path: 'docs/lectures/_build/html'
+          environment-file: ./environment.yml
+          environment-name: GeoAI4Haz
+          condarc: |
+            channels:
+              - conda-forge
+      # Build the book
+      - name: Build the jupyter book
+        run: |
+          jupyter-book build docs/lectures
+      # Deploy the book's HTML to gh-pages branch
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/lectures/_build/html
+          force_orphan: true
