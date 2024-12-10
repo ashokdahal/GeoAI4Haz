@@ -1,0 +1,677 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Scientific Machine Learning and Physics-informed Neural Networks &#8212; Machine Learning for Natural Hazards</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '16_pinns';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Machine Learning for Natural Hazards</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Background and Refresher</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_intro.html">Introduction to Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_linalg.html">Linear Algebra refresher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_gradopt.html">Gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_linreg.html">Linear and Logistic Regression</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_nn.html">Basics of Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_nn.html">More on Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_bestpractice.html">Best practices in the training of Machine Learning models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Convolutional Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="08_gradopt1.html">More on gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_cnn.html">Convolutional Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_cnnarch.html">CNNs Popular Architectures</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz/issues/new?title=Issue%20on%20page%20%2F16_pinns.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/16_pinns.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Scientific Machine Learning and Physics-informed Neural Networks</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#physics-informed-neural-networks-pinns">Physics-Informed Neural Networks (PINNs)</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="scientific-machine-learning-and-physics-informed-neural-networks">
+<h1>Scientific Machine Learning and Physics-informed Neural Networks<a class="headerlink" href="#scientific-machine-learning-and-physics-informed-neural-networks" title="Link to this heading">#</a></h1>
+<p>In the last two lectures of our course, we will focus our attention on a flourishing area of scientific computing that
+aims to develop algorithms that can bridge the gap between purely data-driven methods and model-driven ones. Sometimes
+this new field of research is referred to as <em>Scientific Machine Learning</em> and you can find a great deal of information
+on the web (e.g., <a class="reference external" href="https://sciml.ai">1</a>, <a class="reference external" href="https://sites.brown.edu/bergen-lab/research/what-is-sciml/">2</a>,
+<a class="reference external" href="https://www.science.org/doi/10.1126/science.aau0323">3</a>). However, it is not always easy to understand what Scientific ML
+really is and how it differs from the mere application of the ML (and DL) tooling that we have discussed during this course.</p>
+<p>To be able to understand what is the best way to marry the latest advances in deep learning with our toolbox of model-driven
+algorithms, let’s first briefly review what these two disciplines are good at alone and where they usually struggle.</p>
+<p><strong>Deep Learning</strong> is usually great at:</p>
+<ul class="simple">
+<li><p>Computer Vision tasks;</p></li>
+<li><p>Language modelling tasks;</p></li>
+<li><p>Discovery of hidden patterns in large amount of structured data.</p></li>
+</ul>
+<p>These three topics have something in common: very little is known a priori about the <code class="docutils literal notranslate"><span class="pre">physics</span></code> that underlie the process that
+we want to learn from. For example, although a great deal of research has been performed in the fields of neuroscience, our current
+understanding of how a child learns to recognize a dog from a cat or how we learn a new language is still very limited. Whilst
+for long time researchers have tried to decode the rules of a language and create computer programs that could translate,
+answer questions or more broadly communicate with humans, it is nowadays clear to us that a better route is to provide machines
+with a large amount of training data and let them identify the best possible way to accomplish a task.</p>
+<p><strong>Physics</strong> is usually great at:</p>
+<ul>
+<li><p>Modelling natural phenomena by means of (more or less) simple equations, e.g. how waves propagate.</p></li>
+<li><p>Providing a link between some observations that we are able to take in the nature and the unobserved parameters of the underlying
+physical system. For example, we can link the traveltime of sound waves with the actual velocity of the medium they travel in, or link
+precipitation levels with the pressure and temperature of the atmosphere. This is usually encoded by equations of the form:</p>
+<div class="math notranslate nohighlight">
+\[
+    d = g(m)
+    \]</div>
+<p>where <span class="math notranslate nohighlight">\(d\)</span> are the observations, <span class="math notranslate nohighlight">\(m\)</span> are the model parameters, and <span class="math notranslate nohighlight">\(g\)</span> is the (usually nonlinear) physical model. This could be
+an ordinary differential equation (ODE), or a partial differential equation (PDE), or any other equation that has an analytical or
+numerical solution.</p>
+</li>
+</ul>
+<p>On the other hand, unlike deep learning, a purely physics-driven approach may not be able to learn useful information from data nor
+automatically identify patterns in the solution space that we would like to enhance or suppress. This is where a hybrid approach could
+come in handy: we can leverage some of the deep learning methods discussed in this course to identify patterns in both the observations and
+the sought after model and use it as an informed prior whilst still relying on the well-established physical process to link the two.</p>
+<p>In the following we will focus on the following three directions of research that build their foundations on this paradigm:</p>
+<ul class="simple">
+<li><p><em>Physics-Informed Neural Networks (PINNs)</em>: this family of NNs try to learn to model a physical process in an unsupervised manner. This is accomplished
+by including the ODE or PDE that describe the physical process of interest as part of
+the loss function used to train the network. Ultimately, a trained PINN can quickly evaluate the solution of the chosen ODE or PDE at any point in the domain of interest
+(or perform inverse modelling with respect to the free-parameters, initial conditions or boundary conditions of such an equation);</p></li>
+<li><p><em>Data-driven regularization of inverse problems</em>: in classical inverse problem theory, regularization is a heavily used tool to allow the solution
+of ill-posed inverse problem. We will discuss how hand-crafted regularizers (and/or preconditioners) are nowadays replaced by properly pre-trained
+Neural networks.</p></li>
+<li><p><em>Learned iterative solvers</em>: large-scale inverse problems are usually solved by means of iterative solvers. A new line of research has shown great promise
+in learning the best direction to apply at each step of an iterative solver, this being the output of a neural network fed with the current solution, gradient
+and possibly other inputs. Whilst this approach requires supervision, we will discuss its great potential to replace classical iterative solvers to improve both
+the speed and quality of the solution.</p></li>
+</ul>
+<section id="physics-informed-neural-networks-pinns">
+<h2>Physics-Informed Neural Networks (PINNs)<a class="headerlink" href="#physics-informed-neural-networks-pinns" title="Link to this heading">#</a></h2>
+<p>Physics-Informed Neural Networks are a new family of deep learning models specifically aimed at solving differential equations.</p>
+<p>To begin with, let’s recall how a physical model can be explained by means of differential equations:</p>
+<ul class="simple">
+<li><p>Ordinary Differential Equations (ODEs): differential equations with a single independent variable, here denoted with <span class="math notranslate nohighlight">\(t\)</span>. For example:
+$<span class="math notranslate nohighlight">\(
+\frac{d u(t)}{dt} = f(u(t; \alpha))
+\)</span><span class="math notranslate nohighlight">\(
+where \)</span>u(t)<span class="math notranslate nohighlight">\( is the dependent variable we are interested in, and \)</span>f<span class="math notranslate nohighlight">\( is a generic linear or nonlinear function of \)</span>u(t)$.</p></li>
+<li><p>Partial Differential Equation (PDEs): differential equations with two or more independent variable, here denoted with <span class="math notranslate nohighlight">\(t,x\)</span>. For example:
+$<span class="math notranslate nohighlight">\(
+\frac{\partial u(t,x)}{\partial t} + \frac{\partial u(t,x)}{\partial x} = f(u(t,x; \alpha))
+\)</span><span class="math notranslate nohighlight">\(
+where \)</span>u(t)<span class="math notranslate nohighlight">\( is the dependent variable we are interested in, and \)</span>f<span class="math notranslate nohighlight">\( is a generic linear or nonlinear function of \)</span>u(t)$.</p></li>
+</ul>
+<p>In both cases the free-parameters of the equation are denoted with <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+<p>Three family of methods exist to solve such equations:</p>
+<ul class="simple">
+<li><p><em>Analytical solution</em>: some special types of ODEs and PDEs (e.g., with constant free-parameters <span class="math notranslate nohighlight">\(\alpha\)</span>) can be solved analytically.
+Whilst this approach is very appealing in terms of computational cost and accuracy of the solution it has limited practical use;</p></li>
+<li><p><em>Numerical methods</em>: a more general approach to any form of ODE or PDE is to discretize the differential equation itself (or its equivalent
+integral relation) and solve it by means of numerical methods such as Finite-Difference (FD), Finite-Element (FE), Spectral-Element (SE), etc.
+Whilst these methods are routinely employed in almost any scientific field, they present some outstanding limitations, the most important of which
+are the extremely large computational cost and the need for a predefined (regular or irregular) mesh. Moreover, numerical methods like FD or FE
+solve a specific instance of a ODE or PDE (given fixed initial and boundary conditions and free-parameters) and cannot take advantage of the solution
+of one instance of the equation when solving a different instance. A classical problem in geophysics, for example, is to solve the wave equation
+for a given number of different sources (i.e., forcing terms): each instance is solved separately as no one instance can benefit from another one even
+when sources are just a few meters apart.</p></li>
+<li><p><em>Learned models</em>: in the spirit of supervised learning, a number of solutions have been proposed to directly learn a ODE or PDE (or the entire operator)
+by training a deep learning model (usually a CNN) to map initial conditions and free-parameters into the solution, or a portion of the solution
+(e.g., u(t) for <span class="math notranslate nohighlight">\(0\ge t &lt;T/N\)</span>) and free-parameters into the rest of the solution (e.g., u(t) for <span class="math notranslate nohighlight">\(T/N\ge t&lt;T\)</span>). Whilst such an approach can work under special
+circumstances, one clear limitation is that the knowledge of the ODE/PDE is only embedded in the training data. Moreover a classical numerical solver
+is still required to create the training data.</p></li>
+</ul>
+<p>PINNs, on the other hand, take a very different approach to learning differential equations. First of all, the exploit the general idea of the
+Universal Approximation Theorem which states that any function can be learned with a large enough (1 layer) Neural Network. Second, they do so
+by leveraging the underlying ODE/PDE that we wish to solve as part of the loss function used to train such a network. To explain how PINNs work,
+let’s take a generic PDE and write it formally as:</p>
+<p><img alt="PDE" src="_images/pde.png" /></p>
+<p>where we have specified here both the differential equation itself, as well as its initial conditions (IC) and boundary conditions (BC).</p>
+<p>Given the definition of a ODE/PDE, a Physics-Informed Neural Network is composed of the following:</p>
+<ul class="simple">
+<li><p>A simple feedforward network <span class="math notranslate nohighlight">\(f_\theta\)</span> with number of inputs equal to the number of independent variables of the differential equation and number of
+outputs equal to the number of dependent variables of the differential equation. In the simple case above, the network will have 2 inputs and one
+outputs. The internal structure of the network is totally arbitrary. Depending on the complexity of the solution this may require more or less layers
+as well as more or less units per layer. Similarly, the choice of the internal activation functions is arbitrary. Experience has shown than tanh works
+well in simple scenarios (e.g., when the solution <span class="math notranslate nohighlight">\(u\)</span> is smooth), whilst other activations such as LeakyRelu, Swish or even Sin may be preferable for
+complex solutions (e.g., oscillating or with abrupt discontinuities).</p></li>
+<li><p>Automatic differentiation (AD) is used not only to compute the gradient of the loss function, but also to compute the derivatives of the output(s) of the
+network (dependent variables) over the inputs (independent variables)</p></li>
+<li><p>A loss function is defined in such a way that the ODE/PDE is fitted alongside initial and/or boundary conditions.</p></li>
+</ul>
+<p>Before we delve into the details of each of these three new ingredients, let’s visually consider the PINN for the sample PDE equation above:</p>
+<p><img alt="PINN" src="_images/pinn.png" /></p>
+<p>Starting from the left, as usually done when training NNs, a number of <span class="math notranslate nohighlight">\((x^{&lt;i&gt;},t^{&lt;i&gt;}) \; i=1,2,...,N_c\)</span> pairs (also sometimes referred in the literature as co-location points) is selected
+and feed to the network. The corresponding outputs <span class="math notranslate nohighlight">\(u(x^{&lt;i&gt;},t^{&lt;i&gt;})\)</span> are then fed to AD to compute the required derivatives over the inputs (here <span class="math notranslate nohighlight">\(\partial u / \partial x\)</span> and
+<span class="math notranslate nohighlight">\(\partial u / \partial t\)</span>). Finally, both the output and its derivatives are used to evaluate the PDE. Alongside these <span class="math notranslate nohighlight">\(N_c\)</span> co-locations points, a number of additional points
+are fed to the network. In case of initial conditions, these points are <span class="math notranslate nohighlight">\((x^{&lt;i&gt;},t_0) \; i=1,2,...,N_{IC}\)</span>. Similarly, in case of boundary conditions,
+these points are <span class="math notranslate nohighlight">\((x_j,t^{&lt;i&gt;}) \; i=1,2,...,N_{BC}; \; j=0,1\)</span>. The ratio between <span class="math notranslate nohighlight">\(N_c\)</span>, <span class="math notranslate nohighlight">\(N_{IC}\)</span>, <span class="math notranslate nohighlight">\(N_{BC}\)</span> is arbitrary. Moreover, the choice of the co-location
+points can be performed in various alternative ways:</p>
+<ul class="simple">
+<li><p>Uniform in the grid;</p></li>
+<li><p>Randomly sampled in the grid (once at the start of training);</p></li>
+<li><p>Randomly sampled in the grid (at every step)</p></li>
+<li><p>Adaptively: this can be based for example on the PDE loss, where during the training process more points are selected in areas where the PDE match is poorer.</p></li>
+<li></li>
+</ul>
+<p>Which one is best is still under debate, and it is likely to be also problem dependent. Moreover, whilst a full batch approach is the most common for training PINNs,
+researcher have also started to successfully use mini-batch approaches during training.</p>
+<p>Moving onto the computation of the derivatives (<span class="math notranslate nohighlight">\(\partial u / \partial x\)</span> and <span class="math notranslate nohighlight">\(\partial u / \partial t\)</span>), since <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(t\)</span> represents the entry leaves of the
+computational graph, as long as we make our computational framework aware of the fact that we want to compute derivatives over such variables,
+we can do so at any time (and even multiple times if required by the PDE, e.g., <span class="math notranslate nohighlight">\(\partial^2 u / \partial x^2\)</span>).</p>
+<p>Last but not least, the loss function of PINNs can be written as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\mathscr{L}_{pinn} &amp;= \frac{1}{N_c} \sum_{i=1}^{N_c} PDE(x^{&lt;i&gt;},t^{&lt;i&gt;}) \\
+&amp;+ \frac{\lambda_IC}{N_{IC}} \sum_{i=1}^{N_{IC}} IC(x^{&lt;i&gt;},t_0) \\
+&amp;+ \frac{\lambda_{BC}}{N_{BC}} \sum_{i=1}^{N_{BC}} BC(x_{j^{&lt;i&gt;}},t^{&lt;i&gt;}) \\
+\end{aligned}
+\end{split}\]</div>
+<p>As an example, for the problem above, the loss function becomes:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\mathscr{L}_{pinn} &amp;= \frac{1}{N_c} \sum_{i=1}^{N_c} (\partial u(x^{&lt;i&gt;},t^{&lt;i&gt;}) / \partial t 
++ \partial u(x^{&lt;i&gt;},t^{&lt;i&gt;}) / \partial x - f(u(x^{&lt;i&gt;},t^{&lt;i&gt;}; \alpha)||_2^2 \\
+&amp;+ \frac{\lambda_IC}{N_{IC}} \sum_{i=1}^{N_{IC}} ||u(x^{&lt;i&gt;},t_0)-u_{t0}(x^{&lt;i&gt;})||_2^2 \\
+&amp;+ \frac{\lambda_{BC}}{N_{BC}} \sum_{i=1}^{N_{BC}} ||u(x_{j^{&lt;i&gt;}},t^{&lt;i&gt;})-u_{x_{j^{&lt;i&gt;}}}(t^{&lt;i&gt;})||_2^2
+\end{aligned}
+\end{split}\]</div>
+<p>where the L2 norm has been used for all the three losses.</p>
+<p>Given the loss, the training process follows similar pattern to that of any Neural Network described in this course. An optimizer of
+choice (e.g., Adam) is used to minimize the loss:</p>
+<div class="math notranslate nohighlight">
+\[
+\underset{\theta} {\mathrm{argmin}} \; \mathscr{L}_{pinn}
+\]</div>
+<p>Finally, once the network is trained, the solution can be evaluated anywhere in the domain by simply passing a pair of coordinates <span class="math notranslate nohighlight">\((x,t)\)</span> of choice.
+One of the key features of PINNs is that they are mesh independent. Theoretically speaking we could sample our solution at any spatial and temporal sampling of choice,
+and even more so we could have different ones for different areas of the domain. Similarly, since we can evaluate any area of the domain, this method can be also very fast
+compared to for example FD which requires starting from earlier times to get to later ones.</p>
+<p>To conclude, whilst up until now we have discussed PINNs in the context of forward modelling, they can be also used for inverse modelling. In other words,
+an optimization problem can be setup for the free-parameters of the ODE/PDE <span class="math notranslate nohighlight">\(\alpha\)</span> as follows:</p>
+<p><img alt="PINNINV" src="_images/pinninv.png" /></p>
+<p>where the optimization process is now performed not only over the network parameters <span class="math notranslate nohighlight">\(\theta\)</span> whose aim is to produce a continuos field <span class="math notranslate nohighlight">\(u\)</span> that
+satisfies the ODE/PDE of interest but also over the free-parameters <span class="math notranslate nohighlight">\(\alpha\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\underset{\theta, \alpha} {\mathrm{argmin}} \; \mathscr{L}_{pinn}
+\]</div>
+<p>Note, however, that whilst from a computational point of view this can be easily done, In practice the underlying inverse problem may be highly ill-posed
+and finding a satisfactory pair of (<span class="math notranslate nohighlight">\(\alpha, \theta\)</span> may not always be easy. Finally, when <span class="math notranslate nohighlight">\(\alpha\)</span> is also function of one or more of the independent
+variables of the differential equation (e.g., <span class="math notranslate nohighlight">\(\alpha(x)\)</span>), this approach can be taken one step further by parametrizing also <span class="math notranslate nohighlight">\(\alpha\)</span> with a
+feedforward neural network and optimizing the the weights of the two networks instead of <span class="math notranslate nohighlight">\(\alpha\)</span> directly:</p>
+<div class="math notranslate nohighlight">
+\[
+\underset{\theta, \phi} {\mathrm{argmin}} \; \mathscr{L}_{pinn}
+\]</div>
+<p><img alt="PINNINV1" src="_images/pinn2net.png" /></p>
+<p>An example of such a scenario can be represented by a classical problem in geophysics: traveltime tomography. Here the PDE is the eikonal
+equation, the independent variables are spatial coordinates <span class="math notranslate nohighlight">\((x,z)\)</span> and possibly the coordinates of the sources <span class="math notranslate nohighlight">\((x_S,z_S)\)</span>, and the dependent
+variable is the traveltime <span class="math notranslate nohighlight">\(T\)</span>. For inverse modelling, the free-parameter <span class="math notranslate nohighlight">\(\alpha(x,z)\)</span> is the velocity of the medium which can be also parametrized
+via a network as shown above. To reduce the amount of plausible solutions that can fit the PDE, a BC must be added to the loss function in the form of
+the observed traveltime at receivers (either on the surface (<span class="math notranslate nohighlight">\(z=0\)</span>) or anywhere available within the domain).</p>
+<p>Of course, the eikonal equation and traveltime tomography is just one problem in geophysics where PINNs may represent an appealing solution.
+Other applications that have recently emerged within the field of geoscience are:</p>
+<ul class="simple">
+<li><p>time and frequency domain wave equation;</p></li>
+<li><p>Navier-Stokes equations;</p></li>
+<li><p>…</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#physics-informed-neural-networks-pinns">Physics-Informed Neural Networks (PINNs)</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Ashok Dahal, Modified from the Content of Matteo Ravasi, KAUST
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

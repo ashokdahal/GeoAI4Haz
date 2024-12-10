@@ -1,0 +1,564 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Linear Algebra refresher &#8212; Machine Learning for Natural Hazards</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '02_linalg';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Gradient-based optimization" href="03_gradopt.html" />
+    <link rel="prev" title="Introduction to Machine Learning" href="01_intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Machine Learning for Natural Hazards</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Background and Refresher</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_intro.html">Introduction to Machine Learning</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Linear Algebra refresher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_gradopt.html">Gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_linreg.html">Linear and Logistic Regression</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_nn.html">Basics of Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_nn.html">More on Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_bestpractice.html">Best practices in the training of Machine Learning models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Convolutional Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="08_gradopt1.html">More on gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_cnn.html">Convolutional Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_cnnarch.html">CNNs Popular Architectures</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz/issues/new?title=Issue%20on%20page%20%2F02_linalg.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/02_linalg.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Linear Algebra refresher</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="linear-algebra-refresher">
+<h1>Linear Algebra refresher<a class="headerlink" href="#linear-algebra-refresher" title="Link to this heading">#</a></h1>
+<p>In this lecture we will go through some of the key concepts of linear algebra and inverse problem theory that are required
+to develop the theories of the different machine learning algorithm presented in this course.
+This is not meant to be an exhaustive treatise and students are strongly advised to take the
+<a class="reference external" href="https://academicaffairs.kaust.edu.sa/Courses/Pages/DownloadSyllabus.aspx?Year=2017&amp;amp;Semester=030&amp;amp;Course=00008206&amp;amp;V=I">ErSE 213 - Inverse Problems</a>
+prior to this course.</p>
+<p>Three key mathematical objects arise in the study of linear algebra:</p>
+<p><strong>Scalars</strong>: <span class="math notranslate nohighlight">\(a \in \mathbb{R}\)</span>, a single number represented by a lower case italic letter;</p>
+<p><strong>Vectors</strong>: <span class="math notranslate nohighlight">\(\mathbf{x} = [x_1, x_2, ..., x_N]^T \in \mathbb{R}^N\)</span>, ordered collection of <span class="math notranslate nohighlight">\(N\)</span> numbers
+represented by a lower case bold letter; it is sometimes useful to extract a subset of elements by defining a set
+<span class="math notranslate nohighlight">\(\mathbb{S}\)</span> and add it to as a superscript, <span class="math notranslate nohighlight">\(\mathbf{x}_\mathbb{S}\)</span>. As an example, given <span class="math notranslate nohighlight">\(\mathbf{x} = [x_1, x_2, x_3, x_4, x_5, x_6]^T \in \mathbb{R}^6\)</span> and <span class="math notranslate nohighlight">\(\mathbb{S} = {1, 3, 5}\)</span>
+we can define the vector <span class="math notranslate nohighlight">\(\mathbf{x}_\mathbb{S} = [x_1, x_3, x_5]\)</span> and its complementary vector
+<span class="math notranslate nohighlight">\(\mathbf{x}_{-\mathbb{S}} = [x_2, x_4, x_6]\)</span></p>
+<p><strong>Matrices</strong>: <span class="math notranslate nohighlight">\(\mathbf{X} \in \mathbb{R}^{[N \times M]}\)</span>, two dimensional collection of numbers represented by an upper case bold letter
+where <span class="math notranslate nohighlight">\(N\)</span> and <span class="math notranslate nohighlight">\(M\)</span> are referred to as the height and width of the matrix. More specifically a matrix can be written as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{X} = \begin{bmatrix} 
+                x_{1,1} &amp; x_{1,2} &amp; x_{1,M} \\
+                ...     &amp; ...     &amp; ... \\
+                x_{N,1} &amp; x_{N,2} &amp; x_{N,M}
+  \end{bmatrix}
+\end{split}\]</div>
+<p>A matrix can be indexed by rows <span class="math notranslate nohighlight">\(\mathbf{X}_{i, :}\)</span> (i-th row), by columns <span class="math notranslate nohighlight">\(\mathbf{X}_{:, j}\)</span> (j-th column), and by
+element <span class="math notranslate nohighlight">\(\mathbf{X}_{i, j}\)</span> (i-th row, j-th column). A number of useful operations that are commonly applied on vectors
+and matrices are now described:</p>
+<ul class="simple">
+<li><p>Transpose: <span class="math notranslate nohighlight">\(\mathbf{Y} = \mathbf{X}^T\)</span>, where <span class="math notranslate nohighlight">\(Y_{i, j} = X_{j, i}\)</span></p></li>
+<li><p>Matrix plus vector: <span class="math notranslate nohighlight">\(\mathbf{Y}_{[N \times M]} = \mathbf{X}_{[N \times M]} + \mathbf{z}_{[1 \times M]}\)</span>, where
+<span class="math notranslate nohighlight">\(Y_{i, j} = X_{i, j} + z_{j}\)</span> (<span class="math notranslate nohighlight">\(\mathbf{z}\)</span> is added to each row of the matrix <span class="math notranslate nohighlight">\(\mathbf{X}\)</span>)</p></li>
+<li><p>Matrix-vector product: <span class="math notranslate nohighlight">\(\mathbf{y}_{[N \times 1]} = \mathbf{A}_{[N \times M]} \mathbf{x}_{[M \times 1]}\)</span>, where
+<span class="math notranslate nohighlight">\(y_i = \sum_{j=1}^M A_{i, j} x_j\)</span></p></li>
+<li><p>Matrix-vector product: <span class="math notranslate nohighlight">\(\mathbf{y}_{[N \times 1]} = \mathbf{A}_{[N \times M]} \mathbf{x}_{[M \times 1]}\)</span>, where
+<span class="math notranslate nohighlight">\(y_i = \sum_{j=1}^M A_{i, j} x_j\)</span></p></li>
+<li><p>Matrix-matrix product: <span class="math notranslate nohighlight">\(\mathbf{C}_{[N \times K]} = \mathbf{A}_{[N \times M]} \mathbf{B}_{[M \times K]}\)</span>, where
+<span class="math notranslate nohighlight">\(C_{i,k} = \sum_{j=1}^M A_{i, j} B_{j, k}\)</span></p></li>
+<li><p>Hadamart product (i.e., element-wise product): <span class="math notranslate nohighlight">\(\mathbf{C}_{[N \times M]} = \mathbf{A}_{[N \times M]} \odot \mathbf{B}_{[N \times M]}\)</span>, where
+<span class="math notranslate nohighlight">\(C_{i,j} = A_{i, j} B_{i, j}\)</span></p></li>
+<li><p>Dot product: <span class="math notranslate nohighlight">\(a = \mathbf{x}_{[N \times 1]}^T \mathbf{y}_{[N \times 1]} = \sum_{i=1}^N x_i y_i\)</span></p></li>
+<li><p>Identity matrix: <span class="math notranslate nohighlight">\(\mathbf{I}_N = diag\{\mathbf{1}_N\}\)</span>. Based on its definition, we have that
+<span class="math notranslate nohighlight">\(\mathbf{I}_N \mathbf{x} = \mathbf{x}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{I}_N \mathbf{X} = \mathbf{X}\)</span></p></li>
+<li><p>Inverse matrix: given <span class="math notranslate nohighlight">\(\mathbf{y} = \mathbf{A} \mathbf{x}\)</span>, the inverse matrix of <span class="math notranslate nohighlight">\(\mathbf{A}\)</span> is a matrix that
+satisfies the following equality <span class="math notranslate nohighlight">\(\mathbf{A}^{-1} \mathbf{A} = \mathbf{I}_N\)</span>. We can finally write
+<span class="math notranslate nohighlight">\(\mathbf{x} = \mathbf{A}^{-1} \mathbf{y}\)</span></p></li>
+<li><p>Orthogonal vectors and matrices: given two vectors <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{y}\)</span>, they are said to be orthogonal if
+<span class="math notranslate nohighlight">\(\mathbf{y}^T \mathbf{x} = 0\)</span>. Given two matrices <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span>, they are said to be orthogonal if
+<span class="math notranslate nohighlight">\(\mathbf{Y}^T \mathbf{X} = \mathbf{I}_N\)</span>. Orthogonal matrices are especially interesting because their inverse is simply <span class="math notranslate nohighlight">\(\mathbf{X}^{-1} = \mathbf{X}^T\)</span></p></li>
+<li><p>Matrix decomposition: like any scalar number can be decomposed into a product of prime numbers, a matrix <span class="math notranslate nohighlight">\(\mathbf{A}\)</span>
+can also be decomposed into a combination of vectors (i.e., eigenvectors) and scalars (i.e., eigenvalues).
+- Eigendecomposition: real-valued, square, symmetric matrices can be written as
+<span class="math notranslate nohighlight">\(\mathbf{A} = \mathbf{V} \Lambda \mathbf{V}^T = \sum_i \lambda_i \mathbf{v}_i \mathbf{v}_i^T\)</span>
+where <span class="math notranslate nohighlight">\(\lambda_i\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}_i\)</span> are the eigenvalues and eigenvectors of the matrix <span class="math notranslate nohighlight">\(\mathbf{A}\)</span>, respectively.
+Eigenvectors are placed along the columns of the matrix <span class="math notranslate nohighlight">\(\mathbf{V}\)</span>, which is an orthogonal matrix
+(i.e., <span class="math notranslate nohighlight">\(\mathbf{V}^T=\mathbf{V}^{-1}\)</span>). Eigenvalues are placed along the diagonal of the matrix
+<span class="math notranslate nohighlight">\(\Lambda=diag\{\lambda\}\)</span> and tell us about the rank of the matrix, <span class="math notranslate nohighlight">\(rank(\mathbf{A}) = \# \lambda \neq 0\)</span>. A
+<em>full rank</em> matrix is matrix whose eigenvalues are all non-zero and can be inverted. In this case the inverse
+of <span class="math notranslate nohighlight">\(\mathbf{A}\)</span> is <span class="math notranslate nohighlight">\(\mathbf{A}^{-1}=\mathbf{V}\Lambda^{-1}\mathbf{V}^T\)</span>
+- Singular value decomposition (SVD): this is a more general decomposition which can be applied to real-valued,
+non-square, non-symmetric matrices. Singular vectors <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> and singular values <span class="math notranslate nohighlight">\(\lambda\)</span>
+generalized the concept of eigenvectors and and eigenvalues. The matrix <span class="math notranslate nohighlight">\(\mathbf{A}\)</span> can be decomposed as
+<span class="math notranslate nohighlight">\(\mathbf{A} = \mathbf{U} \mathbf{D} \mathbf{V}^T\)</span> where <span class="math notranslate nohighlight">\(\mathbf{D} = \Lambda\)</span> for square matrices,
+<span class="math notranslate nohighlight">\(\mathbf{D} = [\Lambda \; \mathbf{0}]^T\)</span> for <span class="math notranslate nohighlight">\(N&gt;M\)</span> and <span class="math notranslate nohighlight">\(\mathbf{D} = [\Lambda \; \mathbf{0}]\)</span> for <span class="math notranslate nohighlight">\(M&gt;N\)</span>. Similar
+to the eigendecomposition, in this case the inverse of <span class="math notranslate nohighlight">\(\mathbf{A}\)</span> is <span class="math notranslate nohighlight">\(\mathbf{A}^{-1}=\mathbf{V}\mathbf{D}^{-1}\mathbf{U}^T\)</span></p></li>
+<li><p>Conditioning: in general, it refers to how fast a function <span class="math notranslate nohighlight">\(f(x)\)</span> changes given a small change in its input <span class="math notranslate nohighlight">\(x\)</span>. Similarly
+for a matrix, conditioning is linked to the curvature of its associated quadratic form
+<span class="math notranslate nohighlight">\(f(\mathbf{A}) = \mathbf{x}^T \mathbf{A} \mathbf{x}\)</span> and it generally indicates how rapidly this function changes as function
+of <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>. It is defined as <span class="math notranslate nohighlight">\(cond(\mathbf{A})=\frac{|\lambda_{max}|}{|\lambda_{min}|}\)</span>.</p></li>
+</ul>
+<p><strong>Norms</strong>: another important object that we will be using when defining cost functions for ML models are norms. A norm is a
+function that maps a vector <span class="math notranslate nohighlight">\(\mathbf{x} \in \mathbb{R}^N\)</span> to a scalar <span class="math notranslate nohighlight">\(d \in \mathbb{R}\)</span> and it can be loosely seen as
+measure of the length of the vector (i.e., distance from the origin). In general, the <span class="math notranslate nohighlight">\(L^p\)</span> norm is defined as:</p>
+<div class="math notranslate nohighlight">
+\[
+||\mathbf{x}||_p = \left( \sum_i |x_i|^p \right) ^{1/p} \; p \ge 0
+\]</div>
+<p>Popular norms are:</p>
+<ul class="simple">
+<li><p>Euclidean norm (<span class="math notranslate nohighlight">\(L_2\)</span>): <span class="math notranslate nohighlight">\(||\mathbf{x}||_2 = \sqrt{\sum_i x_i^2}\)</span>, is a real distance of a vector from the origin of the
+N-d Euclidean space. Note that <span class="math notranslate nohighlight">\(||\mathbf{x}||_2^2 = \mathbf{x}^T \mathbf{x}\)</span> and that <span class="math notranslate nohighlight">\(||\mathbf{x}||_2=1\)</span> for a unit vector;</p></li>
+<li><p><span class="math notranslate nohighlight">\(L_1\)</span> norm: <span class="math notranslate nohighlight">\(||\mathbf{x}||_1 = \sum_i |x_i|\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(L_0\)</span> norm: number of non-zero elements in the vector <span class="math notranslate nohighlight">\(\mathbf{x}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(L_\infty\)</span> norm: <span class="math notranslate nohighlight">\(||\mathbf{x}||_2 = max |x_i|\)</span></p></li>
+<li><p>Frobenious norm (for matrices): <span class="math notranslate nohighlight">\(||\mathbf{A}||_F = \sqrt{\sum_{i,j} A_{i,j}^2}\)</span>,</p></li>
+</ul>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="01_intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction to Machine Learning</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="03_gradopt.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Gradient-based optimization</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Ashok Dahal, Modified from the Content of Matteo Ravasi, KAUST
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

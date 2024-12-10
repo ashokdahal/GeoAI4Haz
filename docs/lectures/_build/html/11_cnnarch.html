@@ -1,0 +1,667 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>CNNs Popular Architectures &#8212; Machine Learning for Natural Hazards</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '11_cnnarch';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Convolutional Neural Networks" href="10_cnn.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Machine Learning for Natural Hazards</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Background and Refresher</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_intro.html">Introduction to Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_linalg.html">Linear Algebra refresher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_gradopt.html">Gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_linreg.html">Linear and Logistic Regression</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_nn.html">Basics of Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_nn.html">More on Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_bestpractice.html">Best practices in the training of Machine Learning models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Convolutional Neural Networks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="08_gradopt1.html">More on gradient-based optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_cnn.html">Convolutional Neural Networks</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">CNNs Popular Architectures</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/ashokdahal/GeoAI4Haz/issues/new?title=Issue%20on%20page%20%2F11_cnnarch.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/11_cnnarch.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>CNNs Popular Architectures</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lenet-5">LeNet-5</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#alexnet">AlexNet</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vgg-16">VGG-16</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#googlelenet-and-inception">GoogleLeNet and Inception</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resnet">ResNet</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unet">UNet</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-readings">Additional readings</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="cnns-popular-architectures">
+<h1>CNNs Popular Architectures<a class="headerlink" href="#cnns-popular-architectures" title="Link to this heading">#</a></h1>
+<p>This lecture provides an overview of how deep learning, especially in the context of CNNs (and computer vision in general), has
+evolved over the last decade. This is something that it is good to be familiar with because:</p>
+<ul class="simple">
+<li><p>whilst most of these advances are given for granted and routinely used today, it is always insightful to learn <em>how</em> ans <em>why</em> these
+developments were made;</p></li>
+<li><p>we can use architectures that worked well with no (or minimal) adaptation to our problem at hand (we will see that this is very commonly
+done with high degree of success in geoscience);</p></li>
+<li><p>even better, sometimes we can decide to use pre-trained networks and fine-tune them with limited amount of label data. In this case knowing
+the network architecture in details allows us to make informed choices, such as remove some of the final layers and introduce new ones that
+better adapt to the problem at hand (e.g., different number of classes).</p></li>
+</ul>
+<section id="lenet-5">
+<h2>LeNet-5<a class="headerlink" href="#lenet-5" title="Link to this heading">#</a></h2>
+<p>One of the first successful CNNs was created and trained by the famous Yan Le Cun in 1989 with the objective of classifying hand-written digits.
+As we will see when comparing this to other popular networks, the size of LeNet-5 is very limited, mostly due to the hardware capabilities at that time (and the availability of a fairly small training
+dataset).</p>
+<p>As shown in the figure below, this network is composed of:</p>
+<ul class="simple">
+<li><p>2 convolutional layers with filter size equal to <span class="math notranslate nohighlight">\(5 \times 5\)</span>, stride equal to 1, and number of channels equal to 6 and 16, respectively;</p></li>
+<li><p>2 average pooling layers that reduce the height and width of the feature maps by a factor of 2;</p></li>
+<li><p>3 fully connected layers of size 120, 84, and 10 (the number of digits to classify);</p></li>
+<li><p>softmax activation in the final layer;</p></li>
+</ul>
+<p>and the overall number of training parameters is <span class="math notranslate nohighlight">\(\approx 60k\)</span>. Finally, looking at the network architecture two things stand out that probably
+today would have been implemented differently:</p>
+<ul class="simple">
+<li><p>average pool layers are not so popular today, max pool layers are more commonly used;</p></li>
+<li><p>activations were used also after pooling and all activations where sigmoid/tangent. Again, today ReLU or one of its variant is more commonly
+used and no activations are added after pooling layers.</p></li>
+</ul>
+<p><img alt="LENET" src="_images/letnet.png" /></p>
+</section>
+<section id="alexnet">
+<h2>AlexNet<a class="headerlink" href="#alexnet" title="Link to this heading">#</a></h2>
+<p>AlexNet represents a milestone in the field of DeepLearning. Developed by Alex Krizhevsky, Ilya Sutskever and Geoffrey Hinton, this network
+was the first CNN that won the popular computer vision competition ImageNet. Not only that, but the network outperformed other submissions by
+far, and brought Deep Learning to the attention of the larger Computer Vision community.</p>
+<p>As shown in the figure below, this network is not very different from LeNet-5 in its individual components, it is however much deeper and contains
+much more trainable parameters. More specifically, it is composed of:</p>
+<ul class="simple">
+<li><p>5 convolutional layers with variable filter size (ranging from <span class="math notranslate nohighlight">\(11 \times 11\)</span> in the first layer all the way to <span class="math notranslate nohighlight">\(3 \times 3\)</span> in some of the deeper layers);</p></li>
+<li><p>3 max pooling layers that reduce the height and width of the feature maps by a factor of 2;</p></li>
+<li><p>3 fully connected layers of size 4096, 4096, and 1000 (the number of digits to classify);</p></li>
+<li><p>softmax activation in the final layer;</p></li>
+</ul>
+<p>and the overall number of training parameters is <span class="math notranslate nohighlight">\(\approx 60M\)</span>, 3 order of magnitude more than that of LeNet-5. A number of interesting feature of this
+network:</p>
+<ul class="simple">
+<li><p>the number of channels in the different layers: initially, this grows from 3 (i.e., RGB) to 384 and it is then reduced
+to 256 all the way to the FC layer;</p></li>
+<li><p>ReLU is used as activation function for all hidden layers;</p></li>
+<li><p>Dropout is used to avoid overfitting;</p></li>
+</ul>
+<p><img alt="ALEXNET" src="_images/alexnet.png" /></p>
+</section>
+<section id="vgg-16">
+<h2>VGG-16<a class="headerlink" href="#vgg-16" title="Link to this heading">#</a></h2>
+<p>In 2015, the Visual Geometry Group at Oxford introduce a new CNN architecture called VGG. The key architectural change here is the fact that
+the network was much deeper than most state-of-the art networks at that time (16 layers); this was achieved by trading filter size (now <span class="math notranslate nohighlight">\(3 \times 3\)</span>)
+for depth. Moreover, whilst other networks like AlexNet were hand-crafted with very different filter sizes, strides and padding from layer to layer,
+this network is really very simple to define:</p>
+<ul class="simple">
+<li><p>16 <span class="math notranslate nohighlight">\(3 \times 3\)</span> convolutional layers with stride equal to 1;</p></li>
+<li><p>16 max pooling laywrs with filter size and stride equal to 2.</p></li>
+</ul>
+<p>and the overall number of training parameters is <span class="math notranslate nohighlight">\(\approx 138M\)</span>, roughly twice more than those of AlexNet.</p>
+<p>The key insight of VGG, which we will see is also used in later CNN architectures, is that stacks of convolutional layers with small filters
+can emulate the receptive field of one layer with larger filter sizes. Note that further extensions of VGG-16 have been proposed, for example
+VGG-19 where the network is composed of 19 layers.</p>
+<p><img alt="VGG16" src="_images/vgg16.png" /></p>
+</section>
+<section id="googlelenet-and-inception">
+<h2>GoogleLeNet and Inception<a class="headerlink" href="#googlelenet-and-inception" title="Link to this heading">#</a></h2>
+<p>In 2014, Christian Szegedy from Google was working on reducing the computational burden of deep neural networks. At that time, a new convolutional
+block was introduced under the name of Inception Layer:</p>
+<p><img alt="INCEPTION" src="_images/inception.png" /></p>
+<p>Instead of choosing the size of the bank of filters to be used upfront, the inception layer uses more than once filter size at the same time (a kind of multi-resolution approach).
+More specifically the input is sent into 4 paths in parallel:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(1 \times 1\)</span> convolution block;</p></li>
+<li><p><span class="math notranslate nohighlight">\(3 \times 3\)</span> convolution block;</p></li>
+<li><p><span class="math notranslate nohighlight">\(5 \times 5\)</span> convolution block;</p></li>
+<li><p>Max pooling block.</p></li>
+</ul>
+<p>Moreover, since sending an input with large width, height, and channel number into a <span class="math notranslate nohighlight">\(3 \times 3\)</span> (or <span class="math notranslate nohighlight">\(5 \times 5\)</span>) convolutional layer would result in a very large
+number of trainable parameters and extreme computational cost, the input is first sent into a <span class="math notranslate nohighlight">\(1 \times 1\)</span> that reduces the channel size and then the channel size is increased
+again in the next layer. The <span class="math notranslate nohighlight">\(1 \times 1\)</span> layers act as a <em>bottleneck layer</em> keeping the number of trainable parameters low.  Similarly, after the max pooling layer the number of channels is controlled via another <span class="math notranslate nohighlight">\(1 \times 1\)</span> convolutional layer. The four
+outputs are simply concatenated together to form the output of the Inception layer.</p>
+<p>The GoogleLeNet network is a large networks where multiple of these Inception layers are stacked together. This network presents an additional set of new features:</p>
+<ul class="simple">
+<li><p>two <em>side branches</em> are added at different stages of the network, where intermediate representations from hidden layers are passed through a few more
+layers and sent to a classifier. These classifiers perform the same task of the main classifier placed at the end of the network and have been shown
+to act as a natural regularizer, ensuring that the hidden features are as expressive as possible to the point they can be used directly for the classification
+task at hand.</p></li>
+</ul>
+<p><img alt="GLENET" src="_images/googlelenet.png" /></p>
+</section>
+<section id="resnet">
+<h2>ResNet<a class="headerlink" href="#resnet" title="Link to this heading">#</a></h2>
+<p>We can already observe a trend moving from LeNet-5 to VGG-19. From the 80’ all the way to the early 2000’, networks started to become deeper and deeper.
+However, despite deeper network can generally achieve better performance, practitioners started to also experience painfully slow training. It was later discovered
+that this was caused by the vanishing gradient problem.</p>
+<p>Around the same time of VGG-16, He and coauthors proposed a new network block called the Residual Block. As already discussed in our last lecture,
+this block introduces the innovative idea of shortcuting some of the activations forward in the computational graph and summing them to the activations
+of the main path. This gave rise to the so-called ResNet that proved to be much easier (and faster) to train than other CNNs when stacking a large number of layers,
+even up to 100 (or 1000) of layers!</p>
+<p><img alt="RESNET" src="_images/resnet.png" /></p>
+<p>The figure above shows ResNet-18, but it is important to remember that the idea of adding skip-connections every couple of layers has much wider
+implications than just for the ResNet architecture. One of the key benefits introduced by ResNet is the ability to increase the depth of a network without
+incurring in the risk of overfitting the training data. So, whilst in theory deeper networks should always reduce the training error, this is not always the case
+for plain networks. On the other hand, networks with Residual blocks are much more successful in that respect.</p>
+<p><img alt="RESNETTRAINING" src="_images/resnettraining.png" /></p>
+</section>
+<section id="unet">
+<h2>UNet<a class="headerlink" href="#unet" title="Link to this heading">#</a></h2>
+<p>The UNet architecture was proposed by Ronneberger et al. in 2015 in the context of interpretation of microscopy images.
+This network architecture presents however a number of innovative design choices which led to its widespread use in a variety of disciplines
+for both semantic segmentation and regression tasks.</p>
+<p>More specifically, whilst most of the networks we have discussed so far are specifically designed for classification
+tasks where inputs are of much larger size of target (i.e., imagine taking images from the MNIST dataset as input as a single vector of 10 elements as output),
+UNet was originally conceived for a <em>semantic segmentation</em> task. Semantic segmentation is a special case of classification where
+instead of predicting a class per input samples, we want to predict a class for each element of that sample. This makes the output space very large,
+equal to that of the input times the number of classes.</p>
+<p><img alt="SEMSEG" src="_images/semseg.png" /></p>
+<p>The UNet architecture presents the following characteristics:</p>
+<ul class="simple">
+<li><p>it can be seen as composed by two networks, an <em>Encoder</em> or contracting path, and a <em>Decoder</em> or expanding path. This is a common
+design in dimensionality reduction networks like AutoEncoders (see <a class="reference internal" href="#14_autoencoder.md"><span class="xref myst">Lecture X</span></a> for more details). Each level of the encoder
+network contains a number of convolutional layers followed by a downsampler (usually achieved by means of max pooling). On the other hand,
+the decoder is composed of convolutional layers preceded by an upsampler (this can be either an interpolator like a bilinear interpolation or
+a convtranspose layer);</p></li>
+<li><p>skip connections are introduced at each level of the contracting path, taking those features all the way to the corresponding level of the
+expanding path (where they are concatenated with the features coming from a deeper level of the contracting path itself). Whilst we have
+already discussed the importance of skip connections for stable training, here these skip connections are brought to a new level, as a very
+large portion of the network is skipped and concatenation is used instead of summation. The presence of such connections make the UNet architecture
+able to create very high resolution segmentation and regression outputs;</p></li>
+</ul>
+<p>Finally, restricting ourselves to geoscience applications, UNet has been successfully used for a variety of tasks such as:</p>
+<ul class="simple">
+<li><p>Salt body / channel / karst extraction from seismic data (semantic segmentation);</p></li>
+<li><p>Fault and horizon tracking (semantic segmentation, where a skeletonized fault or horizon volume is used as the target to predict);</p></li>
+<li><p>Microseismic event detection (semantic segmentation);</p></li>
+<li><p>Seismic data interpolation, denoising, deghosting (regression, or more precisely <em>domain translation</em>);</p></li>
+<li><p>and more…</p></li>
+</ul>
+<p><img alt="UNET" src="_images/unet.png" /></p>
+<p>To conclude a summary of some of the most popular CNN architectures used for various computer vision task is shown in the figure below. Note
+the size of the circles refer to the number of trainable parameters of the associated network.</p>
+<p><img alt="ARCHITS" src="_images/archits.png" /></p>
+</section>
+<section id="additional-readings">
+<h2>Additional readings<a class="headerlink" href="#additional-readings" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>the following <a class="reference external" href="https://towardsdatascience.com/neural-network-architectures-156e5bad51ba">blog post</a> provides a good overview of some of
+the most popular architectures in computer vision, including those discussed in this lecture.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="10_cnn.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Convolutional Neural Networks</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lenet-5">LeNet-5</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#alexnet">AlexNet</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vgg-16">VGG-16</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#googlelenet-and-inception">GoogleLeNet and Inception</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resnet">ResNet</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unet">UNet</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-readings">Additional readings</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Ashok Dahal, Modified from the Content of Matteo Ravasi, KAUST
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
