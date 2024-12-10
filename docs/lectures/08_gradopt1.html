@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>08_gradopt1.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="more-on-gradient-based-optimization">More on gradient-based optimization</h1>
+<p>Whilst stochastic gradient descent is easy to understand, and simple to implement algorithm (as discussed in this
+<a href="lectures/03_gradopt.md">lecture</a>), it presents a number of shortcomings that prevent learning to be as fast and effective
+as we would like it to be. In this lecture, we will discuss some of the limitations of SGD and look at alternative optimization
+algorithms that have been developed in the last decade and are nowadays preferred to SGD in the process of training NNs.</p>
+<h2 id="limitations-of-sgd">Limitations of SGD</h2>
+<h3 id="ill-conditioning">Ill-conditioning</h3>
+<p>The shape, and more specifically the curvature, of the functional that we wish to minimize affects
+our ability to quickly and efficiently converge to one of its minima (ideally the global, likely one of the local). For nonlinear optimization problems, like those encountered in deep learning, this is mathematically represented by the <em>Hessian</em> matrix
+($\mathbf{H}=\frac{\partial^2 f}{\partial \boldsymbol \theta^2}$). An Hessian matrix with large conditioning number (i.e.,
+ratio of the largest and smallest eigenvalues) tends to affect convergence speed of first-order (gradient-based) methods.</p>
+<p>In classical optimization theory, second order methods such as the Gauss-Newton method are commonly employed to counteract
+this problem. However, as already mentioned in one of our previous lectures, such methods are not yet suitable for deep learning
+in that no mathematical foundations have been developed in conjunction with approximate gradients (i.e., mini-batch learning
+strategy).</p>
+<p>Another factor that is worth knowing about is related to the norm of the gradient $\mathbf{g}^T\mathbf{g}$ through iterations.
+In theory, this norm should shrink through iterations to guarantee convergence. Nevertheless, successful training may still be
+obtained even if the norm does not shrink as long as the learning rate is kept small. Let's write the second-order Taylor
+expansion of the functional around the current parameter estimate $\boldsymbol \theta_0$:</p>
+<p>$$
+J(\boldsymbol \theta) \approx J(\boldsymbol \theta_0) + (\boldsymbol \theta - \boldsymbol \theta_0)^T \mathbf{g} +
+\frac{1}{2} (\boldsymbol \theta - \boldsymbol \theta_0)^T \mathbf{H} (\boldsymbol \theta - \boldsymbol \theta_0)
+$$</p>
+<p>and evaluate it at the next gradient step $\boldsymbol \theta = \boldsymbol \theta_0 - \alpha \mathbf{g}$:</p>
+<p>$$
+J(\boldsymbol \theta_0 - \alpha \mathbf{g}) \approx J(\boldsymbol \theta_0) - \mathbf{g}^T \mathbf{g} +
+\frac{1}{2} \alpha^2 \mathbf{g}^T \mathbf{H} \mathbf{g}
+$$</p>
+<p>We can interpret this expression as follows: a gradient step of $- \alpha \mathbf{g}$ adds the following contribution
+to the cost function, $-\mathbf{g}^T \mathbf{g} +
+\frac{1}{2} \alpha^2 \mathbf{g}^T \mathbf{H} \mathbf{g}$. When this contribution is positive (i.e.,
+$\frac{1}{2} \alpha^2 \mathbf{g}^T \mathbf{H} \mathbf{g} &gt; \mathbf{g}^T \mathbf{g}$), the cost function grows instead of
+being reduced. Under the assumption that $\mathbf{H}$ is known, we could easily choose a step-size $\alpha$ that prevents this from happening. However, when the Hessian cannot be estimated, a conservative selection of the step-size is the only remedy to prevent the cost function from growing. A downside of such an approach is that the smaller the learning rate the slower the training process.</p>
+<h3 id="local-minima">Local minima</h3>
+<p>Whilst the focus of the previous section has been in the neighbour of $\boldsymbol \theta_0$ where the functional
+$J_{\boldsymbol \theta}$ can be approximated by a convex function, the landscape of NN functionals is generally non-convex
+and populated with a multitude of local minima. The problem of converging to the global minimum without getting stuck
+in one of the local minima is a well-known problem for any non-convex optimization. An example in geophysics is represented
+by waveform inversion and a large body of work has been carried out by the geophysical research community to identify
+objective functions that are more well-behaved (i.e., show a large basin of attraction around the global minimum).</p>
+<p>Nevertheless, getting stuck into local minima is much less of a problem when training neural networks.
+This can be justified by the fact that multiple models may perform equally well on both the training and testing data.
+To be more precise this relates to the concept of <em>model identifiability</em>, where a model is defined identifiable if there exist a
+single set of parameters ($\boldsymbol \theta_{gm}$) that lead to optimal model performance. On the other hand, when multiple models ${ \boldsymbol \theta_{gm},
+\boldsymbol \theta_{lm,1}, ..., \boldsymbol \theta_{lm1,N}$ perform similarly those models are said to be non-identifiable. Moreover, even when a
+single model performs best, a distinction must be made between training and testing performance. As far as training performance is concerned,
+this model must be that of the global minimum of the functional $\boldsymbol \theta_{gm}$. Nevertheless, the model that performs best on the testing
+data may be the one obtained from any of the local minima $\boldsymbol \theta_{lm,i}$ as such a model be have better generalization capabilities
+than the one from the global minimum.</p>
+<h3 id="saddle-points-and-other-flat-regions">Saddle points and other flat regions</h3>
+<p>Recent research in the field of deep learning has however revealed that multi-dimensional landscapes associated to the training of
+deep neural networks may actually have much fewer local minima than we tend to believe, and the main hinder to slow training is actually
+represented by saddle points (and flat regions in general). More specifically, empirically it can be shown that the ratio between saddle points and local
+minima is in the order of $e^n$ where $n$ is the number of dimensions of the model vector $\boldsymbol \theta$.</p>
+<p>The main problem associated with saddle points is similar to that of local minima: the associated gradient is $J(\boldsymbol \theta) \rightarrow 0$;
+as a consequence, during training, when the trajectory of the model parameter vector
+approaches a saddle point, the learning process may experience a slow down.</p>
+<h3 id="cliffs">Cliffs</h3>
+<p>Another potentially dangerous feature of NN landscapes is represented by steep regions where $J(\boldsymbol \theta) \rightarrow \infty$.
+This may in fact lead to unstable behaviours during training as large jumps will arise in the trajectory of the model parameter vector.</p>
+<p>Heuristic approaches to mitigate this problem exist, one of them is the so-called <em>gradient clipping</em> strategy where:</p>
+<p>$$
+\nabla J(\theta_i) = min(\nabla J(\theta_i), th)
+$$
+where $th$ is a user-defined threshold. This approach allows element-wise gradient clipping for those directions with an extremely large gradient
+whilst not forcing us to lower the overall learning rate.</p>
+<h3 id="exploding-and-vanishing-gradients">Exploding and vanishing gradients</h3>
+<p>Two problems that we commonly encounter whilst training Neural Networks are the so-called exploding and vanishing gradient phenomena. Whilst we already mentioned two scenarios where either of these situations can occur, i.e., cliffs and saddle points, the shape of the functional that we wish to optimize is not the only reason for gradients to grow uncontrolled or stagnate. It is in fact the NN architecture itself that sometimes may give rise to such phenomena.</p>
+<p>To provide some intuition, let's consider a matrix of weights $\mathbf{W}$ and apply it N times recursively to a certain input
+(where for simplicity we ignore the nonlinear activation functions):</p>
+<p>$$
+\mathbf{y}=\mathbf{W}^N\mathbf{x}
+$$</p>
+<p>If we assume $\mathbf{W}$ to be symmetric for simplicity and express it using
+its eigendecomposition</p>
+<p>$$
+\mathbf{W}=\mathbf{V} \boldsymbol \Sigma \mathbf{V}^{-1}
+$$</p>
+<p>the resulting output vector $\mathbf{y}$ can be equivalently written as:</p>
+<p>$$
+\begin{aligned}
+\mathbf{y} &amp;= \mathbf{V} \boldsymbol \Sigma \mathbf{V}^{-1} \mathbf{V} \boldsymbol \Sigma \mathbf{V}^{-1} ... \mathbf{V} \boldsymbol \Sigma \mathbf{V}^{-1} \mathbf{x} \
+&amp;= \mathbf{V} \boldsymbol \Sigma^N \mathbf{V}^{-1} \mathbf{x}
+\end{aligned}
+$$</p>
+<p>where we have used here the property of eigendecomposition, $\mathbf{V}^{-1} \mathbf{V} = \mathbf{I}$. Note that since
+the matrix of eigenvalues is raised to the power of N, when N is large we will experience the following phenomena:</p>
+<ul>
+<li>$\lambda_i &gt; 1 \rightarrow$ exploding gradient;</li>
+<li>$\lambda_i &lt; 1 \rightarrow$ vanishing gradient;</li>
+</ul>
+<p>Note that the scenario discussed here does not manifest itself when training feed forward networks, whilst it is much more relevant in the context of recurrent neural networks as the same weights are repeatedly applied to the input
+as it flows through the computational graph. We defer a more extensive discussion of this phenomenon to this <a href="lectures/XX.md">lecture</a>.</p>
+<h2 id="stategies-to-improve-sgd">Stategies to improve SGD</h2>
+<p>After looking at some of the problems that we should be aware of when training NNs (note that some of them can be
+easily overcome as we will see in the following, whilst others are outstanding and do not have a simple solution), let's look back
+at the SGD algorithm and consider a number of improvements that can lead to both faster and more stable training.</p>
+<p>We remember from our previous <a href="lectures/03_gradopt.md">lecture</a>, that the optimization step of SGD is simply composed of two steps:</p>
+<ul>
+<li>compute the gradient of the cost function with respect to the free-parameters, obtained via back-propagation</li>
+<li>apply a scaled step, dictated by the learning rate $\alpha$.</li>
+</ul>
+<h3 id="cooling-strategy">Cooling strategy</h3>
+<p>The most basic version of SGD uses a constant learning rate. However, a learning rate that may be optimal at the start of training and lead to fast convergence towards one of the minima of the cost function, may lead to unstable behaviour at later iterations.</p>
+<p>A question arises: given a gradient telling us where to move in the NN functional landscape, can we do something smart with the
+learning rate to reach the minimum faster. A common approach usually referred to as <em>cooling strategy</em> or <em>learning rate scheduling</em>, where the learning rate is not kept fixed through epochs. Instead, the learning rate is slowly reduced as epochs progress allowing the trajectory of the free-parameters to not fluctuate too much as it progresses towards a valley.</p>
+<p><img src="figs/cooling.png" alt="COOLING"></p>
+<p>Many alternative approaches to LR scheduling exist. However, to be effective, they must respect the following conditions:</p>
+<p>$$
+\sum_i \alpha_i = \infty, ; \sum_i \alpha_i^2 &lt; \infty'
+$$</p>
+<p>or, in words, the learning rate should reduce slowly as iterations progress.</p>
+<p>One common approach uses a linearly decaying LR for the first $\tau$ iterations, followed by a constant LR:</p>
+<p>$$
+\begin{aligned}
+&amp;\alpha_i = (1-\beta) \alpha_0 + \beta \alpha_\tau \qquad i&lt;\tau\
+&amp;\alpha_i = \alpha_\tau \qquad i\ge\tau
+\end{aligned}
+$$</p>
+<p>where $\beta=i/\tau$. As a rule of thumb, $\tau \approx 100 N_{epochs}, \alpha_\tau = \alpha_0/100$, whilst the choice
+of $\alpha_0$ is problem dependent and chosen by monitoring the first few iterations.</p>
+<p><img src="figs/piecewiselr.png" alt="PWLR"></p>
+<p>Alternative approaches can either apply a fixed decay (i.e., exponential) or choose to reduce the LR when the training (or validation) metric has not decreased for a number of epochs.</p>
+<h3 id="momentum">Momentum</h3>
+<p>Another commonly used strategy aimed at improving the convergence of SGD is called <em>Momentum</em> and dates back to the 60s and the
+seminal works of Polyak and Nesterov in the area of mathematical optimization. The idea of momentum is rather simple, yet very effective. It is based on the idea of using information not only from the current gradient but also from past gradients when making a step. More specifically, the step is based on an exponentially decaying moving average of the past gradients created during iterations.</p>
+<p><img src="figs/momentum.png" alt="MOMENTUM"></p>
+<p>The motivation behind using multiple gradients is to use the knowledge about the landscape shape accumulated through time in
+the proximity of the current parameters to make a more informed decision on where to move. This can generally help dealing with
+poorly conditioned modelling matrices in linear optimization and poorly conditioned Hessian matrices in nonlinear optimization.
+Intuitively, momentum can be understood as some sort of medium resistance or inertia when moving down a valley which slows down the trajectory and keeps it close to the axes of the ellipses of the functional (or its linearization around the current position). This physical interpretation is actually used when defining SGD with momentum as a vector $\mathbf{v}$ (where v stands for velocity) is introduced:</p>
+<p>$$
+\mathbf{v}_{i+1} = \gamma \mathbf{v}<em>i - \mathbf{g}</em>{i+1} = \gamma \mathbf{v}<em>i - \frac{\alpha}{N_b} \sum</em>{j=1}^{N_b} \nabla \mathscr{L}_j
+$$</p>
+<p>and the update becomes:</p>
+<p>$$
+\boldsymbol\theta_{i+1} = \boldsymbol\theta_{i} + \mathbf{v}_{i+1}
+$$</p>
+<p>where $\gamma \in [0, 1)$ is the momentum term. If we write explicitly the first three iterates of the velocity vector:</p>
+<p>$$
+\begin{aligned}
+&amp;\mathbf{v}_0 = - \alpha \mathbf{g}_0\
+&amp;\mathbf{v}_1 = \gamma \mathbf{v}_0 - \alpha \mathbf{g}_1 =  - \gamma \alpha \mathbf{g}_0 - \alpha \mathbf{g}_1 \
+&amp;\mathbf{v}_2 = \gamma \mathbf{v}_1 - \alpha \mathbf{g}_2 =</p>
+<ul>
+<li>\gamma^2 \alpha \mathbf{g}_0 - \gamma \alpha \mathbf{g}_1 - \alpha \mathbf{g}_2
+\end{aligned}
+$$</li>
+</ul>
+<p>we notice that the momentum tells us how quickly the contribution of the previous gradients should decay. With $\alpha=0$ we are back to the standard SGD algorithm, whilst with $\alpha \rightarrow 1$ we take into account the entire history of gradients. More commonly used values of momentum are $\alpha=0.5/0.9/0.99$ which can also be combined with a warming strategy (i.e., start from 0.5 and increase through iterations all the way to 0.99). This is a similar strategy (even though in opposite direction) to the one we previously discussed for the learning rate, even though it is known to impact the learning process to a lesser extent.</p>
+<p>Based on what we wrote above for the first three iterates, we can easily conclude that:</p>
+<ul>
+<li>if $\mathbf{g}<em>i \approx \mathbf{g}</em>{i-1} \approx \mathbf{g}_{i-2}$ (where the sign $\approx$ is used here to
+indicate a vector with approximately the same direction), the gradients' sum constructively leading to higher momentum and therefore a faster trajectory</li>
+<li>if $\mathbf{g}<em>i \ne \mathbf{g}</em>{i-1} \ne \mathbf{g}_{i-2}$ (where the sign $\ne is used here to
+indicate a vector with different directions), the gradients' sum destructively leading to lower momentum and therefore a slower trajectory</li>
+</ul>
+<p>Finally, an even smarter approach would require us not only to accumulate past gradients but also to look ahead of time
+so that we could slow down the trajectory if the landscape is about to change curvature (i.e., slow up). This
+requires a slight modification of the momentum term, referred to as <em>Nesterov momentum</em>:</p>
+<p>$$
+\mathbf{v}_{i+1} = \gamma \mathbf{v}<em>i - \frac{\alpha}{N_b} \sum</em>{j=1}^{N_b} \nabla \mathscr{L}<em>j(f</em>{\theta+\gamma \mathbf{v}_i}(\mathbf{x}_i), y_i)
+$$</p>
+<p>where the main change here is represented by the fact that the loss function ($\mathscr{L}$), and therefore, the gradient is
+evaluated at location $\theta+\gamma \mathbf{v}_i$ rather than at the current one. Here, $\gamma \mathbf{v}_i$ represents
+a correction factor to the standard method of momentum. In classical optimization (i.e., for batched gradient descent), this small change provides an improvement in the rate of convergence from $\mathcal{O}(1/i)$ to $\mathcal{O}(1/i^2)$. Note that this is however not always the case when using stochastic gradient descent.</p>
+<h3 id="adaptive-learning-rates">Adaptive learning rates</h3>
+<p>Up until now, we have introduced some modifications to the standard SGD algorithm that globally change the scaling of the
+gradient (also referred to as learning rate). However, if we believe that directions of sensitivity of the functional should be axis aligned, different learning rates should be used for the different parameters we wish to optimize for. More specifically a small LR should be preferred for those directions associated with large eigenvalues of the local Hessian whilst a large LR should be used for the other directions that associated with small eigenvalues.</p>
+<p>The <em>delta-bar-delta</em> algorithm of Jacobs (1988) represents an early heuristic approach to automatically adapting
+learning rates of individual parameters. It is based on this simple rule:</p>
+<ul>
+<li>if $sign{g_{i+1}^j} = sign{g_{i}^j}$, increase LR</li>
+<li>if $sign{g_{i+1}^j} \ne sign{g_{i}^j}$, decrease LR</li>
+</ul>
+<p>where $j$ refers here to the j-th component of the gradient vector.</p>
+<p>However, in the last decade a large variety of optimizers have appeared in the literature mostly focusing on this
+particular aspect of training, i.e. parameter-dependent learning rate. We will go through some of the most popular ones
+that have revolutionized the way we train NNs nowadays.</p>
+<h4 id="adagrad">AdaGrad</h4>
+<p>This optimizer scales the gradient vector by the inverse of the square root of the sum of all historical squared
+values of the gradient.</p>
+<p>$$
+\begin{aligned}
+&amp;\mathbf{g}<em>{i+1} = \frac{1}{N_b} \sum</em>{j=1}^{N_b} \nabla \mathscr{L}<em>j\
+&amp;\mathbf{r}</em>{i+1} = \mathbf{r}<em>i + \mathbf{g}</em>{i+1} \cdot \mathbf{g}<em>{i+1} \
+&amp;\Delta \boldsymbol\theta</em>{i+1} = -\frac{\alpha}{\delta + \sqrt{\mathbf{r}<em>{i+1}}} \cdot \mathbf{g}</em>{i+1} \
+&amp;\boldsymbol\theta_{i+1} = \boldsymbol\theta_{i} + \Delta \boldsymbol\theta_{i+1}
+\end{aligned}
+$$</p>
+<p>where the vector $\mathbf{r}$ contains a running sum of the element-wise square gradients
+(with $\mathbf{r}_0=0$), $\cdot$ and $\sqrt{;}$ represent the element-wise multiplication of two vectors and
+square root, respectively. Finally, $\delta=10^{-6}$ is used as stabilizer to avoid division by zero.</p>
+<p>If we look at the learning rate of AdaGrad, it is clear that this is parameter dependent and more importantly, it is
+a function of the norm of the past gradients. Therefore, parameters associated with large gradients will experience
+a rapid decrease in their associated LR, whilst parameters with small gradients will have an increase of the LR
+through iterations.</p>
+<p>The effect of such adaptive LR, is that the trajectory of the parameters will show greater
+progress over gently sloped directions of the landscape. Nevertheless, it has been reported in the literature that a
+main drawback of AdaGrad is that this effect is too strong, leading to a premature decrease of the LR in those
+directions with large gradients and therefore an overall slow learning process.</p>
+<h4 id="rmsprop">RMSProp</h4>
+<p>A modified version of AdaGrad particularly suited for nonconvex optimization where the gradient accumulation
+(i.e., $\mathbf{r}$ vector) is exponentially weighted on a moving window. The idea behind is that for NN training it may take a large number of gradient steps to converge to a satisfactory solution, and therefore it is important for the LR not to decrease too fast in the first few hundred steps. In mathematical terms, a single change is needed to the AdaGrad equations, namely:</p>
+<p>$$
+\mathbf{r}<em>{i+1} = \rho \mathbf{r}<em>i + (1-\rho)\mathbf{g}</em>{i+1} \cdot \mathbf{g}</em>{i+1} \
+$$</p>
+<p>where $\rho$ represents the decay rate in the accumulation of past gradients. RMSProp, which was proposed by
+Geoffrey Hinton during a Coursera class, is shown to be one of the best-in-class optimizers for NN training and it
+is widely adopted by the DL community.</p>
+<h4 id="adam">ADAM</h4>
+<p>ADAM stands for Adaptive Moments and it is a variant of RMSProp that further includes Momentum. Nowadays, ADAM
+is by far the most popular optimizer in the training of deep NNs.</p>
+<p>Two key changes have been introduced in the ADAM algorithm when compared to RMSProp:</p>
+<ul>
+<li>Momentum is applied via an estimate of the first-order momentum plus an exponential decay and used in spite of
+pure gradients in the parameter update step;</li>
+<li>A bias correction is included to take into account initialization.</li>
+</ul>
+<p>The algorithm can be written as follows:</p>
+<p>$$
+\begin{aligned}
+&amp;\mathbf{g}<em>{i+1} = \frac{1}{N_b} \sum</em>{j=1}^{N_b} \nabla \mathscr{L}<em>j\
+&amp;\mathbf{v}</em>{i+1} = \rho_1 \mathbf{v}<em>i + (1-\rho_1)\mathbf{g}</em>{i+1} \leftarrow velocity ; term \
+&amp;\mathbf{r}<em>{i+1} = \rho_2 \mathbf{r}<em>i + (1-\rho_2)\mathbf{g}</em>{i+1} \cdot \mathbf{g}</em>{i+1}  \leftarrow scaling ; term \
+&amp;\hat{\mathbf{v}}<em>{i+1} = \frac{\mathbf{v}</em>{i+1}}{1-\rho_1^{i+1}} \leftarrow bias ; correction \
+&amp;\hat{\mathbf{r}}<em>{i+1} = \frac{\mathbf{r}</em>{i+1}}{1-\rho_2^{i+1}} \leftarrow bias ; correction \
+&amp;\Delta \boldsymbol\theta_{i+1} = -\frac{\alpha}{\delta + \sqrt{\hat{\mathbf{r}}<em>{i+1}}} \cdot \hat{\mathbf{v}}</em>{i+1}\
+&amp;\boldsymbol\theta_{i+1} = \boldsymbol\theta_{i} + \Delta \boldsymbol\theta_{i+1}
+\end{aligned}
+$$</p>
+<p>where, once again, a number of hyperparameters are introduced. These are the stabilizer, $\delta=10^{-6}$, and two
+decay rates ($\rho_1$ and $\rho_2$).</p>
+<p>To conclude, we have first introduced simpler optimizers and subsequently built complexity in terms of both momentum and
+parameter-dependent learning, there is no universal winner. Although both momentum and adaptive LR do clearly seem
+to be beneficial to the training on NNs, it is not always the case that ADAM provides the best results both in
+terms of robustness and convergence speed. It is therefore important to be aware of the different optimizers that
+are available in the DL arsenal and identify the best based on the task at end. In other words, the choice of the
+optimizer can usually represent one of those hyperparameters that ML practitioners need to evaluate and select
+when developing a new ML pipeline.</p>
+<h3 id="other-tricks">Other tricks</h3>
+<p>In the following, we report a few other practical tricks that can be used when training NNs to further
+improve the learning capabilities of our optimizer (no matter what optimizer has been selected).</p>
+<h4 id="polyak-averaging">Polyak Averaging</h4>
+<p>When training a NN, the most common approach is to select the last iterate ($\boldsymbol\theta_{N_{it}}$) where
+$N_{it}$ is the overall number of iterations and use it at inference stage. Nevertheless, given the highly nonconvex
+optimization problem that we are required to solver, it is logical to expect that perhaps the last estimate of
+model parameters is not the best. Let's for example imagine that towards the end of the training process we are approaching a (local or global) minimum. However, our trajectory is bouncing all around the valley:</p>
+<p><img src="figs/Polyak.png" alt="POLYAK"></p>
+<p>A simple approach to mitigate this effect is to average over the last $N$ iterations:</p>
+<p>$$
+\boldsymbol\theta = \frac{1}{N} \sum_{i=0}^{N-1} \boldsymbol\theta_{N_{it}-i}
+$$</p>
+<p>This averaging acts as a denoising process that takes away some of the fluctuations and makes the optimization
+process less sensitive to the last step.</p>
+<h4 id="batch-normalization">Batch Normalization</h4>
+<p>This is a very recent advancement in the field of DL, from the seminal work of Ioffe and Szegedy (2015). It has been shown
+to be particularly beneficial to the training of very deep neural networks.</p>
+<p>Let's first take a look at what happens during the training process if we do not include batch normalization. As
+previously discussed, given the gradient $\partial J / \partial \boldsymbol \theta$, at every step of the optimization
+process all the parameters (weights and biases) in the different layers of a NN are simultaneously updated. This
+goes against the &quot;theoretical assumption&quot; that the optimization process should update one parameter at the time (which
+is however too expensive and therefore unfeasible). As a consequence of the fact that all free-parameters are updated
+together is that second order updates are introduced or, in other words, the statistical distribution of various parameters
+across the layers of the NN are modified. This is commonly referred to as <em>internal covariate shift</em>.</p>
+<p><em>Batch normalization</em> use a general way to reparametrize every NN, which reduces the need for coordination across many
+layers during an update (making the process of updating all parameters at the same time more stable). It is simply
+implemented by modifying the output of a layer (or all the layers) at training time as follows:</p>
+<p><img src="figs/batchnorm.png" alt="BATCHNORM"></p>
+<p>where a re-normalization process is applied to every row of the output matrix $\mathbf{A}$ and it is directly based on the local statistics (mean and standard deviation) of the output of the layer. The overall forward and backward passes remain unchanged with the simple difference that the network is now operating on the re-normalized output $\mathbf{A}'$ instead of the original one $\mathbf{A}$.</p>
+<p>The implications of such an additional step of re-normalization are that now the activations are distributed as $\mathcal{N}(0, 1)$ throughout the entire training process. By doing so, the optimization algorithm is discouraged to propose an update that simply acts constantly over the mean or the standard deviation of $\mathbf{A}$.</p>
+<p>At testing time, the mean and standard deviation ($\boldsymbol \mu$ and $\boldsymbol \sigma$) are usually fixed and taken from a
+running mean computed during training time.</p>
+<p>In practice, however, batch normalization includes an extra step where instead of forcing the mean and standard deviation
+of each layer to be fixed, these parameters are learned to make the units of the network more expressive. This is simply
+accomplished by defining the output $\mathbf{A}''$ as:</p>
+<p>$$
+\mathbf{A}'' = \gamma \mathbf{A}' + \beta
+$$</p>
+<p>where $\gamma$ and $\beta$ are also learned alongside the weights and biases of the network. Finally, since the bias is now induced by $\beta$ a common recommendation when using batch normalization is to avoid adding a learnable bias to the layer of the network.</p>
+<h4 id="supervised-pre-training">Supervised pre-training</h4>
+<p>So far, we have talked about optimizing the free-parameters of a neural network starting from a random initialization of such
+parameters and using all the available data to get the best estimate of such parameters. We have also briefly mentioned that
+transfer learning, a technique that uses a pre-trained network on a different set of data and possible different task and fine-tunes it on the task and data at hand, as a way to speed-up the training process as well as get around to the fact that sometimes we have access to a small amount of labelled data.</p>
+<p>Another interesting technique that can be used to ease the learning capabilities of a NN is called <em>pre-training</em> or <em>greedy training</em>. Two alternative approaches are generally taken:</p>
+<ul>
+<li>$\boldsymbol \theta_0$ (selected at random) $\rightarrow$ Simple task: $\tilde{\boldsymbol \theta}$ $\rightarrow$ Hard task: $\tilde{\boldsymbol \theta'}$</li>
+<li>$\boldsymbol \theta^1_0$ (selected at random) $\rightarrow$ Simple network: $\tilde{\boldsymbol \theta^1}, \boldsymbol \theta^2_0$
+$\rightarrow$ Complex network: $\tilde{\boldsymbol \theta^1}, \tilde{\boldsymbol \theta^2}$</li>
+</ul>
+<p>where in the latter case a common approach is to fix the hidden layers and discard the output layer after the first training process, add a number of extra layers to make the network deeper and continue training those layers alone. However, since N independent optimizations generally do not provide the overall optimal solution, a final fine-tuning step may be required.</p>
+<h2 id="additional-readings">Additional readings</h2>
+<ul>
+<li>A <a href="https://github.com/jettify/pytorch-optimizer">great resource</a> containing references (and Pytorch implementations) of more than 20 optimizers. This may be a good starting point if interest to experiment with different optimizers in both classical optimization and training of NNs.</li>
+<li>Another great <a href="https://github.com/labmlai/annotated_deep_learning_paper_implementations">resource</a> with step-by-step implementations of
+some popular optimizers and networks.</li>
+</ul>
+
+</body>
+</html>

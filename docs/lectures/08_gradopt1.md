@@ -179,7 +179,7 @@ poorly conditioned modelling matrices in linear optimization and poorly conditio
 Intuitively, momentum can be understood as some sort of medium resistance or inertia when moving down a valley which slows down the trajectory and keeps it close to the axes of the ellipses of the functional (or its linearization around the current position). This physical interpretation is actually used when defining SGD with momentum as a vector $\mathbf{v}$ (where v stands for velocity) is introduced:
 
 $$
-\mathbf{v}_{i+1} = \gamma \mathbf{v}_i - \mathbf{g}_{i+1} = \gamma \mathbf{v}_i - \frac{\alpha}{N_b} \sum_{j=1}^{N_b} \nabla \mathscr{L}_j
+\mathbf{v}_{i+1} = \gamma \mathbf{v}_i - \mathbf{g}_{i+1} = \gamma \mathbf{v}_i - \frac{\alpha}{N_b} \sum_{j=1}^{N_b} \nabla \mathbf{L}_j
 $$
 
 and the update becomes:
@@ -205,7 +205,7 @@ Based on what we wrote above for the first three iterates, we can easily conclud
 
 - if $\mathbf{g}_i \approx \mathbf{g}_{i-1} \approx \mathbf{g}_{i-2}$ (where the sign $\approx$ is used here to
   indicate a vector with approximately the same direction), the gradients' sum constructively leading to higher momentum and therefore a faster trajectory
-- if $\mathbf{g}_i \ne \mathbf{g}_{i-1} \ne \mathbf{g}_{i-2}$ (where the sign $\ne is used here to
+- if $\mathbf{g}_i \ne \mathbf{g}_{i-1} \ne \mathbf{g}_{i-2}$ (where the sign $\ne$ is used here to
   indicate a vector with different directions), the gradients' sum destructively leading to lower momentum and therefore a slower trajectory
 
 Finally, an even smarter approach would require us not only to accumulate past gradients but also to look ahead of time
@@ -213,10 +213,10 @@ so that we could slow down the trajectory if the landscape is about to change cu
 requires a slight modification of the momentum term, referred to as *Nesterov momentum*:
 
 $$
-\mathbf{v}_{i+1} = \gamma \mathbf{v}_i - \frac{\alpha}{N_b} \sum_{j=1}^{N_b} \nabla \mathscr{L}_j(f_{\theta+\gamma \mathbf{v}_i}(\mathbf{x}_i), y_i)
+\mathbf{v}_{i+1} = \gamma \mathbf{v}_i - \frac{\alpha}{N_b} \sum_{j=1}^{N_b} \nabla \mathbf{L}_j(f_{\theta+\gamma \mathbf{v}_i}(\mathbf{x}_i), y_i)
 $$
 
-where the main change here is represented by the fact that the loss function ($\mathscr{L}$), and therefore, the gradient is
+where the main change here is represented by the fact that the loss function ($\mathbf{L}$), and therefore, the gradient is
 evaluated at location $\theta+\gamma \mathbf{v}_i$ rather than at the current one. Here, $\gamma \mathbf{v}_i$ represents
 a correction factor to the standard method of momentum. In classical optimization (i.e., for batched gradient descent), this small change provides an improvement in the rate of convergence from $\mathcal{O}(1/i)$ to $\mathcal{O}(1/i^2)$. Note that this is however not always the case when using stochastic gradient descent.
 
@@ -244,7 +244,7 @@ values of the gradient.
 
 $$
 \begin{aligned}
-&\mathbf{g}_{i+1} = \frac{1}{N_b} \sum_{j=1}^{N_b} \nabla \mathscr{L}_j\\
+&\mathbf{g}_{i+1} = \frac{1}{N_b} \sum_{j=1}^{N_b} \nabla \mathbf{L}_j\\
 &\mathbf{r}_{i+1} = \mathbf{r}_i + \mathbf{g}_{i+1} \cdot \mathbf{g}_{i+1} \\
 &\Delta \boldsymbol\theta_{i+1} = -\frac{\alpha}{\delta + \sqrt{\mathbf{r}_{i+1}}} \cdot \mathbf{g}_{i+1} \\
 &\boldsymbol\theta_{i+1} = \boldsymbol\theta_{i} + \Delta \boldsymbol\theta_{i+1}
@@ -293,7 +293,7 @@ The algorithm can be written as follows:
 
 $$
 \begin{aligned}
-&\mathbf{g}_{i+1} = \frac{1}{N_b} \sum_{j=1}^{N_b} \nabla \mathscr{L}_j\\
+&\mathbf{g}_{i+1} = \frac{1}{N_b} \sum_{j=1}^{N_b} \nabla \mathbf{L}_j\\
 &\mathbf{v}_{i+1} = \rho_1 \mathbf{v}_i + (1-\rho_1)\mathbf{g}_{i+1} \leftarrow velocity \; term \\
 &\mathbf{r}_{i+1} = \rho_2 \mathbf{r}_i + (1-\rho_2)\mathbf{g}_{i+1} \cdot \mathbf{g}_{i+1}  \leftarrow scaling \; term \\
 &\hat{\mathbf{v}}_{i+1} = \frac{\mathbf{v}_{i+1}}{1-\rho_1^{i+1}} \leftarrow bias \; correction \\
